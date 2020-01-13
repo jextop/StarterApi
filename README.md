@@ -1,2 +1,1 @@
-# api
-接口服务中间件，动静分离
+# Api Starter based on Spring Boot Web
