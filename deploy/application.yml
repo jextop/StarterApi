@@ -64,7 +64,7 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://127.0.0.1:3306/starter?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC
+      url: jdbc:mysql://db:3306/starter?useUnicode=true&characterEncoding=UTF-8&allowMultiQueries=true&serverTimezone=UTC
       username: root
       password: root
       initial-size: 1
@@ -82,7 +82,7 @@ spring:
       filters: stat
 
   redis:
-    host: 127.0.0.1
+    host: cache
     port: 6379
     database: 0
     password:
@@ -95,7 +95,7 @@ spring:
         min-idle: 0
 
   activemq:
-    broker-url: tcp://127.0.0.1:61616
+    broker-url: tcp://mq:61616
     user: admin
     password: admin
     in-memory: false

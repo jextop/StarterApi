@@ -1,0 +1,66 @@
+version: '3'
+services:
+    api:
+        hostname: api
+        image: starter_api:latest
+        build: .
+        restart: always
+#        command: ./launch.sh
+#        working_dir: /root/code
+#        volumes:
+#            - ./deploy:/root/code
+#            - ../jext/data/file:/tmp/file
+        ports:
+            - 8011:8011
+        depends_on:
+            - db
+            - cache
+            - mq
+        networks:
+            - api
+            - data
+
+    db:
+        hostname: db
+        image: mysql:5
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+#        volumes:
+#            - ../jext/data/mysql/data:/var/lib/mysql
+#            - ../jext/data/mysql/conf:/etc/mysql/conf.d
+#            - ../jext/data/mysql/initdb:/docker-entrypoint-initdb.d
+        ports:
+            - 3306:3306
+        environment:
+            MYSQL_DATABASE: starter
+            MYSQL_ROOT_PASSWORD: root
+        networks:
+            - data
+
+    cache:
+        hostname: cache
+        image: redis:4
+        command: redis-server --appendonly yes
+        restart: always
+#        volumes:
+#            - ./data:/data
+        ports:
+            - 6379:6379
+        networks:
+            - data
+
+    mq:
+        hostname: mq
+        image: webcenter/activemq
+        restart: always
+        ports:
+            - 61616:61616
+            - 8161:8161
+        networks:
+            - data
+
+networks:
+    api:
+        driver: bridge
+    data:
+        driver: bridge

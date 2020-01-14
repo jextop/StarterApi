@@ -1,5 +1,5 @@
-CREATE DATABASE IF NOT EXISTS starter DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
-use starter;
+-- CREATE DATABASE IF NOT EXISTS starter DEFAULT CHARSET utf8 COLLATE utf8_general_ci;
+-- use starter;
 
 CREATE TABLE if not EXISTS `log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
