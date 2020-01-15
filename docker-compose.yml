@@ -6,9 +6,9 @@ services:
         build: .
         restart: always
 #        command: ./launch.sh
-#        working_dir: /root/code
+#        working_dir: /
 #        volumes:
-#            - ./deploy:/root/code
+#            - ./deploy:/
 #            - ../jext/data/file:/tmp/file
         ports:
             - 8011:8011

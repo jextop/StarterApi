@@ -1,8 +1,8 @@
 FROM openjdk:8
 
 # copy files
-COPY ./deploy/ /root/api/
-WORKDIR /root/api/
+COPY ./deploy/ /
+WORKDIR /
 
 # volume for data
 VOLUME /tmp/file
