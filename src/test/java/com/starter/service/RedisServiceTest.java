@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @SpringBootTest
 public class RedisServiceTest {
@@ -103,7 +104,7 @@ public class RedisServiceTest {
         redisService.setHash(key, 1, 10);
         redisService.setHash(key, 2, 20);
         redisService.setHash(key, 3, 30);
-        redisService.delKey(key, 1);
+        redisService.delHashKey(key, 1);
         redisService.setHash(key, new HashMap<Object, Object>(){{
             put(4, 40);
             put(5, 50);
@@ -116,7 +117,27 @@ public class RedisServiceTest {
         LogUtil.info(redisService.getHash(key, 1));
         LogUtil.info(redisService.getHash(key, 4));
         Assertions.assertFalse(redisService.getHash(key, 1) != null);
-        Assertions.assertTrue(redisService.hasKey(key, 4));
+        Assertions.assertTrue(redisService.hasHashKey(key, 4));
+        redisService.del(key);
+    }
+
+    @Test
+    public void testSet() {
+        String key = "RedisServiceTest.testSet";
+        redisService.del(key);
+        Assertions.assertTrue(redisService.sGet(key).isEmpty());
+
+        redisService.sSet(key, 1, 2, 3);
+        redisService.sDelValue(key, 1, 2);
+        redisService.sSet(key, 4);
+
+        Set<Object> ret = redisService.sGet(key);
+        LogUtil.info(ret);
+        Assertions.assertFalse(ret.isEmpty());
+
+        Assertions.assertFalse(redisService.sHasValue(key, 2));
+        Assertions.assertTrue(redisService.sHasValue(key, 4));
+        Assertions.assertTrue(redisService.sSize(key) == 2);
         redisService.del(key);
     }
 }

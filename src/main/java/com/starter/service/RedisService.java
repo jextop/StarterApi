@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -37,6 +39,10 @@ public class RedisService {
     @SuppressWarnings("all")
     @Resource(name = "redisTemplate")
     HashOperations<Object, Object, Object> hashOps;
+
+    @SuppressWarnings("all")
+    @Resource(name = "redisTemplate")
+    SetOperations<Object, Object> setOps;
 
     public long incr(String key) {
         Long ret = strOps.increment(key, 1L);
@@ -184,13 +190,13 @@ public class RedisService {
     /**
      * HashMap operation
      */
-    public void delKey(String key, Object item) {
+    public void delHashKey(String key, Object item) {
         hashOps.delete(key, item);
     }
 
-    public boolean hasKey(String key, Object item) {
+    public boolean hasHashKey(String key, Object item) {
         Boolean ret = hashOps.hasKey(key, item);
-        return ret == null ? false : true;
+        return ret == null ? false : ret;
     }
 
     public Object getHash(String key, Object item) {
@@ -207,5 +213,32 @@ public class RedisService {
 
     public void setHash(String key, Map<Object, Object> map) {
         hashOps.putAll(key, map);
+    }
+
+    /**
+     * Set operation
+     */
+    public long sSize(String key) {
+        Long ret = setOps.size(key);
+        return ret == null ? 0 : ret;
+    }
+
+    public long sDelValue(String key, Object... values) {
+        Long ret = setOps.remove(key, values);
+        return ret == null ? 0 : ret;
+    }
+
+    public boolean sHasValue(String key, Object value) {
+        Boolean ret = setOps.isMember(key, value);
+        return ret == null ? false : ret;
+    }
+
+    public Set<Object> sGet(String key) {
+        return setOps.members(key);
+    }
+
+    public long sSet(String key, Object... values) {
+        Long ret = setOps.add(key, values);
+        return ret == null ? 0 : ret;
     }
 }
