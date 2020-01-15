@@ -35,16 +35,16 @@ import java.util.HashMap;
 @RequestMapping("/")
 public class CheckController extends BaseController {
     @Autowired
-    private ActiveMqService activeMqService;
+    ActiveMqService activeMqService;
 
     @Autowired
-    private RedisService redisService;
+    RedisService redisService;
 
     @Autowired
-    private LogMapper logMapper;
+    LogMapper logMapper;
 
     @Autowired
-    private HttpService httpService;
+    HttpService httpService;
 
     @AccessLimited(count = 1)
     @GetMapping(value = "")

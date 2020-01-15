@@ -7,8 +7,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @SpringBootTest
 public class RedisServiceTest {
@@ -16,39 +19,13 @@ public class RedisServiceTest {
     RedisService redisService;
 
     @Test
-    public void testList() {
-        String key = "RedisServiceTest.testList";
-        redisService.delList(key);
-        Assertions.assertTrue(redisService.getList(key).isEmpty());
-
-        redisService.listPush(key, 1);
-        redisService.listPush(key, 2);
-        redisService.listPush(key, 3);
-        redisService.listPop(key);
-        redisService.listPush(key, 4);
-        redisService.listPush(key, 5);
-        LogUtil.info(redisService.listSize(key));
-
-        List<Object> list = redisService.getList(key);
-        LogUtil.info(list);
-        Assertions.assertEquals(list, Arrays.asList(new Object[]{2, 3, 4, 5}));
-
-        redisService.trimList(key, 1,-2);
-        list = redisService.getList(key);
-        LogUtil.info(list);
-        Assertions.assertEquals(list, Arrays.asList(new Object[]{3, 4}));
-
-        redisService.delList(key);
-        Assertions.assertTrue(redisService.getList(key).isEmpty());
-    }
-
-    @Test
     public void testIncr() {
-        String key = "RedisServiceTest.testStr";
+        String key = "RedisServiceTest.testIncr";
         long ret = redisService.incr(key);
+        LogUtil.info(ret);
         Assertions.assertTrue(ret > 0);
 
-        LogUtil.info(ret);
+        LogUtil.info(redisService.getExpire(key));
         redisService.expire(key, 1);
     }
 
@@ -82,9 +59,64 @@ public class RedisServiceTest {
         LogUtil.info("New obj value", newObj);
         Assertions.assertEquals(obj, newObj);
 
-        redisService.delObj(key);
+        redisService.del(key);
         final Object delObj = redisService.getObj(key);
         LogUtil.info("Obj after del", delObj);
         Assertions.assertNull(delObj);
+    }
+
+    @Test
+    public void testList() {
+        String key = "RedisServiceTest.testList";
+        redisService.del(key);
+        Assertions.assertTrue(redisService.getList(key).isEmpty());
+
+        redisService.pushList(key, 1);
+        redisService.pushList(key, 2);
+        redisService.pushList(key, 3);
+        redisService.popList(key);
+        redisService.pushList(key, new ArrayList<Object>() {{
+            add(4);
+            add(5);
+        }});
+        LogUtil.info(redisService.listSize(key));
+
+        List<Object> list = redisService.getList(key);
+        LogUtil.info(list);
+        Assertions.assertEquals(list, Arrays.asList(new Object[]{2, 3, 4, 5}));
+
+        redisService.trimList(key, 1,-2);
+        list = redisService.getList(key);
+        LogUtil.info(list);
+        Assertions.assertEquals(list, Arrays.asList(new Object[]{3, 4}));
+
+        redisService.del(key);
+        Assertions.assertTrue(redisService.getList(key).isEmpty());
+    }
+
+    @Test
+    public void testHash() {
+        String key = "RedisServiceTest.testHash";
+        redisService.del(key);
+        Assertions.assertTrue(redisService.getHash(key).isEmpty());
+
+        redisService.setHash(key, 1, 10);
+        redisService.setHash(key, 2, 20);
+        redisService.setHash(key, 3, 30);
+        redisService.delKey(key, 1);
+        redisService.setHash(key, new HashMap<Object, Object>(){{
+            put(4, 40);
+            put(5, 50);
+        }});
+
+        Map<Object, Object> ret = redisService.getHash(key);
+        LogUtil.info(ret);
+        Assertions.assertFalse(ret.isEmpty());
+
+        LogUtil.info(redisService.getHash(key, 1));
+        LogUtil.info(redisService.getHash(key, 4));
+        Assertions.assertFalse(redisService.getHash(key, 1) != null);
+        Assertions.assertTrue(redisService.hasKey(key, 4));
+        redisService.del(key);
     }
 }
