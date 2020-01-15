@@ -47,7 +47,7 @@ public class CheckController extends BaseController {
     private HttpService httpService;
 
     @AccessLimited(count = 1)
-    @GetMapping(value = "/")
+    @GetMapping(value = "")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public Object index(@RequestAttribute(required = false) String ip) {
         return new HashMap<String, Object>() {{

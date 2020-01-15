@@ -1,12 +1,15 @@
 package com.starter.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -25,6 +28,10 @@ public class RedisService {
     @Resource(name = "redisTemplate")
     ValueOperations<Object, Object> objValOps;
 
+    @SuppressWarnings("all")
+    @Resource(name = "redisTemplate")
+    ListOperations<Object, Object> listOps;
+
     public long incr(String key) {
         Long ret = strValOps.increment(key, 1L);
         return ret == null ? 0 : ret;
@@ -33,6 +40,47 @@ public class RedisService {
     public boolean expire(String key, long seconds) {
         Boolean ret = stringRedisTemplate.expire(key, seconds, TimeUnit.SECONDS);
         return ret == null ? false : ret;
+    }
+
+    /**
+     * List operation
+     */
+    public long listSize(String key) {
+        Long size = listOps.size(key);
+        return size == null ? 0 : size;
+    }
+
+    public boolean listPush(String key, Object value) {
+        Long count = listOps.rightPush(key, value);
+        return count != null && count > 0;
+    }
+
+    public Object listPop(String key) {
+        return listOps.leftPop(key);
+    }
+
+    /**
+     * index >=0 时，0 表头，1 第二个元素，依次类推
+     * index <0 时，-1，表尾，-2倒数第二个元素，依次类推
+     */
+    public void trimList(String key, long start, long end) {
+        listOps.trim(key, start, end);
+    }
+
+    public void delList(String key) {
+        listOps.trim(key, -1, 0);
+    }
+
+    /**
+     * 0 到 -1 代表所有值
+     */
+    public List<Object> getList(String key) {
+        return getList(key, 0, -1);
+    }
+
+    public List<Object> getList(String key, long start, long end) {
+        List<Object> list = listOps.range(key, start, end);
+        return list == null ? new ArrayList<Object>() : list;
     }
 
     /**
