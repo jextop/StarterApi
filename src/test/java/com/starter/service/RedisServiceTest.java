@@ -99,25 +99,25 @@ public class RedisServiceTest {
     public void testHash() {
         String key = "RedisServiceTest.testHash";
         redisService.del(key);
-        Assertions.assertTrue(redisService.getHash(key).isEmpty());
+        Assertions.assertTrue(redisService.hGet(key).isEmpty());
 
-        redisService.setHash(key, 1, 10);
-        redisService.setHash(key, 2, 20);
-        redisService.setHash(key, 3, 30);
-        redisService.delHashKey(key, 1);
-        redisService.setHash(key, new HashMap<Object, Object>(){{
+        redisService.hSet(key, 1, 10);
+        redisService.hSet(key, 2, 20);
+        redisService.hSet(key, 3, 30);
+        redisService.hDelKey(key, 1);
+        redisService.hSet(key, new HashMap<Object, Object>(){{
             put(4, 40);
             put(5, 50);
         }});
 
-        Map<Object, Object> ret = redisService.getHash(key);
+        Map<Object, Object> ret = redisService.hGet(key);
         LogUtil.info(ret);
         Assertions.assertFalse(ret.isEmpty());
 
-        LogUtil.info(redisService.getHash(key, 1));
-        LogUtil.info(redisService.getHash(key, 4));
-        Assertions.assertFalse(redisService.getHash(key, 1) != null);
-        Assertions.assertTrue(redisService.hasHashKey(key, 4));
+        LogUtil.info(redisService.hGet(key, 1));
+        LogUtil.info(redisService.hGet(key, 4));
+        Assertions.assertFalse(redisService.hGet(key, 1) != null);
+        Assertions.assertTrue(redisService.hHasKey(key, 4));
         redisService.del(key);
     }
 

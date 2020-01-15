@@ -190,28 +190,28 @@ public class RedisService {
     /**
      * HashMap operation
      */
-    public void delHashKey(String key, Object item) {
+    public void hDelKey(String key, Object item) {
         hashOps.delete(key, item);
     }
 
-    public boolean hasHashKey(String key, Object item) {
+    public boolean hHasKey(String key, Object item) {
         Boolean ret = hashOps.hasKey(key, item);
         return ret == null ? false : ret;
     }
 
-    public Object getHash(String key, Object item) {
+    public Object hGet(String key, Object item) {
         return hashOps.get(key, item);
     }
 
-    public Map<Object, Object> getHash(String key) {
+    public Map<Object, Object> hGet(String key) {
         return hashOps.entries(key);
     }
 
-    public void setHash(String key, Object item, Object value) {
+    public void hSet(String key, Object item, Object value) {
         hashOps.put(key, item, value);
     }
 
-    public void setHash(String key, Map<Object, Object> map) {
+    public void hSet(String key, Map<Object, Object> map) {
         hashOps.putAll(key, map);
     }
 
