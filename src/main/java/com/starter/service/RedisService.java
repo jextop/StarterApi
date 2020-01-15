@@ -148,12 +148,12 @@ public class RedisService {
     /**
      * List operation
      */
-    public long listSize(String key) {
+    public long lSize(String key) {
         Long size = listOps.size(key);
         return size == null ? 0 : size;
     }
 
-    public Object popList(String key) {
+    public Object lPop(String key) {
         return listOps.leftPop(key);
     }
 
@@ -161,28 +161,28 @@ public class RedisService {
      * index >=0 时，0 表头，1 第二个元素，依次类推
      * index <0 时，-1，表尾，-2倒数第二个元素，依次类推
      */
-    public void trimList(String key, long start, long end) {
+    public void lTrim(String key, long start, long end) {
         listOps.trim(key, start, end);
     }
 
     /**
      * 0 到 -1 代表所有值
      */
-    public List<Object> getList(String key) {
-        return getList(key, 0, -1);
+    public List<Object> lGet(String key) {
+        return lGet(key, 0, -1);
     }
 
-    public List<Object> getList(String key, long start, long end) {
+    public List<Object> lGet(String key, long start, long end) {
         List<Object> list = listOps.range(key, start, end);
         return list == null ? new ArrayList<Object>() : list;
     }
 
-    public boolean pushList(String key, Object value) {
+    public boolean lSet(String key, Object value) {
         Long count = listOps.rightPush(key, value);
         return count != null && count > 0;
     }
 
-    public boolean pushList(String key, List<Object> values) {
+    public boolean lSet(String key, List<Object> values) {
         Long count = listOps.rightPushAll(key, values);
         return count != null && count > 0;
     }

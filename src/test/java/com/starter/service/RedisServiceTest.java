@@ -70,29 +70,29 @@ public class RedisServiceTest {
     public void testList() {
         String key = "RedisServiceTest.testList";
         redisService.del(key);
-        Assertions.assertTrue(redisService.getList(key).isEmpty());
+        Assertions.assertTrue(redisService.lGet(key).isEmpty());
 
-        redisService.pushList(key, 1);
-        redisService.pushList(key, 2);
-        redisService.pushList(key, 3);
-        redisService.popList(key);
-        redisService.pushList(key, new ArrayList<Object>() {{
+        redisService.lSet(key, 1);
+        redisService.lSet(key, 2);
+        redisService.lSet(key, 3);
+        redisService.lPop(key);
+        redisService.lSet(key, new ArrayList<Object>() {{
             add(4);
             add(5);
         }});
-        LogUtil.info(redisService.listSize(key));
+        LogUtil.info(redisService.lSize(key));
 
-        List<Object> list = redisService.getList(key);
+        List<Object> list = redisService.lGet(key);
         LogUtil.info(list);
         Assertions.assertEquals(list, Arrays.asList(new Object[]{2, 3, 4, 5}));
 
-        redisService.trimList(key, 1,-2);
-        list = redisService.getList(key);
+        redisService.lTrim(key, 1,-2);
+        list = redisService.lGet(key);
         LogUtil.info(list);
         Assertions.assertEquals(list, Arrays.asList(new Object[]{3, 4}));
 
         redisService.del(key);
-        Assertions.assertTrue(redisService.getList(key).isEmpty());
+        Assertions.assertTrue(redisService.lGet(key).isEmpty());
     }
 
     @Test
