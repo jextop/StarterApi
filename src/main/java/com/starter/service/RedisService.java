@@ -30,7 +30,7 @@ public class RedisService {
 
     @SuppressWarnings("all")
     @Resource(name = "redisTemplate")
-    ValueOperations<Object, Object> objOps;
+    ValueOperations<Object, Object> valOps;
 
     @SuppressWarnings("all")
     @Resource(name = "redisTemplate")
@@ -109,40 +109,40 @@ public class RedisService {
     /**
      * Object operation
      */
-    public Object getObj(Object key) {
-        return objOps.get(key);
+    public Object get(Object key) {
+        return valOps.get(key);
     }
 
-    public void setObj(Object key, Object v) {
-        objOps.set(key, v);
+    public void set(Object key, Object v) {
+        valOps.set(key, v);
     }
 
-    public void setObj(Object key, Object v, long seconds) {
-        objOps.set(key, v, seconds, TimeUnit.SECONDS);
+    public void set(Object key, Object v, long seconds) {
+        valOps.set(key, v, seconds, TimeUnit.SECONDS);
     }
 
-    public void setObj1Minute(Object key, Object v) {
-        setObj(key, v, 60);
+    public void set1Minute(Object key, Object v) {
+        set(key, v, 60);
     }
 
-    public void setObj5Minutes(Object key, Object v) {
-        setObj(key, v, 60 * 5);
+    public void set5Minutes(Object key, Object v) {
+        set(key, v, 60 * 5);
     }
 
-    public void setObj1Hour(Object key, Object v) {
-        setObj(key, v, 3600);
+    public void set1Hour(Object key, Object v) {
+        set(key, v, 3600);
     }
 
-    public void setObj1Day(Object key, Object v) {
-        setObj(key, v, 3600 * 24);
+    public void set1Day(Object key, Object v) {
+        set(key, v, 3600 * 24);
     }
 
-    public void setObj1Week(Object key, Object v) {
-        setObj(key, v, 3600 * 24 * 7);
+    public void set1Week(Object key, Object v) {
+        set(key, v, 3600 * 24 * 7);
     }
 
-    public void setObj1Month(Object key, Object v) {
-        setObj(key, v, 3600 * 24 * 30);
+    public void set1Month(Object key, Object v) {
+        set(key, v, 3600 * 24 * 30);
     }
 
     /**

@@ -49,19 +49,19 @@ public class RedisServiceTest {
     }
 
     @Test
-    public void testObj() {
+    public void testVal() {
         final Object key = new Date();
-        LogUtil.info("Obj before set", redisService.getObj(key));
+        LogUtil.info("Obj before set", redisService.get(key));
 
         final Object obj = new Date();
-        redisService.setObj(key, obj);
+        redisService.set(key, obj);
 
-        final Object newObj = redisService.getObj(key);
+        final Object newObj = redisService.get(key);
         LogUtil.info("New obj value", newObj);
         Assertions.assertEquals(obj, newObj);
 
         redisService.del(key);
-        final Object delObj = redisService.getObj(key);
+        final Object delObj = redisService.get(key);
         LogUtil.info("Obj after del", delObj);
         Assertions.assertNull(delObj);
     }
