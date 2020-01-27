@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties(prefix = "job.quartz")
+@ConfigurationProperties("job.quartz")
 public class QuartzConfig {
     private String cron;
 

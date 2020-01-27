@@ -30,7 +30,7 @@ public class RedisService {
 
     @SuppressWarnings("all")
     @Resource(name = "redisTemplate")
-    ValueOperations<Object, Object> valOps;
+    ValueOperations<Object, Object> valueOps;
 
     @SuppressWarnings("all")
     @Resource(name = "redisTemplate")
@@ -110,15 +110,15 @@ public class RedisService {
      * Object operation
      */
     public Object get(Object key) {
-        return valOps.get(key);
+        return valueOps.get(key);
     }
 
     public void set(Object key, Object v) {
-        valOps.set(key, v);
+        valueOps.set(key, v);
     }
 
     public void set(Object key, Object v, long seconds) {
-        valOps.set(key, v, seconds, TimeUnit.SECONDS);
+        valueOps.set(key, v, seconds, TimeUnit.SECONDS);
     }
 
     public void set1Minute(Object key, Object v) {

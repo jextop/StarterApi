@@ -18,7 +18,7 @@ import java.nio.charset.Charset;
 import java.util.List;
 
 @Configuration
-@ConfigurationProperties(prefix = "http")
+@ConfigurationProperties("http")
 public class HttpConfig {
     private Integer maxTotal;
     private Integer defaultMaxPerRoute;

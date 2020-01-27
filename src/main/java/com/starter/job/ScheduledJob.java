@@ -11,7 +11,7 @@ import java.util.Date;
 @Async
 public class ScheduledJob {
     @Async
-    @Scheduled(cron = "* 0/31 * * * *")
+    @Scheduled(cron = "0 0/31 * * * *")
     public void scheduledCron() {
         LogUtil.info("cron", new Date());
     }
