@@ -84,26 +84,22 @@ public class CheckController extends BaseController {
     @GetMapping(value = "/chk/cache")
     public Object cache(@RequestAttribute(required = false) String ip) {
         // Get a unique key
-        String key = null;
-        while (key == null || redisService.getStr(key) != null) {
-            key = String.format("cache_test_%s_%s_缓存", ip, CodeUtil.getCode());
-        }
+        String key = String.format("cache_test_%s_%s_缓存", ip, CodeUtil.getCode());
 
-        // Set and get cache
+        // Set cache
         redisService.setStr(key, key, 3);
 
         // Get cache
         String str = redisService.getStr(key);
         LogUtil.info("Check cache to set str", key, str);
 
-        // Delete cache
+        // Delete key
         redisService.delStr(key);
 
-        boolean status = key.equals(str);
         return new HashMap<String, Object>() {{
             put("chk", "cache");
             put("msg", str);
-            put("status", status);
+            put("status", key.equals(str));
         }};
     }
 

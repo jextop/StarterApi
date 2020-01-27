@@ -49,7 +49,7 @@ public class RedisServiceTest {
     }
 
     @Test
-    public void testVal() {
+    public void testValue() {
         final Object key = new Date();
         LogUtil.info("Obj before set", redisService.get(key));
 
