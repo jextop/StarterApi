@@ -105,21 +105,24 @@ public class CheckController extends BaseController {
     @AccessLimited(count = 1)
     @GetMapping(value = "/chk/db")
     public Object db(@RequestAttribute(required = false) String ip) {
-        // Write a test log to db
+        // Write a log to db
         Log log = new Log() {{
-            setSummary(String.format("db_test_%s_%s_数据库", ip, new Date().toString()));
+            setSummary(String.format("db_test_%s_%s_数据库", ip, new Date()));
         }};
         logMapper.insert(log);
         LogUtil.info("Check db to insert log", log.getSummary());
 
         // Read log from db
-        Log ret = logMapper.selectOne(new QueryWrapper<Log>().orderByDesc("id").eq("summary", log.getSummary()));
+        Log ret = logMapper.selectOne(new QueryWrapper<Log>()
+                .orderByDesc("id")
+                .eq("summary", log.getSummary())
+        );
         Integer count = logMapper.selectCount(null);
 
         return new HashMap<String, Object>() {{
             put("chk", "db");
             put("msg", log.getSummary());
-            put("status", ret != null && log.getSummary().equals(ret.getSummary()));
+            put("status", log.getSummary().equals(ret.getSummary()));
             put("count", count);
         }};
     }

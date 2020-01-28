@@ -30,15 +30,15 @@ public class MyBatisPlusGenerator {
      */
     public static void main(String[] args) {
         // 代码生成器
-        AutoGenerator mpg = new AutoGenerator();
+        AutoGenerator generator = new AutoGenerator();
 
         // 全局配置
-        GlobalConfig gc = new GlobalConfig();
+        GlobalConfig config = new GlobalConfig();
         String projectPath = System.getProperty("user.dir");
-        gc.setOutputDir(projectPath + "/HelloStarter/src/main/java");
-        gc.setAuthor("Ding");
-        gc.setOpen(false);
-        mpg.setGlobalConfig(gc);
+        config.setOutputDir(projectPath + "/src/main/java");
+        config.setAuthor("Ding");
+        config.setOpen(false);
+        generator.setGlobalConfig(config);
 
         // 数据源配置
         DataSourceConfig dsc = new DataSourceConfig();
@@ -46,49 +46,48 @@ public class MyBatisPlusGenerator {
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
         dsc.setUsername("dba");
         dsc.setPassword("dba");
-        mpg.setDataSource(dsc);
+        generator.setDataSource(dsc);
 
         // 包配置
-        PackageConfig pc = new PackageConfig();
-        pc.setParent("com.hello");
-        mpg.setPackageInfo(pc);
+        PackageConfig pConfig = new PackageConfig();
+        pConfig.setParent("com.starter");
+        generator.setPackageInfo(pConfig);
 
         // 自定义配置
-        InjectionConfig cfg = new InjectionConfig() {
-            @Override
-            public void initMap() {
-            }
-        };
         List<FileOutConfig> focList = new ArrayList<>();
         focList.add(new FileOutConfig("/templates/mapper.xml.ftl") {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输入文件名称
-                return projectPath + "/HelloStarter/src/main/resources/mapper/"
+                return projectPath + "/src/main/resources/mapper/"
                         + tableInfo.getEntityName() + "Mapper" + StringPool.DOT_XML;
             }
         });
+
+        InjectionConfig cfg = new InjectionConfig() {
+            @Override
+            public void initMap() {
+            }
+        };
         cfg.setFileOutConfigList(focList);
-        mpg.setCfg(cfg);
-        mpg.setTemplate(new TemplateConfig().setXml(null));
+        generator.setCfg(cfg);
+        generator.setTemplate(new TemplateConfig().setXml(null));
 
         // 策略配置
         StrategyConfig strategy = new StrategyConfig();
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
-
-        strategy.setInclude("log", "user");
+        strategy.setInclude("log", "user", "auth");
         strategy.setSuperEntityColumns("id");
-        strategy.setTablePrefix(pc.getModuleName() + "_");
-        strategy.setEntityLombokModel(true);
+        strategy.setTablePrefix(pConfig.getModuleName() + "_");
+        strategy.setEntityLombokModel(false);
         strategy.setSuperEntityClass("com.starter.entity.BaseEntity");
-
         strategy.setSuperControllerClass("com.starter.controller.BaseController");
         strategy.setControllerMappingHyphenStyle(true);
-        mpg.setStrategy(strategy);
+        generator.setStrategy(strategy);
 
-        // 选择 freemarker 引擎需要指定如下加，注意pom 依赖必须有！
-        mpg.setTemplateEngine(new FreemarkerTemplateEngine());
-        mpg.execute();
+        // 选择freemarker引擎需要指定如下，注意pom依赖必须有！
+        generator.setTemplateEngine(new FreemarkerTemplateEngine());
+        generator.execute();
     }
 }

@@ -1,8 +1,9 @@
-package com.starter.mapper;
+package com.starter.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.common.util.LogUtil;
 import com.starter.entity.Log;
+import com.starter.service.impl.LogServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,23 +13,23 @@ import java.util.Date;
 import java.util.List;
 
 @SpringBootTest
-public class LogMapperTest {
+public class LogServiceTest {
     @Autowired
-    LogMapper logMapper;
+    LogServiceImpl logService;
 
     @Test
-    public void testInsert() {
-        int ret = logMapper.insert(new Log() {{
-            setSummary(String.format("mapper: %s", new Date()));
+    public void testSave() {
+        boolean ret = logService.save(new Log() {{
+            setSummary(String.format("service: %s", new Date()));
         }});
 
         LogUtil.info(ret);
-        Assertions.assertTrue(ret > 0);
+        Assertions.assertTrue(ret);
     }
 
     @Test
-    public void testSelect() {
-        List<Log> ret = logMapper.selectList(new QueryWrapper<Log>()
+    public void testList() {
+        List<Log> ret = logService.list(new QueryWrapper<Log>()
                 .orderByDesc("id")
                 .last(true, "limit 2")
         );
