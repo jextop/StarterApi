@@ -59,6 +59,11 @@ spring:
     jdbc:
       initialize-schema: always
 
+  flyway:
+    locations: ["classpath:db/migration"]
+    table: flyway_schema_history
+    validate-on-migrate: true
+
   datasource:
     name: db
     type: com.alibaba.druid.pool.DruidDataSource
