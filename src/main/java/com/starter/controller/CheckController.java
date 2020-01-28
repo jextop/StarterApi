@@ -8,6 +8,7 @@ import com.starter.annotation.AccessLimited;
 import com.starter.entity.Log;
 import com.starter.entity.User;
 import com.starter.http.HttpService;
+import com.starter.jext.JextService;
 import com.starter.job.QuartzJob;
 import com.starter.mapper.LogMapper;
 import com.starter.mq.ActiveMqService;
@@ -45,6 +46,9 @@ public class CheckController extends BaseController {
 
     @Autowired
     HttpService httpService;
+
+    @Autowired
+    JextService jextService;
 
     @AccessLimited(count = 1)
     @GetMapping(value = "")
@@ -139,6 +143,8 @@ public class CheckController extends BaseController {
         Date date = null;
         try {
             Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
+            scheduler.getContext().put("jextService", jextService);
+
             date = scheduler.scheduleJob(job, trigger);
             scheduler.startDelayed(1);
         } catch (SchedulerException e) {

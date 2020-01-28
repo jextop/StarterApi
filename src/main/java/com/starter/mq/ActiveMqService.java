@@ -3,6 +3,7 @@ package com.starter.mq;
 import com.common.util.LogUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.core.JmsMessagingTemplate;
+import org.springframework.messaging.MessagingException;
 import org.springframework.stereotype.Service;
 
 import javax.jms.Queue;
@@ -25,11 +26,21 @@ public class ActiveMqService {
 
     public void sendQueue(String msg) {
         LogUtil.info("Send queue msg", msg);
-        jmsMessagingTemplate.convertAndSend(queue, msg);
+
+        try {
+            jmsMessagingTemplate.convertAndSend(queue, msg);
+        } catch (MessagingException e) {
+            LogUtil.error(e.getMessage());
+        }
     }
 
     public void sendTopic(String msg) {
         LogUtil.info("Send topic msg", msg);
-        jmsMessagingTemplate.convertAndSend(topic, msg);
+
+        try {
+            jmsMessagingTemplate.convertAndSend(topic, msg);
+        } catch (MessagingException e) {
+            LogUtil.error(e.getMessage());
+        }
     }
 }

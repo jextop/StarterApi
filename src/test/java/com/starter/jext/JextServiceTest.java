@@ -16,7 +16,7 @@ public class JextServiceTest {
 
     @Test
     public void testGetInfo() {
-        Map<String, Object> ret = jextService.getInfo();
+        Map<String, Object> ret = jextService.getInfo(true);
         LogUtil.info(JsonUtil.toStr(ret));
         Assertions.assertFalse(ret.isEmpty());
     }

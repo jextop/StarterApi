@@ -5,7 +5,6 @@ import com.common.util.StrUtil;
 import com.starter.http.HttpService;
 import com.starter.mq.ActiveMqService;
 import com.starter.service.RedisService;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,24 +43,36 @@ public class JextService {
         String[] users = StrUtil.parse(strCourse, "学员数量：[1-9]\\d*人");
         String[] userDetails = StrUtil.parse(strCourse, "[1-9]\\d*人学习");
 
-        String strBlog = httpService.sendHttpGet("https://blog.51cto.com/13851865");
-        String[] blogs = StrUtil.parse(strBlog, "<span>[1-9]\\d*</span>");
-        String[] readers = StrUtil.parse(strBlog, "阅读&nbsp;[1-9]\\d*");
+        String str51Cto = httpService.sendHttpGet("https://blog.51cto.com/13851865");
+        String[] blog51Cto = StrUtil.parse(str51Cto, "<span>[1-9](\\d*|W\\+)</span>");
+        String[] reader51Cto = StrUtil.parse(str51Cto, "阅读&nbsp;[1-9]\\d*");
+
+        String strCsdn = httpService.sendHttpGet("https://blog.csdn.net/xiziyidi");
+        String[] blogCsdn = StrUtil.parse(strCsdn, "<span class=\"count\">[1-9]\\d*</span>");
+        String[] readerCsdn = StrUtil.parse(strCsdn, "<span class=\"num\">[1-9]\\d*</span>");
 
         infoMap = new HashMap<String, Object>() {{
             put("course", new HashMap<Object, Object>() {{
-                put("count", courses != null && courses.length > 0 ? courses[0] : "");
-                put("userCount", users != null && users.length > 0 ? users[0] : "");
-                put("user", userDetails);
+                put("count", formatInfo(formatInfo(courses, "课程："), "门"));
+                put("userCount", formatInfo(formatInfo(users, "学员数量："), "人"));
+                put("user", formatInfo(userDetails, "人学习"));
             }});
-            put("blog", new HashMap<Object, Object>() {{
-                put("count", blogs);
-                put("reader", readers);
+            put("51cto", new HashMap<Object, Object>() {{
+                put("count", formatInfo(formatInfo(blog51Cto, "<span>"), "</span>"));
+                put("reader", formatInfo(reader51Cto, "阅读&nbsp;"));
+            }});
+            put("csdn", new HashMap<Object, Object>() {{
+                put("count", formatInfo(formatInfo(blogCsdn, "<span class=\"count\">"), "</span>"));
+                put("reader", formatInfo(formatInfo(readerCsdn, "<span class=\"num\">"), "</span>"));
             }});
         }};
 
         // Set cache
         redisService.setStr(INFO_KEY, JsonUtil.toStr(infoMap));
         return infoMap;
+    }
+
+    private String[] formatInfo(String[] strArr, String regex) {
+        return strArr == null ? null : StrUtil.join(strArr, ", ").replaceAll(regex, "").split(", ");
     }
 }
