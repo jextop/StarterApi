@@ -70,10 +70,9 @@ public class CheckController extends BaseController {
     @AccessLimited(count = 1)
     @GetMapping(path = "/chk/mq")
     public Object mq(@RequestAttribute(required = false) String ip) {
-        ip = String.format("check mq ip, %s, %s 消息队列", ip, new Date().toString());
-        activeMqService.send(ip);
+        String msg = String.format("check mq, %s, %s 消息队列", ip, new Date().toString());
+        activeMqService.send(msg);
 
-        final String msg = ip;
         return new HashMap<String, Object>() {{
             put("chk", "mq");
             put("msg", msg);
