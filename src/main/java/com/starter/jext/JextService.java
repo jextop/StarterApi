@@ -33,7 +33,7 @@ public class JextService {
         Map<String, Object> infoMap = updateCache ? null : JsonUtil.parseObj(redisService.getStr(INFO_KEY));
         if (!MapUtils.isEmpty(infoMap)) {
             // Send mq
-            activeMqService.sendQueue("jext.info");
+            activeMqService.send("jext.info");
             return infoMap;
         }
 
@@ -44,12 +44,13 @@ public class JextService {
         String[] userDetails = StrUtil.parse(strCourse, "[1-9]\\d*人学习");
 
         String str51Cto = httpService.sendHttpGet("https://blog.51cto.com/13851865");
-        String[] blog51Cto = StrUtil.parse(str51Cto, "<span>[1-9](\\d*|W\\+)</span>");
+        String[] blog51Cto = StrUtil.parse(str51Cto, "<span>[1-9]\\d*(W\\+)*</span>");
         String[] reader51Cto = StrUtil.parse(str51Cto, "阅读&nbsp;[1-9]\\d*");
 
         String strCsdn = httpService.sendHttpGet("https://blog.csdn.net/xiziyidi");
         String[] blogCsdn = StrUtil.parse(strCsdn, "<span class=\"count\">[1-9]\\d*</span>");
         String[] readerCsdn = StrUtil.parse(strCsdn, "<span class=\"num\">[1-9]\\d*</span>");
+        String[] rankCsdn = StrUtil.parse(strCsdn, "<a class=\"grade-box-rankA\" href=\"https://blog.csdn.net/rank/writing_rank\\w*\" target=\"_blank\">\\s*[1-9]\\d*(\\W\\+)*\\s*</a>");
 
         infoMap = new HashMap<String, Object>() {{
             put("course", new HashMap<Object, Object>() {{
@@ -64,6 +65,7 @@ public class JextService {
             put("csdn", new HashMap<Object, Object>() {{
                 put("count", formatInfo(formatInfo(blogCsdn, "<span class=\"count\">"), "</span>"));
                 put("reader", formatInfo(formatInfo(readerCsdn, "<span class=\"num\">"), "</span>"));
+                put("rank", formatInfo(formatInfo(rankCsdn, "<a class=\"grade-box-rankA\" href=\"https://blog.csdn.net/rank/writing_rank\\w*\" target=\"_blank\">\\s*"), "\\s*</a>"));
             }});
         }};
 

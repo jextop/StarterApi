@@ -5,6 +5,7 @@ import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
+import org.springframework.boot.autoconfigure.quartz.JobStoreType;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,10 +14,11 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties("job.quartz")
 public class QuartzConfig {
     private String cron;
+    JobStoreType
 
     @Bean
     public JobDetail quartzJob() {
-        return JobBuilder.newJob(QuartzJob.class).storeDurably().build();
+        return JobBuilder.newJob(QuartzJob.class).build();
     }
 
     @Bean
