@@ -19,7 +19,7 @@ public class B64Util {
     }
 
     public static String encode(byte[] bytes) {
-        return bytes == null ? null : (new Base64()).encodeToString(bytes);
+        return bytes == null ? null : Base64.encodeBase64String(bytes);
     }
 
     public static String decode(String str) {
