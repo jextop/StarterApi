@@ -4,6 +4,7 @@ import com.common.http.RespStr;
 import com.common.util.LogUtil;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.config.RequestConfig;
@@ -29,22 +30,31 @@ public class HttpService {
     @Autowired
     private RequestConfig requestConfig;
 
-    private <T> T sendRequest(HttpRequestBase httpRequest, ResponseHandler<T> handler) {
-        if (httpRequest == null || handler == null) {
-            return null;
-        }
-
+    public <T> T sendRequest(HttpRequestBase httpRequest, ResponseHandler<T> handler) {
         httpRequest.setConfig(requestConfig);
+
         try {
             return httpClient.execute(httpRequest, handler);
+        } catch (ClientProtocolException e) {
+            LogUtil.error("Error when sendRequest", e.getMessage());
         } catch (IOException e) {
             LogUtil.error("Error when sendRequest", e.getMessage());
         }
         return null;
     }
 
+    public <T> T sendHttpGet(String url, ResponseHandler<T> handler) {
+        return sendRequest(new HttpGet(url), handler);
+    }
+
     public String sendHttpGet(String url) {
-        return sendRequest(new HttpGet(url), new RespStr());
+        return sendHttpGet(url, new RespStr());
+    }
+
+    public <T> T sendHttpGet(String url, Map<String, String> headers, ResponseHandler<T> handler) {
+        HttpGet httpGet = new HttpGet(url);
+        fillHeaders(httpGet, headers);
+        return sendRequest(httpGet, handler);
     }
 
     public <T> T sendHttpForm(String httpUrl, Map<String, String> headers, Map<String, Object> params, ResponseHandler<T> handler) {

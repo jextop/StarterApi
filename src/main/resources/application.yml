@@ -29,10 +29,10 @@ job:
 
 http:
   maxTotal: 100
-  defaultMaxPerRoute: 20
-  connectTimeout: 1000
-  connectionRequestTimeout: 500
+  maxPerRoute: 20
   socketTimeout: 5000
+  connectTimeout: 5000
+  requestTimeout: 5000
   staleConnectionCheckEnabled: true
 
 shiro:

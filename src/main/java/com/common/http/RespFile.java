@@ -48,22 +48,21 @@ public class RespFile implements ResponseHandler<byte[]> {
 
     @Override
     public byte[] handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
-        // Header: Content-Disposition: attachment;fileName=abc.txt
-        Header[] headers = response.getHeaders("Content-Disposition");
-        for (Header header : headers) {
-            final String value = header.getValue();
-            LogUtil.info("Header", header.getName(), "value", value);
-
-            if (value.startsWith(fileNameFlag)) {
-                fileName = value.substring(fileNameFlag.length(), value.length());
-            }
-        }
-
         // 判断响应状态
         if (response.getStatusLine().getStatusCode() >= 300) {
             throw new IOException("HTTP Request is not success, Response code is " + response.getStatusLine().getStatusCode());
         }
 
+        // 读取文件名称，Header: Content-Disposition: attachment;fileName=abc.txt
+        Header header = response.getFirstHeader("Content-Disposition");
+        String headerValue = header.getValue();
+        LogUtil.info("Header", header.getName(), "value", headerValue);
+
+        if (headerValue.startsWith(fileNameFlag)) {
+            fileName = headerValue.substring(fileNameFlag.length(), headerValue.length());
+        }
+
+        // 读取返回内容
         HttpEntity entity = response.getEntity();
         if (entity == null) {
             throw new ClientProtocolException("Response contains no content");

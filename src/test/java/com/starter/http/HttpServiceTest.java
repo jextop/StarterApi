@@ -2,7 +2,7 @@ package com.starter.http;
 
 import com.alibaba.fastjson.JSONObject;
 import com.common.http.RespFile;
-import com.common.http.RespJson;
+import com.common.http.RespJsonObj;
 import com.common.http.UrlUtil;
 import com.common.util.LogUtil;
 import com.common.util.StrUtil;
@@ -28,7 +28,7 @@ public class HttpServiceTest {
     }
 
     @Test
-    public void testHttpForm() {
+    public void testSendHttpForm() {
         String url = "https://openapi.baidu.com/oauth/2.0/token";
         Map<String, String> headers = new HashMap<String, String>() {{
             put("Content-Type", "application/x-www-form-urlencoded");
@@ -39,7 +39,7 @@ public class HttpServiceTest {
             put("client_secret", "O9o1O213UgG5LFn0bDGNtoRN3VWl2du6");
         }};
 
-        JSONObject ret = httpService.sendHttpForm(url, headers, params, new RespJson());
+        JSONObject ret = httpService.sendHttpForm(url, headers, params, new RespJsonObj());
         LogUtil.info(ret);
         Assertions.assertNotNull(ret);
 

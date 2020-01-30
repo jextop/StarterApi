@@ -20,36 +20,34 @@ import java.util.List;
 @Configuration
 @ConfigurationProperties("http")
 public class HttpConfig {
-    private Integer maxTotal;
-    private Integer defaultMaxPerRoute;
-    private Integer connectTimeout;
-    private Integer connectionRequestTimeout;
-    private Integer socketTimeout;
+    private int maxTotal;
+    private int maxPerRoute;
+    private int socketTimeout;
+    private int connectTimeout;
+    private int requestTimeout;
     private boolean staleConnectionCheckEnabled;
 
     @Bean
     public HttpClientConnectionManager httpClientConnectionManager() {
         PoolingHttpClientConnectionManager connMgr = new PoolingHttpClientConnectionManager();
         connMgr.setMaxTotal(maxTotal);
-        connMgr.setDefaultMaxPerRoute(defaultMaxPerRoute);
+        connMgr.setDefaultMaxPerRoute(maxPerRoute);
         return connMgr;
     }
 
     @Bean
     public RequestConfig requestConfig() {
-        return RequestConfig
-                .custom()
-                .setConnectTimeout(connectTimeout)
-                .setConnectionRequestTimeout(connectionRequestTimeout)
+        return RequestConfig.custom()
                 .setSocketTimeout(socketTimeout)
+                .setConnectTimeout(connectTimeout)
+                .setConnectionRequestTimeout(requestTimeout)
                 .setStaleConnectionCheckEnabled(staleConnectionCheckEnabled)
                 .build();
     }
 
     @Bean
     public HttpClient httpClient(HttpClientConnectionManager manager, RequestConfig config) {
-        return HttpClientBuilder
-                .create()
+        return HttpClientBuilder.create()
                 .setConnectionManager(manager)
                 .setDefaultRequestConfig(config)
                 .build();
@@ -73,44 +71,44 @@ public class HttpConfig {
         return template;
     }
 
-    public Integer getMaxTotal() {
+    public int getMaxTotal() {
         return maxTotal;
     }
 
-    public void setMaxTotal(Integer maxTotal) {
+    public void setMaxTotal(int maxTotal) {
         this.maxTotal = maxTotal;
     }
 
-    public Integer getDefaultMaxPerRoute() {
-        return defaultMaxPerRoute;
+    public int getMaxPerRoute() {
+        return maxPerRoute;
     }
 
-    public void setDefaultMaxPerRoute(Integer defaultMaxPerRoute) {
-        this.defaultMaxPerRoute = defaultMaxPerRoute;
+    public void setMaxPerRoute(int maxPerRoute) {
+        this.maxPerRoute = maxPerRoute;
     }
 
-    public Integer getConnectTimeout() {
-        return connectTimeout;
-    }
-
-    public void setConnectTimeout(Integer connectTimeout) {
-        this.connectTimeout = connectTimeout;
-    }
-
-    public Integer getConnectionRequestTimeout() {
-        return connectionRequestTimeout;
-    }
-
-    public void setConnectionRequestTimeout(Integer connectionRequestTimeout) {
-        this.connectionRequestTimeout = connectionRequestTimeout;
-    }
-
-    public Integer getSocketTimeout() {
+    public int getSocketTimeout() {
         return socketTimeout;
     }
 
-    public void setSocketTimeout(Integer socketTimeout) {
+    public void setSocketTimeout(int socketTimeout) {
         this.socketTimeout = socketTimeout;
+    }
+
+    public int getConnectTimeout() {
+        return connectTimeout;
+    }
+
+    public void setConnectTimeout(int connectTimeout) {
+        this.connectTimeout = connectTimeout;
+    }
+
+    public int getRequestTimeout() {
+        return requestTimeout;
+    }
+
+    public void setRequestTimeout(int requestTimeout) {
+        this.requestTimeout = requestTimeout;
     }
 
     public boolean isStaleConnectionCheckEnabled() {

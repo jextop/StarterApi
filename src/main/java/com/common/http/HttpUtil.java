@@ -3,9 +3,11 @@ package com.common.http;
 import com.common.util.JsonUtil;
 import com.common.util.LogUtil;
 import com.common.util.StrUtil;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -42,9 +44,16 @@ import java.util.List;
 import java.util.Map;
 
 public class HttpUtil {
-    public static final String CHARSET_UTF_8 = "utf-8";
-    public static final String CONTENT_TYPE_FORM = "application/x-www-form-urlencoded;charset=utf-8";
-    public static final String CONTENT_TYPE_JSON = "application/json;charset=utf-8";
+    private static final String CHARSET_UTF_8 = "utf-8";
+    private static final String CONTENT_TYPE_FORM = "application/x-www-form-urlencoded;charset=utf-8";
+    private static final String CONTENT_TYPE_JSON = "application/json;charset=utf-8";
+
+    private static final int MAX_TOTAL = 100;
+    private static final int MAX_PER_ROUTE = 20;
+
+    private static final int SOCKET_TIMEOUT = 10000;
+    private static final int CONNECT_TIMEOUT = 10000;
+    private static final int REQUEST_TIMEOUT = 10000;
 
     private static PoolingHttpClientConnectionManager connectionPool;
     private static RequestConfig requestConfig;
@@ -60,36 +69,25 @@ public class HttpUtil {
                     .build();
 
             connectionPool = new PoolingHttpClientConnectionManager(socketFactoryRegistry);
-            connectionPool.setMaxTotal(200);
-            connectionPool.setDefaultMaxPerRoute(2);
-
-            int socketTimeout = 10000;
-            int connectTimeout = 10000;
-            int connectionRequestTimeout = 10000;
-
-            requestConfig = RequestConfig.custom()
-                    .setConnectionRequestTimeout(connectionRequestTimeout)
-                    .setSocketTimeout(socketTimeout)
-                    .setConnectTimeout(connectTimeout)
-                    .build();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
+            connectionPool.setMaxTotal(MAX_TOTAL);
+            connectionPool.setDefaultMaxPerRoute(MAX_PER_ROUTE);
         } catch (KeyStoreException e) {
             e.printStackTrace();
         } catch (KeyManagementException e) {
             e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
         }
 
         requestConfig = RequestConfig.custom()
-                .setSocketTimeout(50000)
-                .setConnectTimeout(50000)
-                .setConnectionRequestTimeout(50000)
+                .setSocketTimeout(SOCKET_TIMEOUT)
+                .setConnectTimeout(CONNECT_TIMEOUT)
+                .setConnectionRequestTimeout(REQUEST_TIMEOUT)
                 .build();
     }
 
     private static CloseableHttpClient getHttpClient() {
-        return HttpClients
-                .custom()
+        return HttpClients.custom()
                 .setConnectionManager(connectionPool)
                 .setDefaultRequestConfig(requestConfig)
                 .setRetryHandler(new DefaultHttpRequestRetryHandler(0, false))
@@ -97,34 +95,23 @@ public class HttpUtil {
     }
 
     private static <T> T sendHttpRequest(HttpRequestBase httpRequest, ResponseHandler<T> handler) {
-        if (httpRequest == null || handler == null) {
-            return null;
-        }
-
         try {
             return getHttpClient().execute(httpRequest, handler);
+        } catch (ClientProtocolException e) {
+            LogUtil.error("Error when sendHttpRequest", e.getMessage());
         } catch (IOException e) {
             LogUtil.error("Error when sendHttpRequest", e.getMessage());
         }
         return null;
     }
 
-    private static String sendHttpPost(HttpPost httpPost) {
-        return sendHttpRequest(httpPost, new RespStr());
-    }
-
-    private static String sendHttpGet(HttpGet httpGet) {
-        return sendHttpRequest(httpGet, new RespStr());
+    public static <T> T sendHttpGet(String httpUrl, ResponseHandler<T> handler) {
+        HttpGet httpGet = new HttpGet(httpUrl);
+        return sendHttpRequest(httpGet, handler);
     }
 
     public static String sendHttpGet(String httpUrl) {
-        HttpGet httpGet = new HttpGet(httpUrl);
-        return sendHttpGet(httpGet);
-    }
-
-    public static String sendHttpPost(String httpUrl) {
-        HttpPost httpPost = new HttpPost(httpUrl);
-        return sendHttpPost(httpPost);
+        return sendHttpGet(httpUrl, new RespStr());
     }
 
     public static <T> T sendHttpGet(String httpUrl, Map<String, String> headers, ResponseHandler<T> handler) {
@@ -136,11 +123,7 @@ public class HttpUtil {
     public static String sendHttpGet(String httpUrl, Map<String, String> headers) {
         HttpGet httpGet = new HttpGet(httpUrl);
         fillHeaders(httpGet, headers);
-        return sendHttpGet(httpGet);
-    }
-
-    public static String sendHttpGet(String httpUrl, Map<String, String> headers, Map<String, Object> params) {
-        return sendHttpGet(httpUrl, headers, params, new RespStr());
+        return sendHttpRequest(httpGet, new RespStr());
     }
 
     public static <T> T sendHttpGet(String httpUrl, Map<String, String> headers, Map<String, Object> params, ResponseHandler<T> handler) {
@@ -159,44 +142,21 @@ public class HttpUtil {
         return sendHttpGet(httpUrl, headers, handler);
     }
 
+    public static String sendHttpGet(String httpUrl, Map<String, String> headers, Map<String, Object> params) {
+        return sendHttpGet(httpUrl, headers, params, new RespStr());
+    }
+
     public static <T> T sendHttpPost(String httpUrl, Map<String, String> headers, Map<String, Object> params, ResponseHandler<T> handler) {
-        return sendHttpPost(httpUrl, headers, JsonUtil.toStr(params), handler);
-    }
-
-    public static String sendHttpPost(String httpUrl, Map<String, String> headers, Map<String, Object> params) {
-        return sendHttpPost(httpUrl, headers, JsonUtil.toStr(params));
-    }
-
-    public static String sendHttpPost(String httpUrl, Map<String, String> headers, String jsonStr) {
-        return sendHttpPost(httpUrl, headers, jsonStr, new RespStr());
-    }
-
-    public static <T> T sendHttpPost(String httpUrl, Map<String, String> headers, String jsonStr, ResponseHandler<T> handler) {
         HttpPost httpPost = new HttpPost(httpUrl);
         fillHeaders(httpPost, headers);
 
-        if (!StrUtil.isEmpty(jsonStr)) {
-            try {
-                StringEntity stringEntity = new StringEntity(jsonStr, "UTF-8");
-                stringEntity.setContentType(CONTENT_TYPE_JSON);
-                httpPost.setEntity(stringEntity);
-            } catch (Exception e) {
-                LogUtil.error("Error when sendHttpPost", e.getMessage());
-            }
+        if (!MapUtils.isEmpty(params)) {
+            String jsonStr = JsonUtil.toStr(params);
+            StringEntity stringEntity = new StringEntity(jsonStr, "UTF-8");
+            stringEntity.setContentType(CONTENT_TYPE_JSON);
+            httpPost.setEntity(stringEntity);
         }
         return sendHttpRequest(httpPost, handler);
-    }
-
-    public static String sendHttpPost(String httpUrl, Map<String, String> headers, Map<String, Object> params, File fileObj) {
-        return sendHttpPost(httpUrl, headers, params, new ArrayList<File>() {{
-            if (fileObj != null) {
-                add(fileObj);
-            }
-        }});
-    }
-
-    public static String sendHttpPost(String httpUrl, Map<String, String> headers, Map<String, Object> params, Collection<File> files) {
-        return sendHttpPost(httpUrl, headers, params, files, new RespStr());
     }
 
     public static <T> T sendHttpPost(String httpUrl, Map<String, String> headers, Map<String, Object> params, Collection<File> files, ResponseHandler<T> handler) {
@@ -204,7 +164,7 @@ public class HttpUtil {
         fillHeaders(httpPost, headers);
 
         MultipartEntityBuilder meBuilder = MultipartEntityBuilder.create();
-        if (params != null) {
+        if (!MapUtils.isEmpty(params)) {
             for (String key : params.keySet()) {
                 Object value = params.get(key);
                 if (value != null) {
@@ -213,7 +173,7 @@ public class HttpUtil {
             }
         }
 
-        if (files != null) {
+        if (!CollectionUtils.isEmpty(files)) {
             for (Object file : files) {
                 if (file instanceof File) {
                     meBuilder.addBinaryBody("file", (File) file);
@@ -228,29 +188,45 @@ public class HttpUtil {
         return sendHttpRequest(httpPost, handler);
     }
 
-    public static String sendHttpForm(String httpUrl, Map<String, String> headers, Map<String, Object> params) {
-        return sendHttpForm(httpUrl, headers, params, new RespStr());
-    }
-
     public static <T> T sendHttpForm(String httpUrl, Map<String, String> headers, Map<String, Object> params, ResponseHandler<T> handler) {
         HttpPost httpPost = new HttpPost(httpUrl);
         fillHeaders(httpPost, headers);
 
         if (!MapUtils.isEmpty(params)) {
-            try {
-                List<NameValuePair> pairs = new ArrayList<NameValuePair>(params.size());
-                for (Map.Entry<String, Object> param : params.entrySet()) {
-                    Object value = param.getValue();
-                    if (value != null) {
-                        pairs.add(new BasicNameValuePair(param.getKey(), String.valueOf(value)));
-                    }
+            List<NameValuePair> pairs = new ArrayList<NameValuePair>(params.size());
+            for (Map.Entry<String, Object> param : params.entrySet()) {
+                Object value = param.getValue();
+                if (value != null) {
+                    pairs.add(new BasicNameValuePair(param.getKey(), String.valueOf(value)));
                 }
+            }
+
+            try {
                 httpPost.setEntity(new UrlEncodedFormEntity(pairs));
             } catch (Exception e) {
-                LogUtil.error(String.format("Error when sendHttpSubmit: %s", e.getMessage()));
+                LogUtil.error("Error when sendHttpSubmit", e.getMessage());
             }
         }
         return sendHttpRequest(httpPost, handler);
+    }
+
+    public static <T> T sendHttpPut(String httpUrl, Map<String, String> headers, Map<String, Object> params, ResponseHandler<T> handler) {
+        HttpPut httpPut = new HttpPut(httpUrl);
+        fillHeaders(httpPut, headers);
+
+        if (!MapUtils.isEmpty(params)) {
+            String jsonStr = JsonUtil.toStr(params);
+            StringEntity stringEntity = new StringEntity(jsonStr, "UTF-8");
+            stringEntity.setContentType(CONTENT_TYPE_JSON);
+            httpPut.setEntity(stringEntity);
+        }
+        return sendHttpRequest(httpPut, handler);
+    }
+
+    public static <T> T sendHttpDelete(String httpUrl, Map<String, String> headers, ResponseHandler<T> handler) {
+        HttpDelete httpDelete = new HttpDelete(httpUrl);
+        fillHeaders(httpDelete, headers);
+        return sendHttpRequest(httpDelete, handler);
     }
 
     private static void fillHeaders(HttpRequestBase request, Map<String, String> headers) {
@@ -261,31 +237,5 @@ public class HttpUtil {
         for (Map.Entry<String, String> header : headers.entrySet()) {
             request.addHeader(header.getKey(), header.getValue());
         }
-    }
-
-    public static <T> T sendHttpPut(String httpUrl, Map<String, String> headers, Map<String, Object> params, ResponseHandler<T> handler) {
-        return sendHttpPut(httpUrl, headers, JsonUtil.toStr(params), handler);
-    }
-
-    public static <T> T sendHttpPut(String httpUrl, Map<String, String> headers, String jsonStr, ResponseHandler<T> handler) {
-        HttpPut httpPost = new HttpPut(httpUrl);
-        fillHeaders(httpPost, headers);
-
-        if (!StrUtil.isEmpty(jsonStr)) {
-            try {
-                StringEntity stringEntity = new StringEntity(jsonStr, "UTF-8");
-                stringEntity.setContentType(CONTENT_TYPE_JSON);
-                httpPost.setEntity(stringEntity);
-            } catch (Exception e) {
-                LogUtil.error("Error when sendHttpPut: %s", e.getMessage());
-            }
-        }
-        return sendHttpRequest(httpPost, handler);
-    }
-
-    public static <T> T sendHttpDelete(String httpUrl, Map<String, String> headers, ResponseHandler<T> handler) {
-        HttpDelete httpDelete = new HttpDelete(httpUrl);
-        fillHeaders(httpDelete, headers);
-        return sendHttpRequest(httpDelete, handler);
     }
 }

@@ -12,7 +12,7 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-public class RespJson implements ResponseHandler<JSONObject> {
+public class RespJsonObj implements ResponseHandler<JSONObject> {
     @Override
     public JSONObject handleResponse(HttpResponse resp) throws ClientProtocolException, IOException {
         HttpEntity entity = resp.getEntity();
@@ -25,7 +25,7 @@ public class RespJson implements ResponseHandler<JSONObject> {
         Charset charset = contentType.getCharset();
         String jsonStr = EntityUtils.toString(entity, charset);
 
-        // parse json
+        // parse JSON object
         return JsonUtil.parseObj(jsonStr);
     }
 }
