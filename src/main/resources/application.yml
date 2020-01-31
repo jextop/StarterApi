@@ -119,5 +119,5 @@ logging:
     max-size: 10MB
     max-history: 7
   pattern:
-    console: "%d %-5level %logger : %msg%n"
+    console: "%d %-5level [%thread] %logger : %msg%n"
     file: "%d %-5level [%thread] %logger : %msg%n"

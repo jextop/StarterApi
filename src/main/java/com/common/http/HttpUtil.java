@@ -159,6 +159,10 @@ public class HttpUtil {
         return sendHttpRequest(httpPost, handler);
     }
 
+    public static String sendHttpPost(String httpUrl, Map<String, String> headers, Map<String, Object> params) {
+        return sendHttpPost(httpUrl, headers, params, new RespStr());
+    }
+
     public static <T> T sendHttpPost(String httpUrl, Map<String, String> headers, Map<String, Object> params, Collection<File> files, ResponseHandler<T> handler) {
         HttpPost httpPost = new HttpPost(httpUrl);
         fillHeaders(httpPost, headers);

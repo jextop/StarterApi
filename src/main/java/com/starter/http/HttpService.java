@@ -1,6 +1,7 @@
 package com.starter.http;
 
 import com.common.http.RespStr;
+import com.common.util.JsonUtil;
 import com.common.util.LogUtil;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.http.NameValuePair;
@@ -12,6 +13,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,8 @@ import java.util.Map;
 
 @Service
 public class HttpService {
+    private static final String CONTENT_TYPE_JSON = "application/json;charset=utf-8";
+
     @Autowired
     private HttpClient httpClient;
 
@@ -55,6 +59,27 @@ public class HttpService {
         HttpGet httpGet = new HttpGet(url);
         fillHeaders(httpGet, headers);
         return sendRequest(httpGet, handler);
+    }
+
+    public String sendHttpGet(String url, Map<String, String> headers) {
+        return sendHttpGet(url, headers, new RespStr());
+    }
+
+    public <T> T sendHttpPost(String httpUrl, Map<String, String> headers, Map<String, Object> params, ResponseHandler<T> handler) {
+        HttpPost httpPost = new HttpPost(httpUrl);
+        fillHeaders(httpPost, headers);
+
+        if (!MapUtils.isEmpty(params)) {
+            String jsonStr = JsonUtil.toStr(params);
+            StringEntity stringEntity = new StringEntity(jsonStr, "UTF-8");
+            stringEntity.setContentType(CONTENT_TYPE_JSON);
+            httpPost.setEntity(stringEntity);
+        }
+        return sendRequest(httpPost, handler);
+    }
+
+    public String sendHttpPost(String httpUrl, Map<String, String> headers, Map<String, Object> params) {
+        return sendHttpPost(httpUrl, headers, params, new RespStr());
     }
 
     public <T> T sendHttpForm(String httpUrl, Map<String, String> headers, Map<String, Object> params, ResponseHandler<T> handler) {
