@@ -115,7 +115,6 @@ logging:
     com.starter: info
   file:
     path: logs
-    name: logs/starter.log
     max-size: 10MB
     max-history: 7
   pattern:
