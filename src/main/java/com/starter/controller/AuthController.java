@@ -4,7 +4,6 @@ package com.starter.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
-import com.starter.controller.BaseController;
 
 /**
  * <p>
@@ -16,6 +15,6 @@ import com.starter.controller.BaseController;
  */
 @Controller
 @RequestMapping("/auth")
-public class AuthController extends BaseController {
+public class AuthController {
 
 }

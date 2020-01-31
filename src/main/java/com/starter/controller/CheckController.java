@@ -10,9 +10,9 @@ import com.starter.entity.User;
 import com.starter.http.HttpService;
 import com.starter.jext.JextService;
 import com.starter.job.QuartzJob;
-import com.starter.mapper.LogMapper;
 import com.starter.mq.ActiveMqService;
 import com.starter.service.RedisService;
+import com.starter.service.impl.LogServiceImpl;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
@@ -34,7 +34,7 @@ import java.util.HashMap;
 
 @RestController
 @RequestMapping("/")
-public class CheckController extends BaseController {
+public class CheckController {
     @Autowired
     ActiveMqService activeMqService;
 
@@ -42,7 +42,7 @@ public class CheckController extends BaseController {
     RedisService redisService;
 
     @Autowired
-    LogMapper logMapper;
+    LogServiceImpl logService;
 
     @Autowired
     HttpService httpService;
@@ -113,15 +113,15 @@ public class CheckController extends BaseController {
         Log log = new Log() {{
             setSummary(String.format("db_test_%s_%s_数据库", ip, new Date()));
         }};
-        logMapper.insert(log);
-        LogUtil.info("Check db to insert log", log.getSummary());
+        boolean bSave = logService.save(log);
+        LogUtil.info("Check db to insert log", bSave, log.getSummary());
 
         // Read log from db
-        Log ret = logMapper.selectOne(new QueryWrapper<Log>()
+        Log ret = logService.getOne(new QueryWrapper<Log>()
                 .orderByDesc("id")
                 .eq("summary", log.getSummary())
         );
-        Integer count = logMapper.selectCount(null);
+        Integer count = logService.count();
 
         return new HashMap<String, Object>() {{
             put("chk", "db");

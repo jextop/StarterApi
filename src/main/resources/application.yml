@@ -111,7 +111,8 @@ spring:
 
 logging:
   level:
-    com.hello: info
+    com.common: info
+    com.starter: info
   file:
     path: logs
     name: logs/starter.log

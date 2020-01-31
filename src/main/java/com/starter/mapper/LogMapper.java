@@ -2,7 +2,6 @@ package com.starter.mapper;
 
 import com.starter.entity.Log;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.springframework.stereotype.Component;
 
 /**
  * <p>
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Component;
  * @author Ding
  * @since 2020-01-07
  */
-@Component
 public interface LogMapper extends BaseMapper<Log> {
 
 }

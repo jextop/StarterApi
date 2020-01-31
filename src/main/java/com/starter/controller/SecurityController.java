@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 @RestController
 @RequestMapping("/")
-public class SecurityController extends BaseController {
+public class SecurityController {
     @AccessLimited(count = 1)
     @GetMapping(value = "/login")
     public Object login(@RequestParam(required = false) String username, @RequestParam(required = false) String password) {

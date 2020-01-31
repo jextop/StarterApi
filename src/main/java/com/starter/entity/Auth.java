@@ -1,7 +1,7 @@
 package com.starter.entity;
 
-import com.starter.entity.BaseEntity;
 import java.time.LocalDateTime;
+import java.io.Serializable;
 
 /**
  * <p>
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * @author Ding
  * @since 2020-01-28
  */
-public class Auth extends BaseEntity {
+public class Auth implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

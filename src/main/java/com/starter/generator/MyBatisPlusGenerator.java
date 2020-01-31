@@ -81,8 +81,6 @@ public class MyBatisPlusGenerator {
         strategy.setSuperEntityColumns("id");
         strategy.setTablePrefix(pConfig.getModuleName() + "_");
         strategy.setEntityLombokModel(false);
-        strategy.setSuperEntityClass("com.starter.entity.BaseEntity");
-        strategy.setSuperControllerClass("com.starter.controller.BaseController");
         strategy.setControllerMappingHyphenStyle(true);
         generator.setStrategy(strategy);
 
