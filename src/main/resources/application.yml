@@ -1,39 +1,12 @@
 server:
   port: 8011
-
   compression:
     enabled: true
     mime-types: application/json
 
-management:
-  metrics:
-    tags:
-      application: ${spring.application.name}
-  endpoint:
-    shutdown:
-      enabled: false
-    health:
-      show-details: always
-      show-components: always
-  endpoints:
-    web:
-      exposure:
-        include: ["health", "info", "logfile", "loggers", "scheduledtasks", "flyway", "prometheus"]
-    jmx:
-      exposure:
-        include: "*"
-
 job:
   quartz:
     cron: 0 0/23 * * * ?
-
-http:
-  maxTotal: 100
-  maxPerRoute: 20
-  socketTimeout: 5000
-  connectTimeout: 5000
-  requestTimeout: 5000
-  staleConnectionCheckEnabled: true
 
 shiro:
   loginUrl: /login
@@ -45,7 +18,6 @@ spring:
     name: starter_api
   mvc:
     throw-exception-if-no-handler-found: true
-
   servlet:
     multipart:
       enabled: true
@@ -109,6 +81,14 @@ spring:
     pool:
       enabled: false
 
+http:
+  maxTotal: 100
+  maxPerRoute: 20
+  socketTimeout: 5000
+  connectTimeout: 5000
+  requestTimeout: 5000
+  staleConnectionCheckEnabled: true
+
 logging:
   config: classpath:logback.xml
   level:
@@ -121,3 +101,21 @@ logging:
   pattern:
     console: "%d %-5level [%thread] %logger : %msg%n"
     file: "%d %-5level [%thread] %logger : %msg%n"
+
+management:
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  endpoint:
+    shutdown:
+      enabled: false
+    health:
+      show-details: always
+      show-components: always
+  endpoints:
+    web:
+      exposure:
+        include: ["health", "info", "logfile", "loggers", "scheduledtasks", "flyway", "prometheus"]
+    jmx:
+      exposure:
+        include: "*"

@@ -1,11 +1,14 @@
 # Api Starter based on Spring Boot Web
 
-## Swagger
-http://localhost:8011/swagger-ui.html
-
 ## ActiveMQ
 launchActiveMQ.bat
 http://localhost:8161, admin/admin
+
+## Swagger
+http://localhost:8011/swagger-ui.html
+
+## Actuator
+http://localhost:8011/actuator
 
 ## LogStash
 launchLogStash.bat
