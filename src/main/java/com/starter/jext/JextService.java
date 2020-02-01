@@ -84,7 +84,7 @@ public class JextService {
         }};
 
         // Set cache
-        redisService.setStr(INFO_KEY, JsonUtil.toStr(infoMap));
+        redisService.setStr1Hour(INFO_KEY, JsonUtil.toStr(infoMap));
         return infoMap;
     }
 

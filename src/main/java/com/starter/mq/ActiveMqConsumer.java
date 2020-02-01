@@ -16,7 +16,7 @@ public class ActiveMqConsumer {
         LogUtil.info("Receive queue msg", msg);
 
         if (JextService.INFO_KEY.equals(msg)) {
-            jextService.getInfo(true);
+            jextService.getInfo();
         }
     }
 
