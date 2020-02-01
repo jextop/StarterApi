@@ -1,10 +1,12 @@
 package com.starter.interceptor;
 
+import com.common.util.LogUtil;
+import com.common.util.ReqUtil;
 import com.starter.annotation.AccessLimited;
 import com.starter.exception.AccessLimitException;
 import com.starter.service.RedisService;
-import com.common.util.ReqUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -40,11 +42,16 @@ public class AccessInterceptor implements HandlerInterceptor {
                 request.getMethod(),
                 request.getRequestURI()
         );
-        long count = redisService.incr(key);
-        if (count <= accessLimited.count()) {
-            if (count == 1) {
-                redisService.expire(key, accessLimited.seconds());
+        try {
+            long count = redisService.incr(key);
+            if (count <= accessLimited.count()) {
+                if (count == 1) {
+                    redisService.expire(key, accessLimited.seconds());
+                }
+                return true;
             }
+        } catch (RedisConnectionFailureException e) {
+            LogUtil.error(e.getMessage());
             return true;
         }
         throw new AccessLimitException();

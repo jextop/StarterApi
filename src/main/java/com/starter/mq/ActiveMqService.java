@@ -31,6 +31,7 @@ public class ActiveMqService {
             jmsMessagingTemplate.convertAndSend(queue, msg);
         } catch (MessagingException e) {
             LogUtil.error(e.getMessage());
+            throw e;
         }
     }
 
@@ -41,6 +42,7 @@ public class ActiveMqService {
             jmsMessagingTemplate.convertAndSend(topic, msg);
         } catch (MessagingException e) {
             LogUtil.error(e.getMessage());
+            throw e;
         }
     }
 }
