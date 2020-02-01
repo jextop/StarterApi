@@ -1,6 +1,7 @@
 package com.starter.controller;
 
 import com.starter.exception.AccessLimitException;
+import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.shiro.ShiroException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -30,16 +31,8 @@ public class ExceptionController {
     }
 
     @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
-    @ExceptionHandler(value = {MessagingException.class})
-    public Object mqExceptionHandler(Exception e) {
-        return new HashMap<String, Object>() {{
-            put("msg", e.getMessage());
-        }};
-    }
-
-    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
-    @ExceptionHandler(value = {DataAccessException.class})
-    public Object dbExceptionHandler(Exception e) {
+    @ExceptionHandler(value = {PersistenceException.class, DataAccessException.class, MessagingException.class})
+    public Object mqExceptionHandler(RuntimeException e) {
         return new HashMap<String, Object>() {{
             put("msg", e.getMessage());
         }};
