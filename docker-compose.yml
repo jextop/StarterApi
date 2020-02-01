@@ -27,7 +27,7 @@ services:
 
     mq:
         hostname: mq
-        image: webcenter/activemq
+        image: webcenter/activemq:latest
         restart: always
         ports:
             - 61616:61616
@@ -35,7 +35,7 @@ services:
 
     log:
         hostname: log
-        image: registry.cn-shanghai.aliyuncs.com/hellodock/logstash:latest
+        image: registry.cn-shanghai.aliyuncs.com/hellodock/logstash:7.5.2
         restart: always
         ports:
             - 9600:9600
