@@ -13,6 +13,8 @@ import com.starter.job.QuartzJob;
 import com.starter.mq.ActiveMqService;
 import com.starter.service.RedisService;
 import com.starter.service.impl.LogServiceImpl;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
@@ -32,6 +34,7 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 
+@Api(tags = {"运行状态"})
 @RestController
 @RequestMapping("/")
 public class CheckController {
@@ -51,6 +54,7 @@ public class CheckController {
     JextService jextService;
 
     @AccessLimited(count = 1)
+    @ApiOperation("检查服务是否运行")
     @GetMapping(value = "")
     @ResponseStatus(HttpStatus.ACCEPTED)
     public Object index(@RequestAttribute(required = false) String ip) {
@@ -62,6 +66,7 @@ public class CheckController {
     }
 
     @AccessLimited(count = 1)
+    @ApiOperation("检查服务是否运行")
     @GetMapping(value = "/chk")
     public Object chk(@RequestAttribute(required = false) String ip) {
         return new HashMap<String, Object>() {{
@@ -72,6 +77,7 @@ public class CheckController {
     }
 
     @AccessLimited(count = 1)
+    @ApiOperation("检查消息队列")
     @GetMapping(path = "/chk/mq")
     public Object mq(@RequestAttribute(required = false) String ip) {
         String msg = String.format("check mq, %s, %s 消息队列", ip, new Date().toString());
@@ -84,6 +90,7 @@ public class CheckController {
     }
 
     @AccessLimited(count = 1)
+    @ApiOperation("检查缓存系统")
     @GetMapping(value = "/chk/cache")
     public Object cache(@RequestAttribute(required = false) String ip) {
         // Get a unique key
@@ -107,6 +114,7 @@ public class CheckController {
     }
 
     @AccessLimited(count = 1)
+    @ApiOperation("检查数据库")
     @GetMapping(value = "/chk/db")
     public Object db(@RequestAttribute(required = false) String ip) {
         // Write a log to db
@@ -132,6 +140,7 @@ public class CheckController {
     }
 
     @AccessLimited(count = 1)
+    @ApiOperation("检查作业调度")
     @GetMapping(value = "/chk/job")
     public Object job() {
         JobDetail job = JobBuilder.newJob(QuartzJob.class).build();
@@ -159,6 +168,7 @@ public class CheckController {
     }
 
     @AccessLimited(count = 1)
+    @ApiOperation("检查JSON数据传输")
     @GetMapping(value = "/chk/json", produces = "application/json")
     public Object json(@RequestAttribute(required = false) String ip) {
         return new User() {{
@@ -169,6 +179,7 @@ public class CheckController {
     }
 
     @AccessLimited(count = 1)
+    @ApiOperation("检查HTTP连接")
     @GetMapping(value = "/chk/http", produces = "application/json")
     public Object http() {
         String strCourse = httpService.sendHttpGet("https://edu.51cto.com/lecturer/13841865.html");
