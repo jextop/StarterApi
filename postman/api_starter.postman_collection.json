@@ -233,6 +233,34 @@
 			"response": []
 		},
 		{
+			"name": "{{server}}:{{port}}/jext",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "f5cfa067-380d-42ac-92b3-50faa9faf1f3",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Chk\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.cto51.course.user.length).to.gt(0);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{server}}:{{port}}/jext"
+			},
+			"response": []
+		},
+		{
 			"name": "{{server}}:{{port}}/actuator",
 			"event": [
 				{
@@ -341,34 +369,6 @@
 				"method": "GET",
 				"header": [],
 				"url": "{{server}}:{{port}}/actuator/loggers/root"
-			},
-			"response": []
-		},
-		{
-			"name": "{{server}}:{{port}}/jext",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "f5cfa067-380d-42ac-92b3-50faa9faf1f3",
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.test(\"Chk\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.cto51.course.user.length).to.gt(0);",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": "{{server}}:{{port}}/jext"
 			},
 			"response": []
 		}

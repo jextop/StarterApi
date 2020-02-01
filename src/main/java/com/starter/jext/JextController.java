@@ -19,6 +19,6 @@ public class JextController {
     @ApiOperation("获取社区信息")
     @GetMapping(value = "")
     public Object info() {
-        return jextService.getInfo();
+        return jextService.getInfo(false);
     }
 }

@@ -1,41 +1,19 @@
 version: '3'
 services:
-    api:
-        hostname: api
-        image: starter_api:latest
-        build: .
-        restart: always
-#        command: ./launch.sh
-#        working_dir: /
-#        volumes:
-#            - ./deploy:/
-#            - ../jext/data/file:/tmp/file
-        ports:
-            - 8011:8011
-        depends_on:
-            - db
-            - cache
-            - mq
-        networks:
-            - api
-            - data
-
     db:
         hostname: db
         image: mysql:5
         command: --default-authentication-plugin=mysql_native_password
         restart: always
 #        volumes:
-#            - ../jext/data/mysql/data:/var/lib/mysql
-#            - ../jext/data/mysql/conf:/etc/mysql/conf.d
-#            - ../jext/data/mysql/initdb:/docker-entrypoint-initdb.d
+#            - ../data/mysql/data:/var/lib/mysql
+#            - ../data/mysql/conf:/etc/mysql/conf.d
+#            - ../data/mysql/initdb:/docker-entrypoint-initdb.d
         ports:
             - 3306:3306
         environment:
             MYSQL_DATABASE: starter
             MYSQL_ROOT_PASSWORD: root
-        networks:
-            - data
 
     cache:
         hostname: cache
@@ -43,11 +21,9 @@ services:
         command: redis-server --appendonly yes
         restart: always
 #        volumes:
-#            - ./data:/data
+#            - ../data/redis:/data
         ports:
             - 6379:6379
-        networks:
-            - data
 
     mq:
         hostname: mq
@@ -56,11 +32,34 @@ services:
         ports:
             - 61616:61616
             - 8161:8161
-        networks:
-            - data
 
-networks:
+    log:
+        hostname: log
+        image: registry.cn-shanghai.aliyuncs.com/hellodock/logstash:latest
+        restart: always
+        ports:
+            - 9600:9600
+            - 9601:9601
+
+    db_admin:
+        image: adminer:latest
+        restart: always
+        ports:
+            - 3006:8080
+        depends_on:
+            - db
+
     api:
-        driver: bridge
-    data:
-        driver: bridge
+        hostname: api
+        image: starter_api:latest
+        build: .
+        restart: always
+#        volumes:
+#            - ../data/file:/tmp/file
+        ports:
+            - 8011:8011
+        depends_on:
+            - db
+            - cache
+            - mq
+            - log

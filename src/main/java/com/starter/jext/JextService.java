@@ -3,7 +3,6 @@ package com.starter.jext;
 import com.common.util.JsonUtil;
 import com.common.util.StrUtil;
 import com.starter.http.HttpService;
-import com.starter.mq.ActiveMqService;
 import com.starter.service.RedisService;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,23 +16,14 @@ public class JextService {
     public static final String INFO_KEY = "jext.info";
 
     @Autowired
-    ActiveMqService activeMqService;
-
-    @Autowired
     RedisService redisService;
 
     @Autowired
     HttpService httpService;
 
-    public Map<String, Object> getInfo() {
-        return getInfo(false);
-    }
-
-    public Map<String, Object> getInfo(boolean updateCache) {
-        Map<String, Object> infoMap = updateCache ? null : JsonUtil.parseObj(redisService.getStr(INFO_KEY));
+    public Map<String, Object> getInfo(boolean forceUpdateCache) {
+        Map<String, Object> infoMap = forceUpdateCache ? null : JsonUtil.parseObj(redisService.getStr(INFO_KEY));
         if (!MapUtils.isEmpty(infoMap)) {
-            // Send mq
-            activeMqService.send("jext.info");
             return infoMap;
         }
 
