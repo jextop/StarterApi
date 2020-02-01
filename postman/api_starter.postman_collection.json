@@ -2,7 +2,7 @@
 	"info": {
 		"_postman_id": "0c7c8625-5a8d-497f-bd51-38808b33e78b",
 		"name": "api_starter",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
 	"item": [
 		{
@@ -29,16 +29,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "{{server}}:{{port}}/",
-					"host": [
-						"{{server}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						""
-					]
-				}
+				"url": "{{server}}:{{port}}/"
 			},
 			"response": []
 		},
@@ -66,16 +57,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "{{server}}:{{port}}/chk",
-					"host": [
-						"{{server}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"chk"
-					]
-				}
+				"url": "{{server}}:{{port}}/chk"
 			},
 			"response": []
 		},
@@ -103,17 +85,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "{{server}}:{{port}}/chk/mq",
-					"host": [
-						"{{server}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"chk",
-						"mq"
-					]
-				}
+				"url": "{{server}}:{{port}}/chk/mq"
 			},
 			"response": []
 		},
@@ -142,17 +114,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "{{server}}:{{port}}/chk/cache",
-					"host": [
-						"{{server}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"chk",
-						"cache"
-					]
-				}
+				"url": "{{server}}:{{port}}/chk/cache"
 			},
 			"response": []
 		},
@@ -182,17 +144,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "{{server}}:{{port}}/chk/db",
-					"host": [
-						"{{server}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"chk",
-						"db"
-					]
-				}
+				"url": "{{server}}:{{port}}/chk/db"
 			},
 			"response": []
 		},
@@ -220,17 +172,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "{{server}}:{{port}}/chk/job",
-					"host": [
-						"{{server}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"chk",
-						"job"
-					]
-				}
+				"url": "{{server}}:{{port}}/chk/job"
 			},
 			"response": []
 		},
@@ -258,17 +200,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "{{server}}:{{port}}/chk/json",
-					"host": [
-						"{{server}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"chk",
-						"json"
-					]
-				}
+				"url": "{{server}}:{{port}}/chk/json"
 			},
 			"response": []
 		},
@@ -296,17 +228,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "{{server}}:{{port}}/chk/http",
-					"host": [
-						"{{server}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"chk",
-						"http"
-					]
-				}
+				"url": "{{server}}:{{port}}/chk/http"
 			},
 			"response": []
 		},
@@ -334,16 +256,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "{{server}}:{{port}}/actuator",
-					"host": [
-						"{{server}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"actuator"
-					]
-				}
+				"url": "{{server}}:{{port}}/actuator"
 			},
 			"response": []
 		},
@@ -371,17 +284,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "{{server}}:{{port}}/actuator/health",
-					"host": [
-						"{{server}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"actuator",
-						"health"
-					]
-				}
+				"url": "{{server}}:{{port}}/actuator/health"
 			},
 			"response": []
 		},
@@ -409,17 +312,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "{{server}}:{{port}}/actuator/prometheus",
-					"host": [
-						"{{server}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"actuator",
-						"prometheus"
-					]
-				}
+				"url": "{{server}}:{{port}}/actuator/prometheus"
 			},
 			"response": []
 		},
@@ -447,18 +340,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "{{server}}:{{port}}/actuator/loggers/root",
-					"host": [
-						"{{server}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"actuator",
-						"loggers",
-						"root"
-					]
-				}
+				"url": "{{server}}:{{port}}/actuator/loggers/root"
 			},
 			"response": []
 		},
@@ -476,7 +358,7 @@
 							"",
 							"pm.test(\"Chk\", function () {",
 							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.course.user.length).to.gt(0);",
+							"    pm.expect(jsonData.cto51.course.user.length).to.gt(0);",
 							"});"
 						],
 						"type": "text/javascript"
@@ -486,16 +368,7 @@
 			"request": {
 				"method": "GET",
 				"header": [],
-				"url": {
-					"raw": "{{server}}:{{port}}/jext",
-					"host": [
-						"{{server}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"jext"
-					]
-				}
+				"url": "{{server}}:{{port}}/jext"
 			},
 			"response": []
 		}

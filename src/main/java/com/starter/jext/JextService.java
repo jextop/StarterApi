@@ -38,34 +38,48 @@ public class JextService {
         }
 
         // Get info
-        String strCourse = httpService.sendHttpGet("https://edu.51cto.com/center/course/index/search?q=Jext%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA");
-        String[] courses = StrUtil.parse(strCourse, "课程：[1-9]\\d*门");
-        String[] users = StrUtil.parse(strCourse, "学员数量：[1-9]\\d*人");
-        String[] userDetails = StrUtil.parse(strCourse, "[1-9]\\d*人学习");
+        String str51CtoCourse = httpService.sendHttpGet("https://edu.51cto.com/center/course/index/search?q=Jext%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA");
+        String[] course51Cto = StrUtil.parse(str51CtoCourse, "课程：[1-9]\\d*门");
+        String[] user51Cto = StrUtil.parse(str51CtoCourse, "学员数量：[1-9]\\d*人");
+        String[] userDetail51Cto = StrUtil.parse(str51CtoCourse, "[1-9]\\d*人学习");
 
-        String str51Cto = httpService.sendHttpGet("https://blog.51cto.com/13851865");
-        String[] blog51Cto = StrUtil.parse(str51Cto, "<span>[1-9]\\d*(W\\+)*</span>");
-        String[] reader51Cto = StrUtil.parse(str51Cto, "阅读&nbsp;[1-9]\\d*");
+        String str51CtoBlog = httpService.sendHttpGet("https://blog.51cto.com/13851865");
+        String[] blog51Cto = StrUtil.parse(str51CtoBlog, "<span>[1-9]\\d*(W\\+)*</span>");
+        String[] reader51Cto = StrUtil.parse(str51CtoBlog, "阅读&nbsp;[1-9]\\d*(W\\+)*");
 
-        String strCsdn = httpService.sendHttpGet("https://blog.csdn.net/xiziyidi");
-        String[] blogCsdn = StrUtil.parse(strCsdn, "<span class=\"count\">[1-9]\\d*</span>");
-        String[] readerCsdn = StrUtil.parse(strCsdn, "<span class=\"num\">[1-9]\\d*</span>");
-        String[] rankCsdn = StrUtil.parse(strCsdn, "<a class=\"grade-box-rankA\" href=\"https://blog.csdn.net/rank/writing_rank\\w*\" target=\"_blank\">\\s*[1-9]\\d*(\\W\\+)*\\s*</a>");
+        String strCsdnCourse = httpService.sendHttpGet("https://edu.csdn.net/lecturer/4306");
+        String[] userCsdn = StrUtil.parse(strCsdnCourse, "累计<b>[1-9]\\d*</b>人");
+        String[] userDetailCsdn = StrUtil.parse(strCsdnCourse, "<span>[1-9]\\d*人学习过</span>");
+
+        String strCsdnBlog = httpService.sendHttpGet("https://blog.csdn.net/xiziyidi");
+        String[] blogCsdn = StrUtil.parse(strCsdnBlog, "<span class=\"count\">[1-9]\\d*(\\W\\+)*</span>");
+        String[] readerCsdn = StrUtil.parse(strCsdnBlog, "<span class=\"num\">[1-9]\\d*(\\W\\+)*</span>");
+        String[] rankCsdn = StrUtil.parse(strCsdnBlog, "<a class=\"grade-box-rankA\" href=\"https://blog.csdn.net/rank/writing_rank\\w*\" target=\"_blank\">\\s*[1-9]\\d*(\\W\\+)*\\s*</a>");
+        String[] scoreCsdn = StrUtil.parse(strCsdnBlog, "<dd title=\"[1-9]\\d*(\\W\\+)*\">");
 
         infoMap = new HashMap<String, Object>() {{
-            put("course", new HashMap<Object, Object>() {{
-                put("count", formatInfo(formatInfo(courses, "课程："), "门"));
-                put("userCount", formatInfo(formatInfo(users, "学员数量："), "人"));
-                put("user", formatInfo(userDetails, "人学习"));
-            }});
-            put("51cto", new HashMap<Object, Object>() {{
-                put("count", formatInfo(formatInfo(blog51Cto, "<span>"), "</span>"));
-                put("reader", formatInfo(reader51Cto, "阅读&nbsp;"));
+            put("cto51", new HashMap<Object, Object>() {{
+                put("course", new HashMap<Object, Object>() {{
+                    put("count", formatInfo(formatInfo(course51Cto, "课程："), "门"));
+                    put("userCount", formatInfo(formatInfo(user51Cto, "学员数量："), "人"));
+                    put("user", formatInfo(userDetail51Cto, "人学习"));
+                }});
+                put("blog", new HashMap<Object, Object>() {{
+                    put("count", formatInfo(formatInfo(blog51Cto, "<span>"), "</span>"));
+                    put("reader", formatInfo(reader51Cto, "阅读&nbsp;"));
+                }});
             }});
             put("csdn", new HashMap<Object, Object>() {{
-                put("count", formatInfo(formatInfo(blogCsdn, "<span class=\"count\">"), "</span>"));
-                put("reader", formatInfo(formatInfo(readerCsdn, "<span class=\"num\">"), "</span>"));
-                put("rank", formatInfo(formatInfo(rankCsdn, "<a class=\"grade-box-rankA\" href=\"https://blog.csdn.net/rank/writing_rank\\w*\" target=\"_blank\">\\s*"), "\\s*</a>"));
+                put("course", new HashMap<Object, Object>() {{
+                    put("userCount", formatInfo(formatInfo(userCsdn, "累计<b>"), "</b>人"));
+                    put("user", formatInfo(formatInfo(userDetailCsdn, "<span>"), "人学习过</span>"));
+                }});
+                put("blog", new HashMap<Object, Object>() {{
+                    put("count", formatInfo(formatInfo(blogCsdn, "<span class=\"count\">"), "</span>"));
+                    put("reader", formatInfo(formatInfo(readerCsdn, "<span class=\"num\">"), "</span>"));
+                    put("rank", formatInfo(formatInfo(rankCsdn, "<a class=\"grade-box-rankA\" href=\"https://blog.csdn.net/rank/writing_rank\\w*\" target=\"_blank\">\\s*"), "\\s*</a>"));
+                    put("score", formatInfo(formatInfo(scoreCsdn, "<dd title=\""), "\">"));
+                }});
             }});
         }};
 
