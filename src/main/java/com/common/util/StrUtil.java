@@ -19,7 +19,7 @@ public class StrUtil {
     }
 
     public static boolean isEmpty(String str, boolean trim) {
-        return str == null || str.isEmpty() || (trim && str.trim().length() <= 0);
+        return str == null || str.isEmpty() || (trim && str.trim().isEmpty());
     }
 
     public static boolean chkLen(String str, int minLen, int maxLen) {

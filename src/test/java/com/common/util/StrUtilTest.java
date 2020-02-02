@@ -11,6 +11,21 @@ import java.util.Map;
 @SpringBootTest(classes = StarterApplication.class)
 public class StrUtilTest {
     @Test
+    public void testIsEmpty() {
+        Map<String, Boolean> mapIO = new HashMap<String, Boolean>() {{
+            put(null, true);
+            put("", true);
+            put(" ", true);
+            put("t", false);
+        }};
+
+        for (Map.Entry<String, Boolean> io : mapIO.entrySet()) {
+            boolean ret = StrUtil.isEmpty(io.getKey());
+            Assertions.assertEquals(io.getValue(), ret);
+        }
+    }
+
+    @Test
     public void testParse() {
         Map<String, Integer> mapIO = new HashMap<String, Integer>() {{
             put(null, 0);
@@ -47,20 +62,6 @@ public class StrUtilTest {
         for (Map.Entry<String[], Boolean> io : mapIO.entrySet()) {
             String[] params = io.getKey();
             boolean ret = StrUtil.matches(params[0], params[1]);
-            Assertions.assertEquals(io.getValue(), ret);
-        }
-    }
-
-    @Test
-    public void testIsEmpty() {
-        Map<String, Boolean> mapIO = new HashMap<String, Boolean>() {{
-            put(null, true);
-            put("", true);
-            put("t", false);
-        }};
-
-        for (Map.Entry<String, Boolean> io : mapIO.entrySet()) {
-            boolean ret = StrUtil.isEmpty(io.getKey());
             Assertions.assertEquals(io.getValue(), ret);
         }
     }

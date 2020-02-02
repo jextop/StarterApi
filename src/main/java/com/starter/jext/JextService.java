@@ -1,6 +1,8 @@
 package com.starter.jext;
 
+import com.common.util.EmptyUtil;
 import com.common.util.JsonUtil;
+import com.common.util.LogUtil;
 import com.common.util.StrUtil;
 import com.starter.http.HttpService;
 import com.starter.service.RedisService;
@@ -8,7 +10,9 @@ import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -78,11 +82,26 @@ public class JextService {
         return infoMap;
     }
 
-    private String[] parseNum(String[] strArr) {
+    private Object[] parseNum(String[] strArr) {
         return parseNum(strArr, "[1-9]\\d*");
     }
 
-    private String[] parseNum(String[] strArr, String regex) {
-        return strArr == null ? null : StrUtil.parse(StrUtil.join(strArr, ", "), regex);
+    private Object[] parseNum(String[] strArr, String regex) {
+        String[] numArr = StrUtil.parse(StrUtil.join(strArr, ", "), regex);
+        if (EmptyUtil.isEmpty(numArr)) {
+            return null;
+        }
+
+        List<Object> objList = new ArrayList<>(numArr.length);
+        for (String numStr : numArr) {
+            try {
+                long num = Long.parseLong(numStr);
+                objList.add(num);
+            } catch (NumberFormatException e) {
+                LogUtil.info(e.getMessage());
+                objList.add(numStr);
+            }
+        }
+        return objList.toArray();
     }
 }
