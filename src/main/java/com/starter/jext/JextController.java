@@ -15,7 +15,7 @@ public class JextController {
     @Autowired
     JextService jextService;
 
-    @AccessLimited(count = 1)
+    @AccessLimited(count = 6)
     @ApiOperation("获取社区信息")
     @GetMapping(value = "")
     public Object info() {
