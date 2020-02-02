@@ -8,6 +8,6 @@ WORKDIR /
 VOLUME /tmp/file
 
 # do sth
-CMD ["./launch.sh"]
+CMD ["sh", "launch.sh"]
 
 EXPOSE 8011

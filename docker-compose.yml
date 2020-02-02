@@ -60,7 +60,6 @@ services:
             - db
 
     api:
-        hostname: api
         image: starter_api:latest
         build: .
         restart: always
