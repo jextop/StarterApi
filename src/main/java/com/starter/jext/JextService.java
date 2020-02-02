@@ -42,33 +42,33 @@ public class JextService {
         String[] userDetailCsdn = StrUtil.parse(strCsdnCourse, "<span>[1-9]\\d*人学习过</span>");
 
         String strCsdnBlog = httpService.sendHttpGet("https://blog.csdn.net/xiziyidi");
-        String[] blogCsdn = StrUtil.parse(strCsdnBlog, "<span class=\"count\">[1-9]\\d*(\\W\\+)*</span>");
-        String[] readerCsdn = StrUtil.parse(strCsdnBlog, "<span class=\"num\">[1-9]\\d*(\\W\\+)*</span>");
-        String[] rankCsdn = StrUtil.parse(strCsdnBlog, "<a class=\"grade-box-rankA\" href=\"https://blog.csdn.net/rank/writing_rank\\w*\" target=\"_blank\">\\s*[1-9]\\d*(\\W\\+)*\\s*</a>");
-        String[] scoreCsdn = StrUtil.parse(strCsdnBlog, "<dd title=\"[1-9]\\d*(\\W\\+)*\">");
+        String[] blogCsdn = StrUtil.parse(strCsdnBlog, "<dl class=\"text-center\" title=\"[1-9]\\d*\">");
+        String[] readerCsdn = StrUtil.parse(strCsdnBlog, "<span class=\"num\">[1-9]\\d*</span>");
+        String[] rankCsdn = StrUtil.parse(strCsdnBlog, "<dl title=\"[1-9]\\d*\">");
+        String[] scoreCsdn = StrUtil.parse(strCsdnBlog, "<dd title=\"[1-9]\\d*\">");
 
         infoMap = new HashMap<String, Object>() {{
             put("cto51", new HashMap<Object, Object>() {{
                 put("course", new HashMap<Object, Object>() {{
-                    put("count", formatInfo(formatInfo(course51Cto, "课程："), "门"));
-                    put("userCount", formatInfo(formatInfo(user51Cto, "学员数量："), "人"));
-                    put("user", formatInfo(userDetail51Cto, "人学习"));
+                    put("count", parseNum(course51Cto));
+                    put("userCount", parseNum(user51Cto));
+                    put("user", parseNum(userDetail51Cto));
                 }});
                 put("blog", new HashMap<Object, Object>() {{
-                    put("count", formatInfo(formatInfo(blog51Cto, "<span>"), "</span>"));
-                    put("reader", formatInfo(reader51Cto, "阅读&nbsp;"));
+                    put("count", parseNum(blog51Cto, "[1-9]\\d*(W\\+)*"));
+                    put("reader", parseNum(reader51Cto, "[1-9]\\d*(W\\+)*"));
                 }});
             }});
             put("csdn", new HashMap<Object, Object>() {{
                 put("course", new HashMap<Object, Object>() {{
-                    put("userCount", formatInfo(formatInfo(userCsdn, "累计<b>"), "</b>人"));
-                    put("user", formatInfo(formatInfo(userDetailCsdn, "<span>"), "人学习过</span>"));
+                    put("userCount", parseNum(userCsdn));
+                    put("user", parseNum(userDetailCsdn));
                 }});
                 put("blog", new HashMap<Object, Object>() {{
-                    put("count", formatInfo(formatInfo(blogCsdn, "<span class=\"count\">"), "</span>"));
-                    put("reader", formatInfo(formatInfo(readerCsdn, "<span class=\"num\">"), "</span>"));
-                    put("rank", formatInfo(formatInfo(rankCsdn, "<a class=\"grade-box-rankA\" href=\"https://blog.csdn.net/rank/writing_rank\\w*\" target=\"_blank\">\\s*"), "\\s*</a>"));
-                    put("score", formatInfo(formatInfo(scoreCsdn, "<dd title=\""), "\">"));
+                    put("count", parseNum(blogCsdn));
+                    put("reader", parseNum(readerCsdn));
+                    put("rank", parseNum(rankCsdn));
+                    put("score", parseNum(scoreCsdn));
                 }});
             }});
         }};
@@ -78,7 +78,11 @@ public class JextService {
         return infoMap;
     }
 
-    private String[] formatInfo(String[] strArr, String regex) {
-        return strArr == null ? null : StrUtil.join(strArr, ", ").replaceAll(regex, "").split(", ");
+    private String[] parseNum(String[] strArr) {
+        return parseNum(strArr, "[1-9]\\d*");
+    }
+
+    private String[] parseNum(String[] strArr, String regex) {
+        return strArr == null ? null : StrUtil.parse(StrUtil.join(strArr, ", "), regex);
     }
 }
