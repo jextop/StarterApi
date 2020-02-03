@@ -65,6 +65,7 @@ public class JextService {
             }});
             put("csdn", new HashMap<Object, Object>() {{
                 put("course", new HashMap<Object, Object>() {{
+                    put("count", userDetailCsdn == null ? null : new int[] {userDetailCsdn.length});
                     put("userCount", parseNum(userCsdn));
                     put("user", parseNum(userDetailCsdn));
                 }});
