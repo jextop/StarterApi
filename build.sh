@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# package and copy
-./copy.sh
+# package and copy files
+./package.sh
 
 # docker image
 docker-compose build
