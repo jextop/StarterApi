@@ -1,0 +1,18 @@
+FROM openjdk:8
+
+# copy files
+COPY ./ /
+WORKDIR /
+
+# package
+RUN sh mvnw package -Dmaven.test.skip=true
+RUN cp ./target/api-0.0.1-SNAPSHOT.jar ./deploy
+WORKDIR /deploy/
+
+# volume for data
+VOLUME /tmp/file
+
+# do sth
+CMD ["sh", "launch.sh"]
+
+EXPOSE 8011
