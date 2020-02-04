@@ -1,4 +1,4 @@
-FROM registry.cn-shanghai.aliyuncs.com/jext/starter_api_base:latest
+FROM openjdk:8
 
 # copy files
 COPY ./ /code
