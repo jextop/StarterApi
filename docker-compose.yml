@@ -61,7 +61,9 @@ services:
 
     api:
         image: starter_api:latest
-        build: .
+        build:
+          context: .
+          dockerfile: Dockerfile_ce
         restart: always
 #        volumes:
 #            - ../data/file:/tmp/file

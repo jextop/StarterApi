@@ -1,8 +1,19 @@
-FROM openjdk:8
+FROM registry.cn-shanghai.aliyuncs.com/jext/starter_api_base:latest
 
 # copy files
-COPY ./deploy/ /deploy
-WORKDIR /deploy
+COPY ./ /code
+WORKDIR /code
+
+# package
+RUN mvn package -Dmaven.test.skip=true
+
+# copy files
+RUN cp ./target/api-0.0.1-SNAPSHOT.jar ./deploy
+RUN cp -r ./deploy/ /deploy
+WORKDIR /deploy/
+
+# delete code
+RUN rm -rf /code/
 
 # volume for data
 VOLUME /tmp/file
