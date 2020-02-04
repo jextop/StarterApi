@@ -5,7 +5,7 @@ COPY ./ /code
 WORKDIR /code
 
 # package
-RUN mvn package -Dmaven.test.skip=true
+RUN sh mvnw package -Dmaven.test.skip=true
 
 # copy files
 RUN cp ./target/api-0.0.1-SNAPSHOT.jar ./deploy
