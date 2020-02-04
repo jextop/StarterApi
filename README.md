@@ -2,7 +2,7 @@
 
 | 开发运行环境   | URL:Port                                |  备注              |
 | ------------   | --------------------------------------  | :----------------- |
-| MySQL          | http://localhost:3306                   | |
+| MySQL          | http://localhost:3306, root/root        | |
 | MySQL Admin    | http://localhost:3006                   | |
 | Redis          | http://localhost:6379                   | |
 | ActiveMQ       | http://localhost:8161, admin/admin      | launchActiveMQ.bat |
