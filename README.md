@@ -16,3 +16,5 @@
 | Prometheus     | http://localhost:9090                   | |
 | Grafana        | http://localhost:3000                   | |
 | ElasticSearch  | http://localhost:9200                   | launchElasticSearch.bat |
+| Kibana         | http://localhost:5601                   | launchKibana.bat        |
+| Kibana Status  | http://localhost:5601/status            | |
