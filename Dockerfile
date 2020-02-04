@@ -8,8 +8,8 @@ WORKDIR /code
 RUN sh mvnw package -Dmaven.test.skip=true
 
 # copy files
-RUN cp ./target/api-0.0.1-SNAPSHOT.jar ./deploy
-RUN cp -r ./deploy/ /deploy
+RUN mv ./deploy/ /deploy/
+RUN mv ./target/api-0.0.1-SNAPSHOT.jar ./deploy/
 WORKDIR /deploy/
 
 # delete code
