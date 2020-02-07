@@ -1,5 +1,7 @@
 FROM openjdk:8
 
+LABEL maintainer="Jext Community, https://github.com/jextop"
+
 # copy code
 COPY ./ /code
 WORKDIR /code

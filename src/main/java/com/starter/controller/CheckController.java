@@ -73,6 +73,12 @@ public class CheckController {
             put("chk", "ok");
             put("msg", String.format("%s_消息", ip));
             put("date", new Date());
+            put("mq", mq(ip));
+            put("cache", cache(ip));
+            put("db", db(ip));
+            put("job", job());
+            put("json", json(ip));
+            put("http", http());
         }};
     }
 

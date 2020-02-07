@@ -15,6 +15,14 @@ services:
             MYSQL_DATABASE: starter
             MYSQL_ROOT_PASSWORD: root
 
+    db_admin:
+        image: adminer:latest
+        restart: always
+        ports:
+            - 3006:8080
+        depends_on:
+            - db
+
     cache:
         hostname: cache
         image: redis:4
@@ -59,15 +67,22 @@ services:
         depends_on:
             - elasticsearch
 
-    db_admin:
-        image: adminer:latest
+    grafana:
+        image: grafana/grafana:latest
         restart: always
         ports:
-            - 3006:8080
+            - 3000:3000
+
+    prometheus:
+        image: registry.cn-shanghai.aliyuncs.com/hellodock/prometheus:latest
+        restart: always
+        ports:
+            - 9090:9090
         depends_on:
-            - db
+            - api
 
     api:
+        hostname: api
         image: starter_api:latest
         build:
           context: .
@@ -82,3 +97,31 @@ services:
             - cache
             - mq
             - log
+
+    api:
+        hostname: api
+        image: registry.cn-shanghai.aliyuncs.com/jext/starter_api:latest
+        # volumes:
+        #     - ./data/file:/tmp/file
+        deploy:
+            replicas: 1
+            # placement:
+            #     constraints: [node.role == api]
+        ports:
+            - 8011:8011
+        depends_on:
+            - db
+            - cache
+            - mq
+            - log
+
+    admin:
+        image: registry.cn-shanghai.aliyuncs.com/jext/starter_admin:latest
+        deploy:
+            replicas: 1
+            # placement:
+            #     constraints: [node.role == api]
+        ports:
+            - 8010:8010
+        depends_on:
+            - api
