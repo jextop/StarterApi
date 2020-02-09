@@ -11,10 +11,11 @@
 
 | 管理工具         | URL:Port                                |  备注              |
 | ------------     | --------------------------------------  | :----------------- |
+| API服务检查      | http://localhost:8011/chk               | |
 | Swagger接口文档  | http://localhost:8011/swagger-ui.html   | |
 | Actuator服务监控 | http://localhost:8011/actuator          | |
 | Prometheus       | http://localhost:9090                   | |
-| Prometheus       | http://localhost:9090/alerts            | |
+| Prometheus Alerts| http://localhost:9090/alerts            | |
 | Grafana          | http://localhost:3000, admin/admin      | |
 | ElasticSearch    | http://localhost:9200                   | launchElasticSearch.bat |
 | Kibana           | http://localhost:5601                   | launchKibana.bat        |

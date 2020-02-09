@@ -2,6 +2,7 @@ package com.starter.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.common.util.CodeUtil;
+import com.common.util.DateUtil;
 import com.common.util.LogUtil;
 import com.common.util.StrUtil;
 import com.starter.annotation.AccessLimited;
@@ -169,7 +170,7 @@ public class CheckController {
         final Date jobDate = date;
         return new HashMap<String, Object>() {{
             put("chk", "job");
-            put("date", jobDate);
+            put("date", DateUtil.format(jobDate));
         }};
     }
 
