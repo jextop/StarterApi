@@ -73,50 +73,13 @@ public class CheckController {
         return new HashMap<String, Object>() {{
             put("chk", "ok");
             put("msg", String.format("%s_消息", ip));
-            put("date", new Date());
-            put("mq", mq(ip));
-            put("cache", cache(ip));
+            put("date", DateUtil.format(new Date()));
             put("db", db(ip));
+            put("cache", cache(ip));
+            put("mq", mq(ip));
+            put("http", http());
             put("job", job());
             put("json", json(ip));
-            put("http", http());
-        }};
-    }
-
-    @AccessLimited(count = 1)
-    @ApiOperation("检查消息队列")
-    @GetMapping(path = "/chk/mq")
-    public Object mq(@RequestAttribute(required = false) String ip) {
-        String msg = String.format("check mq, %s, %s 消息队列", ip, new Date().toString());
-        activeMqService.send(msg);
-
-        return new HashMap<String, Object>() {{
-            put("chk", "mq");
-            put("msg", msg);
-        }};
-    }
-
-    @AccessLimited(count = 1)
-    @ApiOperation("检查缓存系统")
-    @GetMapping(value = "/chk/cache")
-    public Object cache(@RequestAttribute(required = false) String ip) {
-        // Get a unique key
-        String key = String.format("cache_test_%s_%s_缓存", ip, CodeUtil.getCode());
-
-        // Set cache
-        redisService.setStr(key, key, 3);
-
-        // Get cache
-        String str = redisService.getStr(key);
-        LogUtil.info("Check cache to set str", key, str);
-
-        // Delete key
-        redisService.delStr(key);
-
-        return new HashMap<String, Object>() {{
-            put("chk", "cache");
-            put("msg", str);
-            put("status", key.equals(str));
         }};
     }
 
@@ -147,6 +110,56 @@ public class CheckController {
     }
 
     @AccessLimited(count = 1)
+    @ApiOperation("检查缓存系统")
+    @GetMapping(value = "/chk/cache")
+    public Object cache(@RequestAttribute(required = false) String ip) {
+        // Get a unique key
+        String key = String.format("cache_test_%s_%s_缓存", ip, CodeUtil.getCode());
+
+        // Set cache
+        redisService.setStr(key, key, 3);
+
+        // Get cache
+        String str = redisService.getStr(key);
+        LogUtil.info("Check cache to set str", key, str);
+
+        // Delete key
+        redisService.delStr(key);
+
+        return new HashMap<String, Object>() {{
+            put("chk", "cache");
+            put("msg", str);
+            put("status", key.equals(str));
+        }};
+    }
+
+    @AccessLimited(count = 1)
+    @ApiOperation("检查消息队列")
+    @GetMapping(path = "/chk/mq")
+    public Object mq(@RequestAttribute(required = false) String ip) {
+        String msg = String.format("check mq, %s, %s 消息队列", ip, new Date().toString());
+        activeMqService.send(msg);
+
+        return new HashMap<String, Object>() {{
+            put("chk", "mq");
+            put("msg", msg);
+        }};
+    }
+
+    @AccessLimited(count = 1)
+    @ApiOperation("检查HTTP连接")
+    @GetMapping(value = "/chk/http", produces = "application/json")
+    public Object http() {
+        String strCourse = httpService.sendHttpGet("https://edu.51cto.com/lecturer/13841865.html");
+        String[] courses = StrUtil.parse(strCourse, "[1-9]\\d*人学习");
+
+        return new HashMap<String, Object>() {{
+            put("chk", "http");
+            put("msg", courses);
+        }};
+    }
+
+    @AccessLimited(count = 1)
     @ApiOperation("检查作业调度")
     @GetMapping(value = "/chk/job")
     public Object job() {
@@ -170,7 +183,7 @@ public class CheckController {
         final Date jobDate = date;
         return new HashMap<String, Object>() {{
             put("chk", "job");
-            put("date", DateUtil.format(jobDate));
+            put("msg", DateUtil.format(jobDate));
         }};
     }
 
@@ -178,23 +191,13 @@ public class CheckController {
     @ApiOperation("检查JSON数据传输")
     @GetMapping(value = "/chk/json", produces = "application/json")
     public Object json(@RequestAttribute(required = false) String ip) {
-        return new User() {{
-            setName("json");
-            setTitle(String.format("%s_%s", ip, new Date().toString()));
-            setUpdated(LocalDateTime.now());
-        }};
-    }
-
-    @AccessLimited(count = 1)
-    @ApiOperation("检查HTTP连接")
-    @GetMapping(value = "/chk/http", produces = "application/json")
-    public Object http() {
-        String strCourse = httpService.sendHttpGet("https://edu.51cto.com/lecturer/13841865.html");
-        String[] courses = StrUtil.parse(strCourse, "[1-9]\\d*人学习");
-
         return new HashMap<String, Object>() {{
-            put("chk", "http");
-            put("course", courses);
+            put("chk", "job");
+            put("msg", new User() {{
+                setName("json");
+                setTitle(String.format("%s_%s", ip, DateUtil.format(new Date())));
+                setUpdated(LocalDateTime.now());
+            }});
         }};
     }
 }
