@@ -32,7 +32,7 @@ public class ExceptionController {
 
     @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     @ExceptionHandler(value = {PersistenceException.class, DataAccessException.class, MessagingException.class})
-    public Object mqExceptionHandler(RuntimeException e) {
+    public Object dataExceptionHandler(RuntimeException e) {
         return new HashMap<String, Object>() {{
             put("msg", e.getMessage());
         }};

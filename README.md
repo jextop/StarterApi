@@ -16,6 +16,7 @@
 | Actuator服务监控 | http://localhost:8011/actuator          | |
 | Prometheus       | http://localhost:9090                   | |
 | Prometheus Alerts| http://localhost:9090/alerts            | |
+| AlertManager     | http://localhost:9093                   | |
 | Grafana          | http://localhost:3000, admin/admin      | |
 | ElasticSearch    | http://localhost:9200                   | launchElasticSearch.bat |
 | Kibana           | http://localhost:5601                   | launchKibana.bat        |
