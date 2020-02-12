@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -74,12 +75,14 @@ public class CheckController {
             put("chk", "ok");
             put("msg", String.format("%s_消息", ip));
             put("date", DateUtil.format(new Date()));
-            put("db", db(ip));
-            put("cache", cache(ip));
-            put("mq", mq(ip));
-            put("http", http());
-            put("job", job());
-            put("json", json(ip));
+            put("services", new ArrayList<Object>(){{
+                add(db(ip));
+                add(cache(ip));
+                add(mq(ip));
+                add(http());
+                add(job());
+                add(json(ip));
+            }});
         }};
     }
 

@@ -91,22 +91,22 @@ services:
             - alertmanager
             - api
 
-    api:
-        hostname: api
-        image: starter_api:latest
-        build:
-          context: .
-          dockerfile: Dockerfile_ce
-        restart: always
-#        volumes:
-#            - ../data/file:/tmp/file
-        ports:
-            - 8011:8011
-        depends_on:
-            - db
-            - cache
-            - mq
-            - logstash
+#    api:
+#        hostname: api
+#        image: starter_api:latest
+#        build:
+#          context: .
+#          dockerfile: Dockerfile_ce
+#        restart: always
+##        volumes:
+##            - ../data/file:/tmp/file
+#        ports:
+#            - 8011:8011
+#        depends_on:
+#            - db
+#            - cache
+#            - mq
+#            - logstash
 
 #    admin:
 #        image: registry.cn-shanghai.aliyuncs.com/jext/starter_admin:latest
