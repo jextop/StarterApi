@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -63,7 +62,7 @@ public class CheckController {
         return new HashMap<String, Object>() {{
             put("ip", ip);
             put("msg", String.format("Hello, Starter! 你好，%s", this.getClass().getName()));
-            put("date", new Date());
+            put("date", DateUtil.format(new Date()));
         }};
     }
 
@@ -75,7 +74,7 @@ public class CheckController {
             put("chk", "ok");
             put("msg", String.format("%s_消息", ip));
             put("date", DateUtil.format(new Date()));
-            put("services", new ArrayList<Object>(){{
+            put("services", new ArrayList<Object>() {{
                 add(db(ip));
                 add(cache(ip));
                 add(mq(ip));
@@ -92,7 +91,7 @@ public class CheckController {
     public Object db(@RequestAttribute(required = false) String ip) {
         // Write a log to db
         Log log = new Log() {{
-            setSummary(String.format("db_test_%s_%s_数据库", ip, new Date()));
+            setSummary(String.format("db_test_%s_%s_数据库", ip, DateUtil.format(new Date())));
         }};
         boolean bSave = logService.save(log);
         LogUtil.info("Check db to insert log", bSave, log.getSummary());
@@ -140,7 +139,7 @@ public class CheckController {
     @ApiOperation("检查消息队列")
     @GetMapping(path = "/chk/mq")
     public Object mq(@RequestAttribute(required = false) String ip) {
-        String msg = String.format("check mq, %s, %s 消息队列", ip, new Date().toString());
+        String msg = String.format("check mq, %s, %s 消息队列", ip, DateUtil.format(new Date()));
         activeMqService.send(msg);
 
         return new HashMap<String, Object>() {{
@@ -195,11 +194,10 @@ public class CheckController {
     @GetMapping(value = "/chk/json", produces = "application/json")
     public Object json(@RequestAttribute(required = false) String ip) {
         return new HashMap<String, Object>() {{
-            put("chk", "job");
+            put("chk", "json");
             put("msg", new User() {{
                 setName("json");
                 setTitle(String.format("%s_%s", ip, DateUtil.format(new Date())));
-                setUpdated(LocalDateTime.now());
             }});
         }};
     }
