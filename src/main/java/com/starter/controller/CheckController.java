@@ -152,7 +152,7 @@ public class CheckController {
     @ApiOperation("检查HTTP连接")
     @GetMapping(value = "/chk/http", produces = "application/json")
     public Object http() {
-        String strCourse = httpService.sendHttpGet("https://edu.51cto.com/lecturer/13841865.html");
+        String strCourse = httpService.sendHttpGet("https://edu.51cto.com/center/course/index/search?q=Jext%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA");
         String[] courses = StrUtil.parse(strCourse, "[1-9]\\d*人学习");
 
         return new HashMap<String, Object>() {{
