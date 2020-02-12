@@ -49,8 +49,8 @@ services:
             - 9200:9200
             - 9300:9300
 
-    log:
-        hostname: log
+    logstash:
+        hostname: logstash
         image: registry.cn-shanghai.aliyuncs.com/hellodock/logstash:latest
         restart: always
         ports:
@@ -106,32 +106,12 @@ services:
             - db
             - cache
             - mq
-            - log
+            - logstash
 
-    api:
-        hostname: api
-        image: registry.cn-shanghai.aliyuncs.com/jext/starter_api:latest
-        # volumes:
-        #     - ./data/file:/tmp/file
-        deploy:
-            replicas: 1
-            # placement:
-            #     constraints: [node.role == api]
-        ports:
-            - 8011:8011
-        depends_on:
-            - db
-            - cache
-            - mq
-            - log
-
-    admin:
-        image: registry.cn-shanghai.aliyuncs.com/jext/starter_admin:latest
-        deploy:
-            replicas: 1
-            # placement:
-            #     constraints: [node.role == api]
-        ports:
-            - 8010:8010
-        depends_on:
-            - api
+#    admin:
+#        image: registry.cn-shanghai.aliyuncs.com/jext/starter_admin:latest
+#        restart: always
+#        ports:
+#            - 8010:8010
+#        depends_on:
+#            - api
