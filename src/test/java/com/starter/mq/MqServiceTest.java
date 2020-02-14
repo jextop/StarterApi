@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Date;
+import java.util.HashMap;
 
 @SpringBootTest
 public class MqServiceTest {
@@ -13,11 +14,17 @@ public class MqServiceTest {
 
     @Test
     public void testSendQueue() {
-        mqService.sendQueue(String.format("test active queue: %s", new Date().toString()));
+        mqService.sendQueue(new HashMap<String, Object>() {{
+            put("msg", "test active queue");
+            put("date", new Date().toString());
+        }});
     }
 
     @Test
     public void testSendTopic() {
-        mqService.sendTopic(String.format("test active topic: %s", new Date().toString()));
+        mqService.sendTopic(new HashMap<String, Object>() {{
+            put("msg", "test active topic");
+            put("date", new Date().toString());
+        }});
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.jms.Queue;
 import javax.jms.Topic;
+import java.util.Map;
 
 @Service
 public class MqService {
@@ -20,22 +21,24 @@ public class MqService {
     @Autowired
     private Topic topic;
 
-    public void sendQueue(String msg) {
-        LogUtil.info("Send queue msg", msg);
+    public void sendQueue(Map<String, ?> msgMap) {
+        String msgStr = MqUtil.formatMsg(msgMap);
+        LogUtil.info("Send queue msg", msgStr);
 
         try {
-            jmsMessagingTemplate.convertAndSend(queue, msg);
+            jmsMessagingTemplate.convertAndSend(queue, msgStr);
         } catch (MessagingException e) {
             LogUtil.error(e.getMessage());
             throw e;
         }
     }
 
-    public void sendTopic(String msg) {
-        LogUtil.info("Send topic msg", msg);
+    public void sendTopic(Map<String, ?> msgMap) {
+        String msgStr = MqUtil.formatMsg(msgMap);
+        LogUtil.info("Send topic msg", msgStr);
 
         try {
-            jmsMessagingTemplate.convertAndSend(topic, msg);
+            jmsMessagingTemplate.convertAndSend(topic, msgStr);
         } catch (MessagingException e) {
             LogUtil.error(e.getMessage());
             throw e;

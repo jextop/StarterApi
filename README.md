@@ -1,4 +1,4 @@
-# Api Starter based on Spring Boot Web
+# Api Starter based on Java + SpringBoot
 
 | 开发运行环境     | URL:Port                                |  备注              |
 | ------------     | --------------------------------------  | :----------------- |
