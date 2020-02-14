@@ -139,7 +139,9 @@ public class CheckController {
     @ApiOperation("检查消息队列")
     @GetMapping(path = "/chk/mq")
     public Object mq(@RequestAttribute(required = false) String ip) {
-        String msg = String.format("check mq, %s, 消息队列", ip);
+        String msg = String.format("check mq from java, %s, 消息队列", ip);
+
+        // to service
         mqService.sendQueue(new HashMap<String, Object>() {{
             put("msg", msg);
             put("date", DateUtil.format(new Date()));
