@@ -14,7 +14,7 @@ import javax.jms.Topic;
 
 @EnableJms
 @Configuration
-public class ActiveMqConfig {
+public class MqConfig {
     @Bean
     public Queue queue() {
         return new ActiveMQQueue("starter.queue");

@@ -10,7 +10,7 @@ import javax.jms.Queue;
 import javax.jms.Topic;
 
 @Service
-public class ActiveMqService {
+public class MqService {
     @Autowired
     private JmsMessagingTemplate jmsMessagingTemplate;
 

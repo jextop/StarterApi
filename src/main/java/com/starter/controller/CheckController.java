@@ -11,7 +11,7 @@ import com.starter.entity.User;
 import com.starter.http.HttpService;
 import com.starter.jext.JextService;
 import com.starter.job.QuartzJob;
-import com.starter.mq.ActiveMqService;
+import com.starter.mq.MqService;
 import com.starter.service.RedisService;
 import com.starter.service.impl.LogServiceImpl;
 import io.swagger.annotations.Api;
@@ -40,7 +40,7 @@ import java.util.HashMap;
 @RequestMapping("/")
 public class CheckController {
     @Autowired
-    ActiveMqService activeMqService;
+    MqService mqService;
 
     @Autowired
     RedisService redisService;
@@ -140,7 +140,7 @@ public class CheckController {
     @GetMapping(path = "/chk/mq")
     public Object mq(@RequestAttribute(required = false) String ip) {
         String msg = String.format("check mq, %s, %s 消息队列", ip, DateUtil.format(new Date()));
-        activeMqService.send(msg);
+        mqService.send(msg);
 
         return new HashMap<String, Object>() {{
             put("chk", "mq");

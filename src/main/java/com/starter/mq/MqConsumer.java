@@ -5,7 +5,7 @@ import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ActiveMqConsumer {
+public class MqConsumer {
     @JmsListener(destination = "starter.queue")
     public void listenQueue(String msg) {
         LogUtil.info("Receive queue msg", msg);

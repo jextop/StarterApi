@@ -7,17 +7,17 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Date;
 
 @SpringBootTest
-public class ActiveMqServiceTest {
+public class MqServiceTest {
     @Autowired
-    ActiveMqService activeMqService;
+    MqService mqService;
 
     @Test
     public void testSendQueue() {
-        activeMqService.sendQueue(String.format("test active queue: %s", new Date().toString()));
+        mqService.sendQueue(String.format("test active queue: %s", new Date().toString()));
     }
 
     @Test
     public void testSendTopic() {
-        activeMqService.sendTopic(String.format("test active topic: %s", new Date().toString()));
+        mqService.sendTopic(String.format("test active topic: %s", new Date().toString()));
     }
 }
