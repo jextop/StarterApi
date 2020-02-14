@@ -15,7 +15,7 @@ public class MqServiceTest {
     @Test
     public void testSendQueue() {
         mqService.sendQueue(new HashMap<String, Object>() {{
-            put("msg", "test active queue");
+            put("msg", "test active queue from java");
             put("date", new Date().toString());
         }});
     }
@@ -23,7 +23,7 @@ public class MqServiceTest {
     @Test
     public void testSendTopic() {
         mqService.sendTopic(new HashMap<String, Object>() {{
-            put("msg", "test active topic");
+            put("msg", "test active topic from java");
             put("date", new Date().toString());
         }});
     }

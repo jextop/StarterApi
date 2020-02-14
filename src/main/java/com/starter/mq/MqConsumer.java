@@ -9,15 +9,15 @@ import java.util.Map;
 
 @Component
 public class MqConsumer {
-    @JmsListener(destination = "starter.queue")
-    public void listenQueue(Message msg) {
-        Map<String, ?> msgMap = MqUtil.parseMsg(msg);
-        LogUtil.info("Receive queue msg", msgMap);
-    }
+//    @JmsListener(destination = "starter.process")
+//    public void listenQueue(Message msg) {
+//        Map<String, ?> msgMap = MqUtil.parseMsg(msg);
+//        LogUtil.info("Receive process msg", msgMap);
+//    }
 
-    @JmsListener(destination = "starter.topic", containerFactory = "jmsTopicListenerContainerFactory")
+    @JmsListener(destination = "starter.status", containerFactory = "jmsTopicListenerContainerFactory")
     public void listenTopic(Message msg) {
         Map<String, ?> msgMap = MqUtil.parseMsg(msg);
-        LogUtil.info("Receive topic msg", msgMap);
+        LogUtil.info("Receive status msg", msgMap);
     }
 }

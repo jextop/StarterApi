@@ -17,12 +17,12 @@ import javax.jms.Topic;
 public class MqConfig {
     @Bean
     public Queue queue() {
-        return new ActiveMQQueue("starter.queue");
+        return new ActiveMQQueue("starter.process");
     }
 
     @Bean
     public Topic topic() {
-        return new ActiveMQTopic("starter.topic");
+        return new ActiveMQTopic("starter.status");
     }
 
     /**
