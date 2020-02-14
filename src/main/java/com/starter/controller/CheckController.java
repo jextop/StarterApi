@@ -140,7 +140,7 @@ public class CheckController {
     @GetMapping(path = "/chk/mq")
     public Object mq(@RequestAttribute(required = false) String ip) {
         String msg = String.format("check mq, %s, %s 消息队列", ip, DateUtil.format(new Date()));
-        mqService.send(msg);
+        mqService.sendQueue(msg);
 
         return new HashMap<String, Object>() {{
             put("chk", "mq");

@@ -20,10 +20,6 @@ public class MqService {
     @Autowired
     private Topic topic;
 
-    public void send(String msg) {
-        sendQueue(msg);
-    }
-
     public void sendQueue(String msg) {
         LogUtil.info("Send queue msg", msg);
 

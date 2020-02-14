@@ -26,7 +26,7 @@ public class MqConfig {
     }
 
     /**
-     * 默认只配置queue类型消息，如果要使用topic类型的消息，则需要配置factory
+     * 使用topic类型消息时，需要配置factory
      */
     @Bean
     public JmsListenerContainerFactory jmsTopicListenerContainerFactory(ConnectionFactory connectionFactory) {
