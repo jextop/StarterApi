@@ -163,6 +163,18 @@ public class FileUtil {
         return fileName;
     }
 
+    public static String removeFileExt(String fileName) {
+        if (StrUtil.isEmpty(fileName)) {
+            return null;
+        }
+
+        int index = fileName.lastIndexOf(".");
+        if (index < 0 || index >= fileName.length()) {
+            return fileName;
+        }
+        return fileName.substring(0, index);
+    }
+
     public static String getFileExt(String fileName) {
         if (StrUtil.isEmpty(fileName)) {
             return null;

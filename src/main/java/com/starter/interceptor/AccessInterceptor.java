@@ -1,7 +1,7 @@
 package com.starter.interceptor;
 
 import com.common.util.LogUtil;
-import com.common.util.ReqUtil;
+import com.common.http.ReqUtil;
 import com.starter.annotation.AccessLimited;
 import com.starter.exception.AccessLimitException;
 import com.starter.service.RedisService;

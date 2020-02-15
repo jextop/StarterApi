@@ -15,6 +15,6 @@ public class Md5UtilTest {
         Assertions.assertNotNull(ret);
 
         Assertions.assertNotNull(Md5Util.md5(""));
-        Assertions.assertNull(Md5Util.md5(null));
+        Assertions.assertNull(Md5Util.md5((String) null));
     }
 }

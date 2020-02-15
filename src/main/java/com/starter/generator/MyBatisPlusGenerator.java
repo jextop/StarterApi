@@ -44,8 +44,8 @@ public class MyBatisPlusGenerator {
         DataSourceConfig dsc = new DataSourceConfig();
         dsc.setUrl("jdbc:mysql://localhost:3306/starter?useUnicode=true&serverTimezone=GMT&useSSL=false&characterEncoding=utf8");
         dsc.setDriverName("com.mysql.cj.jdbc.Driver");
-        dsc.setUsername("dba");
-        dsc.setPassword("dba");
+        dsc.setUsername("root");
+        dsc.setPassword("root");
         generator.setDataSource(dsc);
 
         // 包配置
@@ -77,7 +77,7 @@ public class MyBatisPlusGenerator {
         StrategyConfig strategy = new StrategyConfig();
         strategy.setNaming(NamingStrategy.underline_to_camel);
         strategy.setColumnNaming(NamingStrategy.underline_to_camel);
-        strategy.setInclude("log", "user", "auth");
+        strategy.setInclude("log", "user", "auth", "file", "voucher");
         strategy.setSuperEntityColumns("id");
         strategy.setTablePrefix(pConfig.getModuleName() + "_");
         strategy.setEntityLombokModel(false);

@@ -17,8 +17,8 @@ public class IpUtilTest {
         LogUtil.info(ret);
         Assertions.assertNotNull(ret);
 
-        LogUtil.info(IpUtil.getLocalServerUrl());
-        LogUtil.info(IpUtil.getLocalServerUrl(8011));
+        LogUtil.info(IpUtil.getLocalUrl());
+        LogUtil.info(IpUtil.getLocalUrl(8011));
     }
 
     @Test

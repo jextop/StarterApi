@@ -11,11 +11,11 @@ import java.util.Enumeration;
 import java.util.List;
 
 public class IpUtil {
-    public static String getLocalServerUrl() {
-        return getLocalServerUrl(80);
+    public static String getLocalUrl() {
+        return getLocalUrl(80);
     }
 
-    public static String getLocalServerUrl(int port) {
+    public static String getLocalUrl(int port) {
         String strPort = port > 0 && port != 80 ? String.format(":%d", port) : "";
         return String.format("http://%s%s", getLocalIP(), strPort);
     }
