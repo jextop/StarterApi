@@ -28,8 +28,6 @@ services:
         image: redis:4
         command: redis-server --appendonly yes
         restart: always
-#        volumes:
-#            - ../data/redis:/data
         ports:
             - 6379:6379
 
