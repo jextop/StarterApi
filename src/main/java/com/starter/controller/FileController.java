@@ -213,7 +213,7 @@ public class FileController {
         }
 
         // Read file
-        response.setContentType("application/force-download");
+        response.setContentType("application/octet-stream");
         fileHelper.read(response, file);
         return RespUtil.respOK();
     }
