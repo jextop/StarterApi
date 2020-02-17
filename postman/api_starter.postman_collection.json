@@ -1,7 +1,9 @@
 {
+	"variables": [],
 	"info": {
-		"_postman_id": "0c7c8625-5a8d-497f-bd51-38808b33e78b",
 		"name": "api_starter",
+		"_postman_id": "8bd76d72-0d13-0b0e-db83-13c581b3d7cb",
+		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
 	"item": [
@@ -11,7 +13,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "7e31af4e-ab04-49ac-bd1b-dac54c2d1973",
+						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"Status code is 202\", function () {",
 							"    pm.response.to.have.status(202);",
@@ -21,15 +23,19 @@
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.msg).to.include(\"Hello\");",
 							"});"
-						],
-						"type": "text/javascript"
+						]
 					}
 				}
 			],
 			"request": {
+				"url": "{{server}}:{{port}}/",
 				"method": "GET",
 				"header": [],
-				"url": "{{server}}:{{port}}/"
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
 			},
 			"response": []
 		},
@@ -39,7 +45,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "f5cfa067-380d-42ac-92b3-50faa9faf1f3",
+						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -49,15 +55,19 @@
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.chk).to.eql(\"ok\");",
 							"});"
-						],
-						"type": "text/javascript"
+						]
 					}
 				}
 			],
 			"request": {
+				"url": "{{server}}:{{port}}/chk",
 				"method": "GET",
 				"header": [],
-				"url": "{{server}}:{{port}}/chk"
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
 			},
 			"response": []
 		},
@@ -67,7 +77,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "d325d5ae-3a45-41c1-abd0-db6dde2e2202",
+						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -77,15 +87,19 @@
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.chk).to.eql(\"mq\");",
 							"});"
-						],
-						"type": "text/javascript"
+						]
 					}
 				}
 			],
 			"request": {
+				"url": "{{server}}:{{port}}/chk/mq",
 				"method": "GET",
 				"header": [],
-				"url": "{{server}}:{{port}}/chk/mq"
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
 			},
 			"response": []
 		},
@@ -95,7 +109,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "39c04d98-f638-4501-8728-d15a22452a8f",
+						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -106,15 +120,19 @@
 							"    pm.expect(jsonData.chk).to.eql(\"cache\");",
 							"    pm.expect(jsonData.status).to.eql(true);",
 							"});"
-						],
-						"type": "text/javascript"
+						]
 					}
 				}
 			],
 			"request": {
+				"url": "{{server}}:{{port}}/chk/cache",
 				"method": "GET",
 				"header": [],
-				"url": "{{server}}:{{port}}/chk/cache"
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
 			},
 			"response": []
 		},
@@ -124,7 +142,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "27fd0bd7-1d1d-4ab4-a97b-a071426e3e6b",
+						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -136,15 +154,19 @@
 							"    pm.expect(jsonData.status).to.eql(true);",
 							"    pm.expect(jsonData.count).to.gt(0);",
 							"});"
-						],
-						"type": "text/javascript"
+						]
 					}
 				}
 			],
 			"request": {
+				"url": "{{server}}:{{port}}/chk/db",
 				"method": "GET",
 				"header": [],
-				"url": "{{server}}:{{port}}/chk/db"
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
 			},
 			"response": []
 		},
@@ -154,7 +176,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "f5cfa067-380d-42ac-92b3-50faa9faf1f3",
+						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -164,15 +186,19 @@
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.chk).to.eql(\"job\");",
 							"});"
-						],
-						"type": "text/javascript"
+						]
 					}
 				}
 			],
 			"request": {
+				"url": "{{server}}:{{port}}/chk/job",
 				"method": "GET",
 				"header": [],
-				"url": "{{server}}:{{port}}/chk/job"
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
 			},
 			"response": []
 		},
@@ -182,7 +208,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "f5cfa067-380d-42ac-92b3-50faa9faf1f3",
+						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -192,15 +218,19 @@
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.name).to.eql(\"json\");",
 							"});"
-						],
-						"type": "text/javascript"
+						]
 					}
 				}
 			],
 			"request": {
+				"url": "{{server}}:{{port}}/chk/json",
 				"method": "GET",
 				"header": [],
-				"url": "{{server}}:{{port}}/chk/json"
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
 			},
 			"response": []
 		},
@@ -210,7 +240,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "f5cfa067-380d-42ac-92b3-50faa9faf1f3",
+						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -220,15 +250,19 @@
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.chk).to.eql(\"http\");",
 							"});"
-						],
-						"type": "text/javascript"
+						]
 					}
 				}
 			],
 			"request": {
+				"url": "{{server}}:{{port}}/chk/http",
 				"method": "GET",
 				"header": [],
-				"url": "{{server}}:{{port}}/chk/http"
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
 			},
 			"response": []
 		},
@@ -238,7 +272,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "f5cfa067-380d-42ac-92b3-50faa9faf1f3",
+						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -248,15 +282,19 @@
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.cto51.course.user.length).to.gt(0);",
 							"});"
-						],
-						"type": "text/javascript"
+						]
 					}
 				}
 			],
 			"request": {
+				"url": "{{server}}:{{port}}/jext",
 				"method": "GET",
 				"header": [],
-				"url": "{{server}}:{{port}}/jext"
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
 			},
 			"response": []
 		},
@@ -266,7 +304,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "f5cfa067-380d-42ac-92b3-50faa9faf1f3",
+						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -276,15 +314,19 @@
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.chk).to.eql(\"ok\");",
 							"});"
-						],
-						"type": "text/javascript"
+						]
 					}
 				}
 			],
 			"request": {
+				"url": "{{server}}:{{port}}/actuator",
 				"method": "GET",
 				"header": [],
-				"url": "{{server}}:{{port}}/actuator"
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
 			},
 			"response": []
 		},
@@ -294,7 +336,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "f5cfa067-380d-42ac-92b3-50faa9faf1f3",
+						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -304,15 +346,19 @@
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.chk).to.eql(\"ok\");",
 							"});"
-						],
-						"type": "text/javascript"
+						]
 					}
 				}
 			],
 			"request": {
+				"url": "{{server}}:{{port}}/actuator/health",
 				"method": "GET",
 				"header": [],
-				"url": "{{server}}:{{port}}/actuator/health"
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
 			},
 			"response": []
 		},
@@ -322,7 +368,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "f5cfa067-380d-42ac-92b3-50faa9faf1f3",
+						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -332,15 +378,19 @@
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.chk).to.eql(\"ok\");",
 							"});"
-						],
-						"type": "text/javascript"
+						]
 					}
 				}
 			],
 			"request": {
+				"url": "{{server}}:{{port}}/actuator/prometheus",
 				"method": "GET",
 				"header": [],
-				"url": "{{server}}:{{port}}/actuator/prometheus"
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
 			},
 			"response": []
 		},
@@ -350,7 +400,7 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "f5cfa067-380d-42ac-92b3-50faa9faf1f3",
+						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
@@ -360,40 +410,98 @@
 							"    var jsonData = pm.response.json();",
 							"    pm.expect(jsonData.chk).to.eql(\"ok\");",
 							"});"
-						],
-						"type": "text/javascript"
+						]
 					}
 				}
 			],
 			"request": {
+				"url": "{{server}}:{{port}}/actuator/loggers/root",
 				"method": "GET",
 				"header": [],
-				"url": "{{server}}:{{port}}/actuator/loggers/root"
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "{{server}}:{{port}}/file/upload",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Chk\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.msg).to.eql(\"OK\");",
+							"    postman.setEnvironmentVariable(\"file\", jsonData.name);",
+							"    postman.setEnvironmentVariable(\"file_url\", jsonData.url);",
+							"});",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{server}}:{{port}}/file/upload",
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"description": "",
+							"type": "file",
+							"src": "api-service.postman_collection.json"
+						}
+					]
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "{{server}}:{{port}}/file/download",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{file_url}}",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"description": "",
+							"type": "file",
+							"src": "api-service.postman_collection.json"
+						}
+					]
+				},
+				"description": ""
 			},
 			"response": []
 		}
-	],
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"id": "62a8a5a2-ad74-49c7-b274-a9b78b8cfee6",
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		},
-		{
-			"listen": "test",
-			"script": {
-				"id": "b22d08e9-23b8-4cca-88e2-99e659e5fc48",
-				"type": "text/javascript",
-				"exec": [
-					""
-				]
-			}
-		}
-	],
-	"protocolProfileBehavior": {}
+	]
 }
