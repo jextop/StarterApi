@@ -91,6 +91,7 @@ http:
   staleConnectionCheckEnabled: true
 
 logging:
+  config: classpath:logback.xml
   level:
     com.common: info
     com.starter: info

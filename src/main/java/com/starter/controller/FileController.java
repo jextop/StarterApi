@@ -122,7 +122,7 @@ public class FileController {
             LogUtil.info("Existed file in db", file.getOriginalFilename(), md5Str);
 
             Map<String, Object> ret = RespUtil.respOK();
-            ret.put("name", file.getName());
+            ret.put("name", fileDb.getName());
             ret.put("url", fileHelper.getFileUrl(fileDb));
             return ret;
         }
