@@ -22,7 +22,7 @@ spring:
   servlet:
     multipart:
       enabled: true
-      location: /tmp/files
+      location: files
       file-size-threshold: 0B
       max-file-size: 10MB
       max-request-size: 10MB

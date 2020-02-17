@@ -48,7 +48,7 @@ services:
 #          dockerfile: Dockerfile_ce
 #        restart: always
 ##        volumes:
-##            - ../data/file:/tmp/file
+##            - ../data/files:/tmp/files
 #        ports:
 #            - 8011:8011
 #        depends_on:
