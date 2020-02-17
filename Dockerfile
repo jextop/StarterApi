@@ -18,7 +18,7 @@ WORKDIR /deploy
 RUN rm -rf /code
 
 # volume for data
-VOLUME /tmp/file
+VOLUME /tmp/files
 
 # do sth
 CMD ["sh", "launch.sh"]

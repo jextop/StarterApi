@@ -7,7 +7,7 @@ COPY ./deploy/ /deploy
 WORKDIR /deploy
 
 # volume for data
-VOLUME /tmp/file
+VOLUME /tmp/files
 
 # do sth
 CMD ["sh", "launch.sh"]
