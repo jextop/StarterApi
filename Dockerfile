@@ -1,4 +1,4 @@
-FROM openjdk:8
+FROM registry.cn-shanghai.aliyuncs.com/jext/starter_api_base:latest
 
 LABEL maintainer="Jext Community, https://github.com/jextop"
 
