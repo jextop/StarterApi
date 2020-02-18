@@ -1,5 +1,7 @@
 package com.starter.controller;
 
+import com.common.http.RespEnum;
+import com.common.http.RespUtil;
 import com.starter.exception.AccessLimitException;
 import org.apache.ibatis.exceptions.PersistenceException;
 import org.apache.shiro.ShiroException;
@@ -9,40 +11,37 @@ import org.springframework.messaging.MessagingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.util.HashMap;
+import org.springframework.web.multipart.MultipartException;
 
 @RestControllerAdvice
 public class ExceptionController {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(ShiroException.class)
     public Object shiroExceptionHandler(ShiroException e) {
-        return new HashMap<String, Object>() {{
-            put("msg", e.getMessage());
-        }};
+        return RespUtil.resp(RespEnum.UNAUTHORIZED, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
     @ExceptionHandler(value = AccessLimitException.class)
     public Object accessLimitExceptionHandler(AccessLimitException e) {
-        return new HashMap<String, Object>() {{
-            put("msg", e.getMessage());
-        }};
+        return RespUtil.resp(RespEnum.TOO_MANY_REQUESTS, e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+    @ExceptionHandler(value = MultipartException.class)
+    public Object fileExceptionHandler(MultipartException e) {
+        return RespUtil.resp(RespEnum.UNSUPPORTED_MEDIA_TYPE, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     @ExceptionHandler(value = {PersistenceException.class, DataAccessException.class, MessagingException.class})
     public Object dataExceptionHandler(RuntimeException e) {
-        return new HashMap<String, Object>() {{
-            put("msg", e.getMessage());
-        }};
+        return RespUtil.resp(RespEnum.SERVICE_UNAVAILABLE, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(value = Exception.class)
     public Object exceptionHandler(Exception e) {
-        return new HashMap<String, Object>() {{
-            put("msg", e.getMessage());
-        }};
+        return RespUtil.resp(RespEnum.ERROR, e.getMessage());
     }
 }

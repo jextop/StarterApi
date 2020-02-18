@@ -19,6 +19,7 @@ public enum RespEnum {
     TOO_MANY_REQUESTS(HttpStatus.TOO_MANY_REQUESTS),
     ERROR(HttpStatus.INTERNAL_SERVER_ERROR),
     NOT_IMPLEMENTED(HttpStatus.NOT_IMPLEMENTED),
+    SERVICE_UNAVAILABLE(HttpStatus.SERVICE_UNAVAILABLE),
 
     FILE_EMPTY(1000, "the file is empty"),
 
