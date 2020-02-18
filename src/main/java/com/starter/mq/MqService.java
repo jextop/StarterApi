@@ -6,6 +6,7 @@ import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.messaging.MessagingException;
 import org.springframework.stereotype.Service;
 
+import javax.jms.Destination;
 import javax.jms.Queue;
 import javax.jms.Topic;
 import java.util.Map;
@@ -22,23 +23,19 @@ public class MqService {
     private Topic topic;
 
     public void sendQueue(Map<String, ?> msgMap) {
-        String msgStr = MqUtil.formatMsg(msgMap);
-        LogUtil.info("Send queue msg", msgStr);
-
-        try {
-            jmsMessagingTemplate.convertAndSend(queue, msgStr);
-        } catch (MessagingException e) {
-            LogUtil.error(e.getMessage());
-            throw e;
-        }
+        sendMsg(queue, msgMap);
     }
 
     public void sendTopic(Map<String, ?> msgMap) {
+        sendMsg(topic, msgMap);
+    }
+
+    public void sendMsg(Destination dest, Map<String, ?> msgMap) {
         String msgStr = MqUtil.formatMsg(msgMap);
-        LogUtil.info("Send topic msg", msgStr);
+        LogUtil.info(dest.getClass().getSimpleName(), "Send msg", msgStr);
 
         try {
-            jmsMessagingTemplate.convertAndSend(topic, msgStr);
+            jmsMessagingTemplate.convertAndSend(dest, msgStr);
         } catch (MessagingException e) {
             LogUtil.error(e.getMessage());
             throw e;
