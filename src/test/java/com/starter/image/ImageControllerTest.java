@@ -1,4 +1,4 @@
-package com.starter.file;
+package com.starter.image;
 
 import com.common.file.FileUtil;
 import com.common.http.RespEnum;
@@ -6,7 +6,6 @@ import com.common.util.CodeUtil;
 import com.common.util.EmptyUtil;
 import com.common.util.JsonUtil;
 import com.common.util.LogUtil;
-import com.starter.controller.FileController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,47 +19,51 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 @SpringBootTest
-public class FileControllerTest {
+public class ImageControllerTest {
     @Autowired
-    FileController fileController;
+    ImageController imageController;
 
     @Test
     public void testUpload() throws IOException {
-        File emptyFile = File.createTempFile("tmp", ".txt");
+        File txtFile = File.createTempFile("tmp", ".txt");
+        FileUtil.write(txtFile.getPath(), "tmp text file".getBytes());
+        MockMultipartFile txtMultipart = new MockMultipartFile(
+                txtFile.getName(), txtFile.getName(), null,
+                new FileInputStream(txtFile)
+        );
+
+        File emptyFile = File.createTempFile("tmp", ".png");
         MockMultipartFile emptyMultipart = new MockMultipartFile(
                 emptyFile.getName(), emptyFile.getName(), null,
                 new FileInputStream(emptyFile)
         );
 
-        File file = File.createTempFile("tmp", ".txt");
-        FileUtil.write(file.getPath(), "upload tmp file".getBytes());
-        MockMultipartFile multipart = new MockMultipartFile(
-                file.getName(), file.getName(), null,
-                new FileInputStream(file)
+        File pngFile = File.createTempFile("tmp", ".png");
+        FileUtil.write(pngFile.getPath(), "test png file".getBytes());
+        MockMultipartFile pngMultipart = new MockMultipartFile(
+                pngFile.getName(), pngFile.getName(), null,
+                new FileInputStream(pngFile)
         );
 
         Map<MultipartFile, RespEnum> mapIO = new HashMap<MultipartFile, RespEnum>() {{
-            put(null, RespEnum.FILE_EMPTY);
+            put(txtMultipart, RespEnum.UNSUPPORTED_MEDIA_TYPE);
             put(emptyMultipart, RespEnum.FILE_EMPTY);
-            put(multipart, RespEnum.OK);
+            put(pngMultipart, RespEnum.OK);
         }};
 
         String url = null;
         for (Map.Entry<MultipartFile, RespEnum> io : mapIO.entrySet()) {
-            Object ret = fileController.doUpload(FileTypeEnum.File, io.getKey(), null);
+            Object ret = imageController.upload(io.getKey(), "1");
             LogUtil.info(ret);
 
+            Map<String, Object> retMap = (Map<String, Object>) ret;
+            Assertions.assertEquals(io.getValue().getCode(), retMap.get("code"));
             if (io.getValue().getCode() == RespEnum.OK.getCode()) {
-                Map<String, Object> retMap = (Map<String, Object>) ret;
-                Assertions.assertEquals(io.getValue().getCode(), retMap.get("code"));
                 url = (String) retMap.get("url");
-            } else {
-                Assertions.assertEquals(io.getValue().toMap(), ret);
             }
         }
 
@@ -68,22 +71,22 @@ public class FileControllerTest {
         testList();
     }
 
-    public void testDownload(String name) {
+    public void testDownload(final String name) {
         Map<String, RespEnum> mapIO = new HashMap<String, RespEnum>() {{
-            put(String.format("%s.txt", CodeUtil.getCode()), RespEnum.NOT_FOUND);
+            put(String.format("%s.png", CodeUtil.getCode()), RespEnum.NOT_FOUND);
             put(name, RespEnum.OK);
         }};
 
-        HttpServletResponse response = new MockHttpServletResponse();
+        final HttpServletResponse response = new MockHttpServletResponse();
         for (Map.Entry<String, RespEnum> io : mapIO.entrySet()) {
-            Object ret = fileController.doDownload(response, io.getKey());
+            Object ret = imageController.download(response, io.getKey());
             LogUtil.info(ret);
             Assertions.assertEquals(io.getValue().toMap(), ret);
         }
     }
 
     public void testList() {
-        Object ret = fileController.doList("", null);
+        Object ret = imageController.list("");
         ret = ((Map<String, ?>) ret).get("items");
         LogUtil.info(JsonUtil.toStr(ret));
         Assertions.assertFalse(EmptyUtil.isEmpty((Collection) ret));

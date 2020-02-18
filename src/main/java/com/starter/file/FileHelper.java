@@ -1,6 +1,7 @@
 package com.starter.file;
 
 import com.common.file.FileUtil;
+import com.common.util.EmptyUtil;
 import com.common.util.LogUtil;
 import com.common.util.StrUtil;
 import com.starter.config.MultipartConfig;
@@ -18,6 +19,9 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class FileHelper {
@@ -109,5 +113,16 @@ public class FileHelper {
                 && file.getName() != null && !file.getName().isEmpty()
                 && file.getUrl() != null && !file.getUrl().isEmpty()
                 && file.getMd5() != null && !file.getMd5().isEmpty();
+    }
+
+    public void fillInfo(List<com.starter.entity.File> itemList) {
+        if (EmptyUtil.isEmpty(itemList)) {
+            return;
+        }
+
+        // Set full url
+        for (com.starter.entity.File item : itemList) {
+            item.setUrl(getFileUrl(item));
+        }
     }
 }

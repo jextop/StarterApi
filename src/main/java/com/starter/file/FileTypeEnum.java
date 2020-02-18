@@ -63,8 +63,8 @@ public enum FileTypeEnum {
         return ret == null ? FileTypeEnum.File : ret;
     }
 
-    public static FileTypeEnum get(String name) {
-        return FileTypeEnum.valueOf(name);
+    public static FileTypeEnum get(String idStr) {
+        return StrUtil.isEmpty(idStr) ? Image : get(Integer.valueOf(idStr));
     }
 
     public static FileTypeEnum getByFlag(String flag) {

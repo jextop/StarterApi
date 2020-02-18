@@ -25,9 +25,10 @@ public class LogServiceTest {
 
         LogUtil.info(ret);
         Assertions.assertTrue(ret);
+
+        testList();
     }
 
-    @Test
     public void testList() {
         List<Log> ret = logService.list(new QueryWrapper<Log>()
                 .orderByDesc("id")

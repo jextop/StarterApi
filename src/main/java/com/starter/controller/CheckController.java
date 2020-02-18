@@ -56,7 +56,7 @@ public class CheckController {
 
     @AccessLimited(count = 1)
     @ApiOperation("检查服务是否运行")
-    @GetMapping(value = "")
+    @GetMapping
     @ResponseStatus(HttpStatus.ACCEPTED)
     public Object index(@RequestAttribute(required = false) String ip) {
         return new HashMap<String, Object>() {{
@@ -68,7 +68,7 @@ public class CheckController {
 
     @AccessLimited(count = 1)
     @ApiOperation("检查服务是否运行")
-    @GetMapping(value = "/chk")
+    @GetMapping("/chk")
     public Object chk(@RequestAttribute(required = false) String ip) {
         return new HashMap<String, Object>() {{
             put("chk", "ok");
@@ -87,7 +87,7 @@ public class CheckController {
 
     @AccessLimited(count = 1)
     @ApiOperation("检查数据库")
-    @GetMapping(value = "/chk/db")
+    @GetMapping("/chk/db")
     public Object db(@RequestAttribute(required = false) String ip) {
         // Write a log to db
         Log log = new Log() {{
@@ -113,7 +113,7 @@ public class CheckController {
 
     @AccessLimited(count = 1)
     @ApiOperation("检查缓存系统")
-    @GetMapping(value = "/chk/cache")
+    @GetMapping("/chk/cache")
     public Object cache(@RequestAttribute(required = false) String ip) {
         // Get a unique key
         String key = String.format("cache_test_%s_%s_缓存", ip, CodeUtil.getCode());
@@ -137,7 +137,7 @@ public class CheckController {
 
     @AccessLimited(count = 1)
     @ApiOperation("检查消息队列")
-    @GetMapping(path = "/chk/mq")
+    @GetMapping("/chk/mq")
     public Object mq(@RequestAttribute(required = false) String ip) {
         String msg = String.format("check mq from java, %s, 消息队列", ip);
 
@@ -155,7 +155,7 @@ public class CheckController {
 
     @AccessLimited(count = 1)
     @ApiOperation("检查HTTP连接")
-    @GetMapping(value = "/chk/http", produces = "application/json")
+    @GetMapping("/chk/http")
     public Object http() {
         String strCourse = httpService.sendHttpGet("https://edu.51cto.com/center/course/index/search?q=Jext%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA");
         String[] courses = StrUtil.parse(strCourse, "[1-9]\\d*人学习");
@@ -168,7 +168,7 @@ public class CheckController {
 
     @AccessLimited(count = 1)
     @ApiOperation("检查作业调度")
-    @GetMapping(value = "/chk/job")
+    @GetMapping("/chk/job")
     public Object job() {
         JobDetail job = JobBuilder.newJob(QuartzJob.class).build();
         SimpleTrigger trigger = (SimpleTrigger) TriggerBuilder.newTrigger()
@@ -196,7 +196,7 @@ public class CheckController {
 
     @AccessLimited(count = 1)
     @ApiOperation("检查JSON数据传输")
-    @GetMapping(value = "/chk/json", produces = "application/json")
+    @GetMapping("/chk/json")
     public Object json(@RequestAttribute(required = false) String ip) {
         return new HashMap<String, Object>() {{
             put("chk", "json");

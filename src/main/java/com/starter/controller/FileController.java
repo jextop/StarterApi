@@ -3,6 +3,7 @@ package com.starter.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.common.enc.Md5Util;
 import com.common.file.FileUtil;
+import com.common.http.ParamUtil;
 import com.common.http.RespEnum;
 import com.common.http.RespUtil;
 import com.common.util.CodeUtil;
@@ -13,8 +14,8 @@ import com.starter.annotation.AccessLimited;
 import com.starter.config.MultipartConfig;
 import com.starter.config.ServerConfig;
 import com.starter.file.FileHelper;
-import com.starter.file.LocationEnum;
 import com.starter.file.FileTypeEnum;
+import com.starter.file.LocationEnum;
 import com.starter.service.impl.FileServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,18 +23,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -216,5 +214,45 @@ public class FileController {
 //        response.setContentType("application/octet-stream");
         fileHelper.read(response, file);
         return RespUtil.respOK();
+    }
+
+    @AccessLimited(count = 1)
+    @ApiOperation("文件列表, {pageIndex: 1, pageSize: 2}")
+    @PostMapping("/list")
+    public Object list(@RequestBody String body) {
+        LogUtil.info("/file/list", body);
+        return doList(body, null);
+    }
+
+    public Object doList(String body, FileTypeEnum[] typeArr) {
+        // Parse params
+        ParamUtil paramUtil = new ParamUtil(body);
+        int size = paramUtil.getPageSize();
+        int offset = size * paramUtil.getPageIndex();
+
+        // Set page size and index
+        QueryWrapper<com.starter.entity.File> query = new QueryWrapper<com.starter.entity.File>()
+                .last(true, String.format("limit %d offset %d", size, offset))
+                .select("name", "code", "url", "file_type", "location")
+                .orderByDesc("id");
+
+        // Set file type
+        if (!EmptyUtil.isEmpty(typeArr)) {
+            List<Integer> typeList = new ArrayList<>();
+            for (FileTypeEnum type : typeArr) {
+                typeList.add(type.getId());
+            }
+            query.in("file_type", typeList);
+        }
+
+        // Query
+        List<com.starter.entity.File> items = fileService.list(query);
+        fileHelper.fillInfo(items);
+
+        Map<String, Object> ret = RespUtil.respOK();
+        ret.put("pageIndex", offset / size);
+        ret.put("pageSize", size);
+        ret.put("items", items);
+        return ret;
     }
 }

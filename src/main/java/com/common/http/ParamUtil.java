@@ -43,7 +43,7 @@ public class ParamUtil {
      */
     public int getPageIndex() {
         Integer v = getInt("pageIndex");
-        return v == null ? 1 : v;
+        return v == null || v < 0 ? 0 : v;
     }
 
     public int getPageSize() {

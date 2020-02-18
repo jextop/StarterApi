@@ -8,6 +8,473 @@
 	},
 	"item": [
 		{
+			"name": "chk",
+			"description": "",
+			"item": [
+				{
+					"name": "{{server}}:{{port}}/chk",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Chk\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.chk).to.eql(\"ok\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{server}}:{{port}}/chk",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "{{server}}:{{port}}/chk/mq",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Chk\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.chk).to.eql(\"mq\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{server}}:{{port}}/chk/mq",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "{{server}}:{{port}}/chk/cache",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Chk\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.chk).to.eql(\"cache\");",
+									"    pm.expect(jsonData.status).to.eql(true);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{server}}:{{port}}/chk/cache",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "{{server}}:{{port}}/chk/db",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Chk\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.chk).to.eql(\"db\");",
+									"    pm.expect(jsonData.status).to.eql(true);",
+									"    pm.expect(jsonData.count).to.gt(0);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{server}}:{{port}}/chk/db",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "{{server}}:{{port}}/chk/job",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Chk\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.chk).to.eql(\"job\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{server}}:{{port}}/chk/job",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "{{server}}:{{port}}/chk/json",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Chk\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.name).to.eql(\"json\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{server}}:{{port}}/chk/json",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "{{server}}:{{port}}/chk/http",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Chk\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.chk).to.eql(\"http\");",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{server}}:{{port}}/chk/http",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "file",
+			"description": "",
+			"item": [
+				{
+					"name": "{{server}}:{{port}}/file/upload",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Chk\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.msg).to.eql(\"OK\");",
+									"    postman.setEnvironmentVariable(\"file\", jsonData.name);",
+									"    postman.setEnvironmentVariable(\"file_url\", jsonData.url);",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{server}}:{{port}}/file/upload",
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"value": "",
+									"description": "",
+									"type": "file"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "{{server}}:{{port}}/file/download",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{file_url}}",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"value": "",
+									"description": "",
+									"type": "file"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "{{server}}:{{port}}/file/list",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{server}}:{{port}}/file/list",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"pageIndex\": 0,\n\t\"pageSize\": 3\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "image",
+			"description": "",
+			"item": [
+				{
+					"name": "{{server}}:{{port}}/image/upload",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Chk\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.msg).to.eql(\"OK\");",
+									"    postman.setEnvironmentVariable(\"image\", jsonData.name);",
+									"    postman.setEnvironmentVariable(\"image_url\", jsonData.url);",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{server}}:{{port}}/image/upload",
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"description": "",
+									"type": "file",
+									"src": "java-annotation-cover.png"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "{{server}}:{{port}}/image/download",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{image_url}}",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"value": "",
+									"description": "",
+									"type": "file"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "{{server}}:{{port}}/image/list",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{server}}:{{port}}/image/list",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"pageIndex\": 0,\n\t\"pageSize\": 3\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "{{server}}:{{port}}/",
 			"event": [
 				{
@@ -29,233 +496,6 @@
 			],
 			"request": {
 				"url": "{{server}}:{{port}}/",
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"description": ""
-			},
-			"response": []
-		},
-		{
-			"name": "{{server}}:{{port}}/chk",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.test(\"Chk\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.chk).to.eql(\"ok\");",
-							"});"
-						]
-					}
-				}
-			],
-			"request": {
-				"url": "{{server}}:{{port}}/chk",
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"description": ""
-			},
-			"response": []
-		},
-		{
-			"name": "{{server}}:{{port}}/chk/mq",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.test(\"Chk\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.chk).to.eql(\"mq\");",
-							"});"
-						]
-					}
-				}
-			],
-			"request": {
-				"url": "{{server}}:{{port}}/chk/mq",
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"description": ""
-			},
-			"response": []
-		},
-		{
-			"name": "{{server}}:{{port}}/chk/cache",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.test(\"Chk\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.chk).to.eql(\"cache\");",
-							"    pm.expect(jsonData.status).to.eql(true);",
-							"});"
-						]
-					}
-				}
-			],
-			"request": {
-				"url": "{{server}}:{{port}}/chk/cache",
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"description": ""
-			},
-			"response": []
-		},
-		{
-			"name": "{{server}}:{{port}}/chk/db",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.test(\"Chk\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.chk).to.eql(\"db\");",
-							"    pm.expect(jsonData.status).to.eql(true);",
-							"    pm.expect(jsonData.count).to.gt(0);",
-							"});"
-						]
-					}
-				}
-			],
-			"request": {
-				"url": "{{server}}:{{port}}/chk/db",
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"description": ""
-			},
-			"response": []
-		},
-		{
-			"name": "{{server}}:{{port}}/chk/job",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.test(\"Chk\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.chk).to.eql(\"job\");",
-							"});"
-						]
-					}
-				}
-			],
-			"request": {
-				"url": "{{server}}:{{port}}/chk/job",
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"description": ""
-			},
-			"response": []
-		},
-		{
-			"name": "{{server}}:{{port}}/chk/json",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.test(\"Chk\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.name).to.eql(\"json\");",
-							"});"
-						]
-					}
-				}
-			],
-			"request": {
-				"url": "{{server}}:{{port}}/chk/json",
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
-				},
-				"description": ""
-			},
-			"response": []
-		},
-		{
-			"name": "{{server}}:{{port}}/chk/http",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.test(\"Chk\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.chk).to.eql(\"http\");",
-							"});"
-						]
-					}
-				}
-			],
-			"request": {
-				"url": "{{server}}:{{port}}/chk/http",
 				"method": "GET",
 				"header": [],
 				"body": {
@@ -421,83 +661,6 @@
 				"body": {
 					"mode": "raw",
 					"raw": ""
-				},
-				"description": ""
-			},
-			"response": []
-		},
-		{
-			"name": "{{server}}:{{port}}/file/upload",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.test(\"Chk\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.msg).to.eql(\"OK\");",
-							"    postman.setEnvironmentVariable(\"file\", jsonData.name);",
-							"    postman.setEnvironmentVariable(\"file_url\", jsonData.url);",
-							"});",
-							""
-						]
-					}
-				}
-			],
-			"request": {
-				"url": "{{server}}:{{port}}/file/upload",
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "file",
-							"description": "",
-							"type": "file",
-							"src": "api-service.postman_collection.json"
-						}
-					]
-				},
-				"description": ""
-			},
-			"response": []
-		},
-		{
-			"name": "{{server}}:{{port}}/file/download",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
-							""
-						]
-					}
-				}
-			],
-			"request": {
-				"url": "{{file_url}}",
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "file",
-							"description": "",
-							"type": "file",
-							"src": "api-service.postman_collection.json"
-						}
-					]
 				},
 				"description": ""
 			},
