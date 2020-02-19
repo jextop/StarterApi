@@ -57,7 +57,7 @@ public class HttpUtilTest {
             put("per", "1");
         }};
 
-        RespFile resp = new RespFile();
+        RespData resp = new RespData();
         byte[] ret = HttpUtil.sendHttpForm(url, headers, params, resp);
         Assertions.assertNotNull(ret);
 

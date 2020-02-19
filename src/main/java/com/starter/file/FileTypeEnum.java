@@ -11,9 +11,10 @@ public enum FileTypeEnum {
      */
     File(0, "file", "f"),
     Image(1, "image", "i"),
+    Audio(2, "audio", "a"),
 
     FaceImage(100, "face_image", "m"),
-    FaceProfiled(101, "face_profiled", "a"),
+    FaceProfiled(101, "face_profiled", "r"),
     FaceImageSrc(110, "face_image_source", "s"),
     FaceChanged(111, "face_changed", "c"),
     Profile(200, "profile", "p");

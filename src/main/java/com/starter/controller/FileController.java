@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -57,8 +57,8 @@ public class FileController {
     @ApiOperation("上传文件，支持一个或多个同时上传")
     @PostMapping("/upload")
     public Object upload(
-            @RequestParam(value = "file", required = false) MultipartFile file,
-            @RequestParam(value = "files", required = false) MultipartFile[] files
+            @RequestPart(value = "file", required = false) MultipartFile file,
+            @RequestPart(value = "files", required = false) MultipartFile[] files
     ) {
         if (file != null) {
             LogUtil.info("/file/upload", file.getOriginalFilename());

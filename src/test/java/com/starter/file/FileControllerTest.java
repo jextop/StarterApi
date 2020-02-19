@@ -15,12 +15,10 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -74,7 +72,7 @@ public class FileControllerTest {
             put(name, RespEnum.OK);
         }};
 
-        HttpServletResponse response = new MockHttpServletResponse();
+        MockHttpServletResponse response = new MockHttpServletResponse();
         for (Map.Entry<String, RespEnum> io : mapIO.entrySet()) {
             Object ret = fileController.doDownload(response, io.getKey());
             LogUtil.info(ret);

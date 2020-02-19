@@ -22,25 +22,25 @@ public class ExceptionController {
     }
 
     @ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
-    @ExceptionHandler(value = AccessLimitException.class)
+    @ExceptionHandler(AccessLimitException.class)
     public Object accessLimitExceptionHandler(AccessLimitException e) {
         return RespUtil.resp(RespEnum.TOO_MANY_REQUESTS, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
-    @ExceptionHandler(value = MultipartException.class)
+    @ExceptionHandler(MultipartException.class)
     public Object fileExceptionHandler(MultipartException e) {
         return RespUtil.resp(RespEnum.UNSUPPORTED_MEDIA_TYPE, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
-    @ExceptionHandler(value = {PersistenceException.class, DataAccessException.class, MessagingException.class})
+    @ExceptionHandler({PersistenceException.class, DataAccessException.class, MessagingException.class})
     public Object dataExceptionHandler(RuntimeException e) {
         return RespUtil.resp(RespEnum.SERVICE_UNAVAILABLE, e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(value = Exception.class)
+    @ExceptionHandler(Exception.class)
     public Object exceptionHandler(Exception e) {
         return RespUtil.resp(RespEnum.ERROR, e.getMessage());
     }

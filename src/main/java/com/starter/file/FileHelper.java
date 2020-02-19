@@ -19,9 +19,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class FileHelper {
@@ -72,7 +70,7 @@ public class FileHelper {
         // Write to disc
         Files.write(path, bytes);
         LogUtil.info("Success save", path.toString());
-        return path.getFileName().toString();
+        return path.toString();
     }
 
     public void read(HttpServletResponse response, File file) {

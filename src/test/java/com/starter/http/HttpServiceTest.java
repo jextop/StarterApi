@@ -1,7 +1,7 @@
 package com.starter.http;
 
 import com.alibaba.fastjson.JSONObject;
-import com.common.http.RespFile;
+import com.common.http.RespData;
 import com.common.http.RespJsonObj;
 import com.common.http.UrlUtil;
 import com.common.util.LogUtil;
@@ -63,7 +63,7 @@ public class HttpServiceTest {
             put("per", "1");
         }};
 
-        RespFile resp = new RespFile();
+        RespData resp = new RespData();
         byte[] ret = httpService.sendHttpForm(url, headers, params, resp);
         Assertions.assertNotNull(ret);
 
