@@ -54,14 +54,17 @@ public class HttpUtilTest {
             put("ctp", "1");
             put("lan", "zh");
             put("spd", "6");
+            put("pit", "5");
+            put("vol", "5");
             put("per", "1");
+            put("aue", "6"); // 3为mp3格式(默认)； 4为pcm-16k；5为pcm-8k；6为wav（内容同pcm-16k）
         }};
 
         RespData resp = new RespData();
         byte[] ret = HttpUtil.sendHttpForm(url, headers, params, resp);
         Assertions.assertNotNull(ret);
 
-        String file = resp.saveFile("http_util_test.mp3");
+        String file = resp.saveFile(String.format("http_util_test.%s", resp.getFileExt()));
         LogUtil.info(file);
     }
 }

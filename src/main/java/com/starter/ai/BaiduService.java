@@ -57,7 +57,9 @@ public class BaiduService {
             put("ctp", "1");
             put("lan", "zh");
             put("spd", "6");
-            put("per", "1");
+            put("pit", "5");
+            put("vol", "5");
+            put("per", "0");
             put("aue", "6"); // 3为mp3格式(默认)； 4为pcm-16k；5为pcm-8k；6为wav（内容同pcm-16k）
         }};
 

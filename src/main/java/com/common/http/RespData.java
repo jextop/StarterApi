@@ -64,7 +64,7 @@ public class RespData implements ResponseHandler<byte[]> {
         try {
             Files.write(path, bytes);
         } catch (IOException e) {
-            System.out.printf("Fail to save file: %s, %s\n", path.toString(), e.getMessage());
+            LogUtil.error("Fail to save file: %s, %s\n", path.toString(), e.getMessage());
             return null;
         }
         return path.toString();
