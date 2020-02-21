@@ -36,7 +36,7 @@ public class FileHelper {
             if (location != null && location == LocationEnum.Service.getId()) {
                 String serverUrl = serverConfig.getServerUrl();
                 String specifiedUrl = FileTypeEnum.get(file.getFileType()).getName();
-                url = String.format("%s/%s/%s%s", serverUrl, specifiedUrl, file.getCode(), FileUtil.getFileExt(url));
+                url = String.format("%s/%s/%s", serverUrl, specifiedUrl, url);
             }
         }
         return url;
@@ -64,10 +64,14 @@ public class FileHelper {
             return null;
         }
 
-        // Get file name. Note it's unique code.
-        Path path = Paths.get(filePath, fileName);
+        // Check file existed or not. Note it's unique.
+        file = new File(filePath, fileName);
+        if (file.exists()) {
+            return file.getPath();
+        }
 
         // Write to disc
+        Path path = Paths.get(filePath, fileName);
         Files.write(path, bytes);
         LogUtil.info("Success save", path.toString());
         return path.toString();

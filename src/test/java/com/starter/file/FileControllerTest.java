@@ -36,7 +36,7 @@ public class FileControllerTest {
         );
 
         File file = File.createTempFile("tmp", ".txt");
-        FileUtil.write(file.getPath(), "upload tmp file".getBytes());
+        FileUtil.write(file.getPath(), "upload temp file".getBytes());
         MockMultipartFile multipart = new MockMultipartFile(
                 file.getName(), file.getName(), null,
                 new FileInputStream(file)

@@ -127,12 +127,10 @@ public class FileController {
 
         // todo: support cloud storage service
 
-        // New file: remember the file name and use code as new name to save
+        // New file: remember the file name and use md5 as new name to save
         String name = FileUtil.getFileName(file.getOriginalFilename());
         String fileExt = FileUtil.getFileExt(name);
-
-        String code = String.format("%s%s", type.getFlag(), CodeUtil.getCode());
-        String fileName = String.format("%s%s", code, fileExt);
+        String fileName = String.format("%s%s%s", type.getFlag(), md5Str, fileExt);
 
         // Save file
         try {
@@ -144,7 +142,7 @@ public class FileController {
         // Add file info to db
         fileDb = new com.starter.entity.File() {{
             setName(name);
-            setCode(code);
+            setCode(String.format("%s%s", type.getFlag(), CodeUtil.getCode()));
             setMd5(md5Str);
             setUrl(fileName);
             setSize(file.getSize());
@@ -185,9 +183,9 @@ public class FileController {
 
     public Object doDownload(HttpServletResponse response, String name) {
         // Get file info from db
-        String code = FileUtil.removeFileExt(name);
+        String md5Str = FileUtil.removeFileExt(name).substring(1);
         com.starter.entity.File fileDb = fileService.getOne(
-                new QueryWrapper<com.starter.entity.File>().eq("code", code)
+                new QueryWrapper<com.starter.entity.File>().eq("md5", md5Str)
         );
 
         if (FileHelper.isValid(fileDb)) {
