@@ -31,7 +31,7 @@ public class JextService {
             return infoMap;
         }
 
-        // Get info
+        // 51cto
         String str51CtoCourse = httpService.sendHttpGet("https://edu.51cto.com/center/course/index/search?q=Jext%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA");
         String[] course51Cto = StrUtil.parse(str51CtoCourse, "课程：[1-9]\\d*门");
         String[] user51Cto = StrUtil.parse(str51CtoCourse, "学员数量：[1-9]\\d*人");
@@ -41,6 +41,10 @@ public class JextService {
         String[] blog51Cto = StrUtil.parse(str51CtoBlog, "<span>[1-9]\\d*(W\\+)*</span>");
         String[] reader51Cto = StrUtil.parse(str51CtoBlog, "阅读&nbsp;[1-9]\\d*(W\\+)*");
 
+        String str51CtoSub = httpService.sendHttpGet("https://blog.51cto.com/cloumn/detail/90");
+        String[] sub51Cto = StrUtil.parse(str51CtoSub, "[1-9]\\d*人已订阅");
+
+        // csdn
         String strCsdnCourse = httpService.sendHttpGet("https://edu.csdn.net/lecturer/4306");
         String[] courseCsdn = StrUtil.parse(strCsdnCourse, "在线课程\\([1-9]\\d*\\W*\\)");
         String[] userCsdn = StrUtil.parse(strCsdnCourse, "累计<b>[1-9]\\d*</b>人");
@@ -62,6 +66,7 @@ public class JextService {
                 put("blog", new HashMap<Object, Object>() {{
                     put("count", parseNum(blog51Cto, "[1-9]\\d*(W\\+)*"));
                     put("reader", parseNum(reader51Cto, "[1-9]\\d*(W\\+)*"));
+                    put("subscribe", parseNum(sub51Cto, "[1-9]\\d*"));
                 }});
             }});
             put("csdn", new HashMap<Object, Object>() {{
