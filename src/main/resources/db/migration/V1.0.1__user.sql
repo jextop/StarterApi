@@ -17,4 +17,4 @@ CREATE TABLE if not EXISTS `user` (
   KEY `user_permission_a46f3ac2` (`permission`),
   KEY `user_is_deleted_8a5fa8e1` (`is_deleted`),
   KEY `user_auth_id_3666ad92` (`auth_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

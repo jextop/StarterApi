@@ -15,4 +15,4 @@ CREATE TABLE if not EXISTS `auth` (
   UNIQUE KEY `app_key` (`app_key`),
   KEY `auth_is_deleted_2cf7df8c` (`is_deleted`),
   KEY `auth_auth_id_057810df` (`auth_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

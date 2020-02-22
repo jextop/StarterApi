@@ -8,8 +8,7 @@ public enum LocationEnum {
     文件存储位置
      */
     Service(0, "service"),
-    Aliyun(1, "aliyun"),
-    Qiniu(2, "qiniu");
+    Qiniu(1, "qiniu");
 
     LocationEnum(int id, String name) {
         this.id = id;

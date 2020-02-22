@@ -46,7 +46,9 @@ public class StrUtil {
 
         // Remove the middle part if it's too long
         if (maxLen > 0) {
-            if (maxLen % 2 != 0) maxLen++;
+            if (maxLen % 2 != 0) {
+                maxLen++;
+            }
 
             if (str.length() > maxLen) {
                 str = String.format("%s%s",

@@ -33,4 +33,4 @@ CREATE TABLE if not EXISTS `voucher` (
   KEY `voucher_is_callback_6c031483` (`is_callback`),
   KEY `voucher_is_deleted_944cdd23` (`is_deleted`),
   KEY `voucher_auth_id_0503ab29` (`auth_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

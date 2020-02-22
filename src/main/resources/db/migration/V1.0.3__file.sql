@@ -1,6 +1,6 @@
 CREATE TABLE if not EXISTS `file` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `code` varchar(32) NOT NULL,
+  `code` varchar(32) DEFAULT NULL,
   `url` longtext,
   `name` varchar(256) NOT NULL,
   `md5` varchar(64) NOT NULL,
@@ -16,10 +16,10 @@ CREATE TABLE if not EXISTS `file` (
   `updated` datetime(6) DEFAULT NULL,
   `updated_by` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `code` (`code`),
-  KEY `file_md5_221b6428` (`md5`),
+  UNIQUE KEY `file_md5_221b6428_uniq` (`md5`),
   KEY `file_file_type_1d3197f0` (`file_type`),
   KEY `file_location_ada5bdd9` (`location`),
   KEY `file_is_deleted_d10a4732` (`is_deleted`),
-  KEY `file_auth_id_734d2086` (`auth_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=277 DEFAULT CHARSET=utf8;
+  KEY `file_auth_id_734d2086` (`auth_id`),
+  KEY `file_code_d1e5f7b6` (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;

@@ -13,4 +13,4 @@ CREATE TABLE if not EXISTS `log` (
   PRIMARY KEY (`id`),
   KEY `log_ops_53a6ed64` (`ops`),
   KEY `log_auth_id_d4155be2` (`auth_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
