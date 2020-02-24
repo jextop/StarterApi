@@ -11,6 +11,8 @@ public enum RespEnum {
      */
     OK(HttpStatus.OK),
 
+    PERMANENT_REDIRECT(HttpStatus.PERMANENT_REDIRECT),
+
     BAD_REQUEST(HttpStatus.BAD_REQUEST),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED),
     NOT_FOUND(HttpStatus.NOT_FOUND),

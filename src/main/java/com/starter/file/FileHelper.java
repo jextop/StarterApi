@@ -1,6 +1,5 @@
 package com.starter.file;
 
-import com.common.file.FileUtil;
 import com.common.util.EmptyUtil;
 import com.common.util.LogUtil;
 import com.common.util.StrUtil;
@@ -29,14 +28,20 @@ public class FileHelper {
     @Autowired
     ServerConfig serverConfig;
 
+    @Autowired(required = false)
+    QiniuConfig qiniuConfig;
+
     public String getFileUrl(com.starter.entity.File file) {
         String url = file.getUrl();
-        if (!StrUtil.isEmpty(url)) {
+        if (!StrUtil.isEmpty(url) && file.getLocation() != null) {
             Integer location = file.getLocation();
-            if (location != null && location == LocationEnum.Service.getId()) {
+            if (location == LocationEnum.Service.getId()) {
                 String serverUrl = serverConfig.getServerUrl();
                 String specifiedUrl = FileTypeEnum.get(file.getFileType()).getName();
                 url = String.format("%s/%s/%s", serverUrl, specifiedUrl, url);
+            } else if (location == LocationEnum.Qiniu.getId() && qiniuConfig != null) {
+                String serverUrl = qiniuConfig.url;
+                url = String.format("%s%s", serverUrl, url);
             }
         }
         return url;

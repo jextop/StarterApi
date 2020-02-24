@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import java.io.File;
 
 @Configuration
-@ConfigurationProperties(prefix = "spring.servlet.multipart")
+@ConfigurationProperties("spring.servlet.multipart")
 public class MultipartConfig {
     private String location;
     private String abstractLocation;

@@ -16,6 +16,7 @@ import com.starter.config.ServerConfig;
 import com.starter.file.FileHelper;
 import com.starter.file.FileTypeEnum;
 import com.starter.file.LocationEnum;
+import com.starter.file.QiniuService;
 import com.starter.service.impl.FileServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,15 +33,19 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@Api(tags = {"文件上传下载"})
+@Api(tags = {"文件管理服务"})
 @RestController
 @RequestMapping("/file")
 public class FileController {
+    @Autowired(required = false)
+    QiniuService qiniuService;
+
     @Autowired
     MultipartConfig multipartConfig;
 
@@ -103,15 +108,16 @@ public class FileController {
         }
 
         // Read file
-        byte[] fileBytes = null;
+        InputStream fileStream = null;
         try {
-            fileBytes = file.getBytes();
+            fileStream = file.getInputStream();
         } catch (IOException e) {
+            LogUtil.error("Error to get file stream when upload", e.getMessage());
             return RespUtil.resp(RespEnum.ERROR, e.getMessage());
         }
 
         // Get md5 and check duplicated files
-        String md5Str = Md5Util.md5(fileBytes);
+        String md5Str = Md5Util.md5(fileStream);
         com.starter.entity.File fileDb = fileService.getOne(
                 new QueryWrapper<com.starter.entity.File>().eq("md5", md5Str)
         );
@@ -125,29 +131,37 @@ public class FileController {
             return ret;
         }
 
-        // todo: support cloud storage service
-
         // New file: remember the file name and use md5 as new name to save
         String name = FileUtil.getFileName(file.getOriginalFilename());
         String fileExt = FileUtil.getFileExt(name);
         String fileName = String.format("%s%s%s", type.getFlag(), md5Str, fileExt);
 
-        // Save file
-        try {
-            fileHelper.save(fileBytes, fileName);
-        } catch (IOException e) {
-            return RespUtil.resp(RespEnum.ERROR, e.getMessage());
+        LocationEnum location = LocationEnum.Service;
+        if (qiniuService != null) {
+            // upload to cloud service
+            location = LocationEnum.Qiniu;
+            fileName = qiniuService.upload(fileStream, fileName);
+        } else {
+            // Save file to local storage
+            try {
+                byte[] fileBytes = file.getBytes();
+                fileHelper.save(fileBytes, fileName);
+            } catch (IOException e) {
+                return RespUtil.resp(RespEnum.ERROR, e.getMessage());
+            }
         }
 
         // Add file info to db
+        String url = fileName;
+        int locationId = location.getId();
         fileDb = new com.starter.entity.File() {{
             setName(name);
             setCode(String.format("%s%s", type.getFlag(), CodeUtil.getCode()));
             setMd5(md5Str);
-            setUrl(fileName);
+            setUrl(url);
             setSize(file.getSize());
             setFileType(type.getId());
-            setLocation(LocationEnum.Service.getId());
+            setLocation(locationId);
         }};
         fileService.save(fileDb);
 
@@ -189,10 +203,10 @@ public class FileController {
         );
 
         if (FileHelper.isValid(fileDb)) {
-            // todo: support cloud storage service
+            // Please download directly from cloud storage service
             if (fileDb.getLocation() != LocationEnum.Service.getId()) {
                 LogUtil.info(String.format("Cloud storage file: %s", name));
-                return RespUtil.notImplemented();
+                return RespUtil.redirect();
             }
 
             // Set file name

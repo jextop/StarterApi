@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties(prefix = "server")
+@ConfigurationProperties("server")
 public class ServerConfig {
     private String address;
     private int port;

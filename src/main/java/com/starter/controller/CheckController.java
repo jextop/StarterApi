@@ -8,6 +8,8 @@ import com.common.util.StrUtil;
 import com.starter.annotation.AccessLimited;
 import com.starter.entity.Log;
 import com.starter.entity.User;
+import com.starter.file.QiniuConfig;
+import com.starter.file.QiniuService;
 import com.starter.http.HttpService;
 import com.starter.jext.JextService;
 import com.starter.job.QuartzJob;
@@ -40,19 +42,25 @@ import java.util.HashMap;
 @RequestMapping("/")
 public class CheckController {
     @Autowired
-    MqService mqService;
+    LogServiceImpl logService;
 
     @Autowired
     RedisService redisService;
 
     @Autowired
-    LogServiceImpl logService;
+    MqService mqService;
 
     @Autowired
     HttpService httpService;
 
     @Autowired
     JextService jextService;
+
+    @Autowired(required = false)
+    QiniuService qiniuService;
+
+    @Autowired(required = false)
+    QiniuConfig qiniuConfig;
 
     @AccessLimited(count = 1)
     @ApiOperation("检查服务是否运行")
@@ -81,6 +89,7 @@ public class CheckController {
                 add(http());
                 add(job());
                 add(json(ip));
+                add(file());
             }});
         }};
     }
@@ -204,6 +213,24 @@ public class CheckController {
                 setName("json");
                 setTitle(String.format("%s_%s", ip, DateUtil.format(new Date())));
             }});
+        }};
+    }
+
+    @AccessLimited(count = 1)
+    @ApiOperation("检查HTTP连接")
+    @GetMapping("/chk/file")
+    public Object file() {
+        String msg;
+        if (qiniuService == null) {
+            msg = "not configured";
+        } else {
+            String key = qiniuService.upload("chk/file".getBytes(), null);
+            msg = key == null ? "fail to upload" : String.format("%s%s", qiniuConfig.getUrl(), key);
+        }
+
+        return new HashMap<String, Object>() {{
+            put("chk", "file_qiniu");
+            put("msg", msg);
         }};
     }
 }

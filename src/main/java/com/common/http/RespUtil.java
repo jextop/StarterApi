@@ -47,4 +47,8 @@ public class RespUtil {
     public static Map<String, Object> notImplemented() {
         return resp(RespEnum.NOT_IMPLEMENTED);
     }
+
+    public static Map<String, Object> redirect() {
+        return resp(RespEnum.PERMANENT_REDIRECT);
+    }
 }

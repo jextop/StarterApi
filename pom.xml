@@ -46,7 +46,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.60</version>
+            <version>[1.2.60, )</version>
         </dependency>
 
         <!-- 数据库 -->
@@ -113,6 +113,13 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpmime</artifactId>
             <version>4.5</version>
+        </dependency>
+
+        <!-- 文件存储 -->
+        <dependency>
+            <groupId>com.qiniu</groupId>
+            <artifactId>qiniu-java-sdk</artifactId>
+            <version>[7.2.0, 7.3.0)</version>
         </dependency>
 
         <!-- 监控 -->
