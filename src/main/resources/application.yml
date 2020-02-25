@@ -94,6 +94,9 @@ ai:
   baidu:
     clientId: kVcnfD9iW2XVZSMaLMrtLYIz
     clientSecret: O9o1O213UgG5LFn0bDGNtoRN3VWl2du6
+  tuling:
+    apiKey: dbc49960eba44013b34837cdcf88dc94
+    userId: starter
 
 file:
   qiniu:

@@ -17,6 +17,8 @@ import java.util.Map;
 @Service
 public class BaiduService {
     public static final String FILE_EXT = "wav";
+    static final String TOKEN_URL = "https://openapi.baidu.com/oauth/2.0/token";
+    static final String TTS_URL = "https://tsn.baidu.com/text2audio";
 
     @Autowired
     HttpService httpService;
@@ -31,7 +33,6 @@ public class BaiduService {
         if (StrUtil.isEmpty(token) || new Date().after(expireDate)) {
             synchronized (BaiduService.class) {
                 if (StrUtil.isEmpty(token) || new Date().after(expireDate)) {
-                    String url = "https://openapi.baidu.com/oauth/2.0/token";
                     Map<String, String> headers = new HashMap<String, String>() {{
                         put("Content-Type", "application/x-www-form-urlencoded");
                     }};
@@ -41,7 +42,7 @@ public class BaiduService {
                         put("client_secret", baiduConfig.clientSecret);
                     }};
 
-                    JSONObject ret = httpService.sendHttpForm(url, headers, params, new RespJsonObj());
+                    JSONObject ret = httpService.sendHttpForm(TOKEN_URL, headers, params, new RespJsonObj());
                     LogUtil.info("Baidu AI token", ret);
                     token = ret.getString("access_token");
 
@@ -54,7 +55,6 @@ public class BaiduService {
     }
 
     public RespData tts(String text) {
-        String url = "https://tsn.baidu.com/text2audio";
         Map<String, String> headers = new HashMap<String, String>() {{
             put("Content-Type", "application/x-www-form-urlencoded");
         }};
@@ -72,7 +72,7 @@ public class BaiduService {
         }};
 
         RespData resp = new RespData();
-        httpService.sendHttpForm(url, headers, params, resp);
+        httpService.sendHttpForm(TTS_URL, headers, params, resp);
         return resp;
     }
 }

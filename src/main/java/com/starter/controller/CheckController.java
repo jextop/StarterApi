@@ -8,6 +8,7 @@ import com.common.util.DateUtil;
 import com.common.util.LogUtil;
 import com.common.util.StrUtil;
 import com.starter.ai.BaiduService;
+import com.starter.ai.TulingService;
 import com.starter.annotation.AccessLimited;
 import com.starter.entity.Log;
 import com.starter.entity.User;
@@ -67,6 +68,9 @@ public class CheckController {
     @Autowired
     BaiduService baiduService;
 
+    @Autowired
+    TulingService tulingService;
+
     @AccessLimited(count = 1)
     @ApiOperation("检查服务是否运行")
     @GetMapping("/")
@@ -84,6 +88,7 @@ public class CheckController {
                 add(json(ip));
                 add(file());
                 add(tts());
+                add(chat(ip));
             }});
         }};
     }
@@ -250,6 +255,16 @@ public class CheckController {
         return new HashMap<String, Object>() {{
             put("chk", "ai/tts");
             put("msg", fileUrl);
+        }};
+    }
+
+    @AccessLimited(count = 1)
+    @ApiOperation("图灵机器人智能聊天")
+    @GetMapping("/ai/chat")
+    public Object chat(@RequestAttribute(required = false) String ip) {
+        return new HashMap<String, Object>() {{
+            put("chk", "ai/chat");
+            put("msg", tulingService.chat("天气", ip));
         }};
     }
 }
