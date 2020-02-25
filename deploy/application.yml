@@ -90,12 +90,18 @@ http:
   requestTimeout: 5000
   staleConnectionCheckEnabled: true
 
-qiniu:
-#  accessKey: xxx
-#  secretKey: xxx
-  region: 0
-  bucket: jext-starter
-  url: http://q671m4cqj.bkt.clouddn.com/
+ai:
+  baidu:
+    clientId: kVcnfD9iW2XVZSMaLMrtLYIz
+    clientSecret: O9o1O213UgG5LFn0bDGNtoRN3VWl2du6
+
+file:
+  qiniu:
+#    accessKey: xxx
+#    secretKey: xxx
+    region: 0
+    bucket: jext-starter
+    url: http://q671m4cqj.bkt.clouddn.com/
 
 logging:
   config: classpath:logback.xml

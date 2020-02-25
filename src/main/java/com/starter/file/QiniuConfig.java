@@ -10,14 +10,18 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties("qiniu")
-@ConditionalOnProperty(prefix = "qiniu", name = "secretKey")
+@ConfigurationProperties("file.qiniu")
+@ConditionalOnProperty(prefix = "file.qiniu", name = "secretKey")
 public class QiniuConfig {
     int region;
     String accessKey;
     String secretKey;
     String bucket;
     String url;
+
+    public String getFileUrl(String fileName) {
+        return String.format("%s%s", url, fileName);
+    }
 
     @Bean
     public UploadManager uploadManager() {

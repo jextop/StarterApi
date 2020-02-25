@@ -1,13 +1,17 @@
 package com.starter.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.common.enc.Md5Util;
+import com.common.http.RespData;
 import com.common.util.CodeUtil;
 import com.common.util.DateUtil;
 import com.common.util.LogUtil;
 import com.common.util.StrUtil;
+import com.starter.ai.BaiduService;
 import com.starter.annotation.AccessLimited;
 import com.starter.entity.Log;
 import com.starter.entity.User;
+import com.starter.file.FileTypeEnum;
 import com.starter.file.QiniuConfig;
 import com.starter.file.QiniuService;
 import com.starter.http.HttpService;
@@ -26,11 +30,9 @@ import org.quartz.SimpleTrigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -39,7 +41,7 @@ import java.util.HashMap;
 
 @Api(tags = {"运行状态"})
 @RestController
-@RequestMapping("/")
+@RequestMapping("/chk")
 public class CheckController {
     @Autowired
     LogServiceImpl logService;
@@ -62,21 +64,12 @@ public class CheckController {
     @Autowired(required = false)
     QiniuConfig qiniuConfig;
 
-    @AccessLimited(count = 1)
-    @ApiOperation("检查服务是否运行")
-    @GetMapping
-    @ResponseStatus(HttpStatus.ACCEPTED)
-    public Object index(@RequestAttribute(required = false) String ip) {
-        return new HashMap<String, Object>() {{
-            put("ip", ip);
-            put("msg", String.format("Hello, Starter! 你好，%s", this.getClass().getName()));
-            put("date", DateUtil.format(new Date()));
-        }};
-    }
+    @Autowired
+    BaiduService baiduService;
 
     @AccessLimited(count = 1)
     @ApiOperation("检查服务是否运行")
-    @GetMapping("/chk")
+    @GetMapping("/")
     public Object chk(@RequestAttribute(required = false) String ip) {
         return new HashMap<String, Object>() {{
             put("chk", "ok");
@@ -90,13 +83,14 @@ public class CheckController {
                 add(job());
                 add(json(ip));
                 add(file());
+                add(tts());
             }});
         }};
     }
 
     @AccessLimited(count = 1)
     @ApiOperation("检查数据库")
-    @GetMapping("/chk/db")
+    @GetMapping("/db")
     public Object db(@RequestAttribute(required = false) String ip) {
         // Write a log to db
         Log log = new Log() {{
@@ -122,7 +116,7 @@ public class CheckController {
 
     @AccessLimited(count = 1)
     @ApiOperation("检查缓存系统")
-    @GetMapping("/chk/cache")
+    @GetMapping("/cache")
     public Object cache(@RequestAttribute(required = false) String ip) {
         // Get a unique key
         String key = String.format("cache_test_%s_%s_缓存", ip, CodeUtil.getCode());
@@ -146,7 +140,7 @@ public class CheckController {
 
     @AccessLimited(count = 1)
     @ApiOperation("检查消息队列")
-    @GetMapping("/chk/mq")
+    @GetMapping("/mq")
     public Object mq(@RequestAttribute(required = false) String ip) {
         String msg = String.format("check mq from java, %s, 消息队列", ip);
 
@@ -164,7 +158,7 @@ public class CheckController {
 
     @AccessLimited(count = 1)
     @ApiOperation("检查HTTP连接")
-    @GetMapping("/chk/http")
+    @GetMapping("/http")
     public Object http() {
         String strCourse = httpService.sendHttpGet("https://edu.51cto.com/center/course/index/search?q=Jext%E6%8A%80%E6%9C%AF%E7%A4%BE%E5%8C%BA");
         String[] courses = StrUtil.parse(strCourse, "[1-9]\\d*人学习");
@@ -177,7 +171,7 @@ public class CheckController {
 
     @AccessLimited(count = 1)
     @ApiOperation("检查作业调度")
-    @GetMapping("/chk/job")
+    @GetMapping("/job")
     public Object job() {
         JobDetail job = JobBuilder.newJob(QuartzJob.class).build();
         SimpleTrigger trigger = (SimpleTrigger) TriggerBuilder.newTrigger()
@@ -205,7 +199,7 @@ public class CheckController {
 
     @AccessLimited(count = 1)
     @ApiOperation("检查JSON数据传输")
-    @GetMapping("/chk/json")
+    @GetMapping("/json")
     public Object json(@RequestAttribute(required = false) String ip) {
         return new HashMap<String, Object>() {{
             put("chk", "json");
@@ -217,20 +211,45 @@ public class CheckController {
     }
 
     @AccessLimited(count = 1)
-    @ApiOperation("检查HTTP连接")
-    @GetMapping("/chk/file")
+    @ApiOperation("七牛云存储")
+    @GetMapping("/file")
     public Object file() {
         String msg;
         if (qiniuService == null) {
             msg = "not configured";
         } else {
-            String key = qiniuService.upload("chk/file".getBytes(), null);
+            String key = qiniuService.upload("chk/file/qiniu".getBytes(), null);
             msg = key == null ? "fail to upload" : String.format("%s%s", qiniuConfig.getUrl(), key);
         }
 
         return new HashMap<String, Object>() {{
-            put("chk", "file_qiniu");
+            put("chk", "file/qiniu");
             put("msg", msg);
+        }};
+    }
+
+    @AccessLimited(count = 1)
+    @ApiOperation("百度AI语音处理")
+    @GetMapping("/ai/tts")
+    public Object tts() {
+        String text = "检查百度AI语音合成";
+        FileTypeEnum type = FileTypeEnum.Audio;
+        String fileName = String.format("%s%s.%s", type.getFlag(), Md5Util.md5(text), BaiduService.FILE_EXT);
+
+        // Call baidu api
+        RespData dataResp = baiduService.tts(text);
+        byte[] dataBytes = dataResp.getBytes();
+
+        // upload to cloud service
+        if (qiniuService != null) {
+            fileName = qiniuService.upload(dataBytes, fileName);
+            fileName = qiniuConfig.getFileUrl(fileName);
+        }
+
+        String fileUrl = fileName;
+        return new HashMap<String, Object>() {{
+            put("chk", "ai/tts");
+            put("msg", fileUrl);
         }};
     }
 }

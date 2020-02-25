@@ -2,7 +2,7 @@
 	"variables": [],
 	"info": {
 		"name": "api_starter",
-		"_postman_id": "8bd76d72-0d13-0b0e-db83-13c581b3d7cb",
+		"_postman_id": "523a3fbb-13aa-6858-31da-c771adbc4df7",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -237,6 +237,74 @@
 						"description": ""
 					},
 					"response": []
+				},
+				{
+					"name": "{{server}}:{{port}}/chk/file",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Chk\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.chk).to.contains(\"file\");",
+									"    postman.setEnvironmentVariable(\"file_url\", jsonData.msg);",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{server}}:{{port}}/chk/file",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "{{server}}:{{port}}/chk/ai/tts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Chk\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.chk).to.contains(\"ai\");",
+									"    postman.setEnvironmentVariable(\"file_url\", jsonData.msg);",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{server}}:{{port}}/chk/ai/tts",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
 				}
 			]
 		},
@@ -395,7 +463,8 @@
 									"key": "file",
 									"description": "",
 									"type": "file",
-									"src": "java-annotation-cover.png"
+									"src": "java-annotation-cover.png",
+									"value": ""
 								}
 							]
 						},
@@ -475,27 +544,43 @@
 			]
 		},
 		{
-			"name": "{{server}}:{{port}}/",
+			"name": "{{server}}:{{port}}/ai/tts",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"type": "text/javascript",
 						"exec": [
-							"pm.test(\"Status code is 202\", function () {",
-							"    pm.response.to.have.status(202);",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
 							"});",
-							"",
-							"pm.test(\"Msg\", function () {",
-							"    var jsonData = pm.response.json();",
-							"    pm.expect(jsonData.msg).to.include(\"Hello\");",
-							"});"
+							""
 						]
 					}
 				}
 			],
 			"request": {
-				"url": "{{server}}:{{port}}/",
+				"url": {
+					"raw": "{{server}}:{{port}}/ai/tts?text=接入百度AI语音合成接口",
+					"auth": {},
+					"host": [
+						"{{server}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"ai",
+						"tts"
+					],
+					"query": [
+						{
+							"key": "text",
+							"value": "接入百度AI语音合成接口",
+							"equals": true,
+							"description": ""
+						}
+					],
+					"variable": []
+				},
 				"method": "GET",
 				"header": [],
 				"body": {
@@ -528,6 +613,38 @@
 			],
 			"request": {
 				"url": "{{server}}:{{port}}/jext",
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "{{server}}:{{port}}/",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 202\", function () {",
+							"    pm.response.to.have.status(202);",
+							"});",
+							"",
+							"pm.test(\"Msg\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.msg).to.include(\"Hello\");",
+							"});"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "{{server}}:{{port}}/",
 				"method": "GET",
 				"header": [],
 				"body": {

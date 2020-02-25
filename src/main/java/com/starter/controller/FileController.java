@@ -43,9 +43,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/file")
 public class FileController {
-    @Autowired(required = false)
-    QiniuService qiniuService;
-
     @Autowired
     MultipartConfig multipartConfig;
 
@@ -57,6 +54,9 @@ public class FileController {
 
     @Autowired
     FileHelper fileHelper;
+
+    @Autowired(required = false)
+    QiniuService qiniuService;
 
     @AccessLimited(count = 1)
     @ApiOperation("上传文件，支持一个或多个同时上传")

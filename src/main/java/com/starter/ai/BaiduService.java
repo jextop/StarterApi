@@ -10,6 +10,7 @@ import com.starter.http.HttpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,25 +21,32 @@ public class BaiduService {
     @Autowired
     HttpService httpService;
 
+    @Autowired
+    BaiduConfig baiduConfig;
+
     String token;
+    Date expireDate;
 
     public String token() {
-        if (StrUtil.isEmpty(token)) {
+        if (StrUtil.isEmpty(token) || new Date().after(expireDate)) {
             synchronized (BaiduService.class) {
-                if (StrUtil.isEmpty(token)) {
+                if (StrUtil.isEmpty(token) || new Date().after(expireDate)) {
                     String url = "https://openapi.baidu.com/oauth/2.0/token";
                     Map<String, String> headers = new HashMap<String, String>() {{
                         put("Content-Type", "application/x-www-form-urlencoded");
                     }};
                     Map<String, Object> params = new HashMap<String, Object>() {{
                         put("grant_type", "client_credentials");
-                        put("client_id", "kVcnfD9iW2XVZSMaLMrtLYIz");
-                        put("client_secret", "O9o1O213UgG5LFn0bDGNtoRN3VWl2du6");
+                        put("client_id", baiduConfig.clientId);
+                        put("client_secret", baiduConfig.clientSecret);
                     }};
 
                     JSONObject ret = httpService.sendHttpForm(url, headers, params, new RespJsonObj());
-                    LogUtil.info(ret);
+                    LogUtil.info("Baidu AI token", ret);
                     token = ret.getString("access_token");
+
+                    long seconds = ret.getLongValue("expires_in");
+                    expireDate = new Date(System.currentTimeMillis() + seconds * 1000);
                 }
             }
         }

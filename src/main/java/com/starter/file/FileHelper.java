@@ -40,8 +40,7 @@ public class FileHelper {
                 String specifiedUrl = FileTypeEnum.get(file.getFileType()).getName();
                 url = String.format("%s/%s/%s", serverUrl, specifiedUrl, url);
             } else if (location == LocationEnum.Qiniu.getId() && qiniuConfig != null) {
-                String serverUrl = qiniuConfig.url;
-                url = String.format("%s%s", serverUrl, url);
+                url =  qiniuConfig.getFileUrl(url);
             }
         }
         return url;
