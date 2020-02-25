@@ -1,5 +1,6 @@
 package com.starter.file;
 
+import com.common.util.EmptyUtil;
 import com.common.util.JsonUtil;
 import com.common.util.LogUtil;
 import com.common.util.StrUtil;
@@ -49,7 +50,9 @@ public class QiniuService {
         while (iterator.hasNext()) {
             //处理获取的file list结果
             FileInfo[] items = iterator.next();
-            fileList.addAll(Arrays.asList(items));
+            if (!EmptyUtil.isEmpty(items)) {
+                fileList.addAll(Arrays.asList(items));
+            }
         }
         return fileList;
     }

@@ -1,11 +1,10 @@
-package com.starter.ai;
+package com.starter.speech;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.common.http.RespJsonObj;
 import com.common.util.EmptyUtil;
 import com.common.util.MapUtil;
-import com.common.util.StrUtil;
 import com.starter.http.HttpService;
 import com.starter.http.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +51,7 @@ public class TulingService {
             }});
             put("userInfo", new HashMap<String, Object>() {{
                 put("apiKey", tulingConfig.getApiKey());
-                put("userId", tulingConfig.getUserId());
+                put("userId", "starter");
             }});
         }};
 

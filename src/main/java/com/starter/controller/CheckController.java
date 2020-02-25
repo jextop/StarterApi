@@ -1,14 +1,15 @@
 package com.starter.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.common.enc.B64Util;
 import com.common.enc.Md5Util;
 import com.common.http.RespData;
 import com.common.util.CodeUtil;
 import com.common.util.DateUtil;
 import com.common.util.LogUtil;
 import com.common.util.StrUtil;
-import com.starter.ai.BaiduService;
-import com.starter.ai.TulingService;
+import com.starter.speech.BaiduService;
+import com.starter.speech.TulingService;
 import com.starter.annotation.AccessLimited;
 import com.starter.entity.Log;
 import com.starter.entity.User;
@@ -85,16 +86,17 @@ public class CheckController {
             put("msg", String.format("%s_消息", ip));
             put("date", DateUtil.format(new Date()));
             put("services", new ArrayList<Object>() {{
-                add(db(ip));
-                add(cache(ip));
-                add(mq(ip));
+                add(db(ip, text));
+                add(cache(ip, text));
+                add(mq(ip, text));
                 add(http());
                 add(job());
-                add(json(ip));
-                add(file());
-                add(tts());
-                add(chat(ip, text));
+                add(json(ip, text));
+                add(file(text));
                 add(location(ip));
+                add(tts(text));
+                add(asr(text));
+                add(chat(ip, text));
             }});
         }};
     }
@@ -102,10 +104,10 @@ public class CheckController {
     @AccessLimited(count = 1)
     @ApiOperation("检查数据库")
     @GetMapping("/db")
-    public Object db(@RequestAttribute(required = false) String ip) {
+    public Object db(@RequestAttribute(required = false) String ip, @RequestParam(required = false) String text) {
         // Write a log to db
         Log log = new Log() {{
-            setSummary(String.format("db_test_%s_%s_数据库", ip, DateUtil.format(new Date())));
+            setSummary(String.format("db_test_%s_%s_数据库_%s", ip, DateUtil.format(new Date()), text));
         }};
         boolean bSave = logService.save(log);
         LogUtil.info("Check db to insert log", bSave, log.getSummary());
@@ -128,9 +130,9 @@ public class CheckController {
     @AccessLimited(count = 1)
     @ApiOperation("检查缓存系统")
     @GetMapping("/cache")
-    public Object cache(@RequestAttribute(required = false) String ip) {
+    public Object cache(@RequestAttribute(required = false) String ip, @RequestParam(required = false) String text) {
         // Get a unique key
-        String key = String.format("cache_test_%s_%s_缓存", ip, CodeUtil.getCode());
+        String key = String.format("cache_test_%s_%s_缓存_%s", ip, CodeUtil.getCode(), text);
 
         // Set cache
         redisService.setStr(key, key, 3);
@@ -152,8 +154,8 @@ public class CheckController {
     @AccessLimited(count = 1)
     @ApiOperation("检查消息队列")
     @GetMapping("/mq")
-    public Object mq(@RequestAttribute(required = false) String ip) {
-        String msg = String.format("check mq from java, %s, 消息队列", ip);
+    public Object mq(@RequestAttribute(required = false) String ip, @RequestParam(required = false) String text) {
+        String msg = String.format("check mq from java, %s, %s, 消息队列", text, ip);
 
         // to service
         mqService.sendQueue(new HashMap<String, Object>() {{
@@ -211,12 +213,12 @@ public class CheckController {
     @AccessLimited(count = 1)
     @ApiOperation("检查JSON数据传输")
     @GetMapping("/json")
-    public Object json(@RequestAttribute(required = false) String ip) {
+    public Object json(@RequestAttribute(required = false) String ip, @RequestParam(required = false) String text) {
         return new HashMap<String, Object>() {{
             put("chk", "json");
             put("msg", new User() {{
                 setName("json");
-                setTitle(String.format("%s_%s", ip, DateUtil.format(new Date())));
+                setTitle(String.format("%s_%s_%s", text, ip, DateUtil.format(new Date())));
             }});
         }};
     }
@@ -224,12 +226,12 @@ public class CheckController {
     @AccessLimited(count = 1)
     @ApiOperation("七牛云存储")
     @GetMapping("/file")
-    public Object file() {
+    public Object file(@RequestParam(required = false) String text) {
         String msg;
         if (qiniuService == null) {
             msg = "not configured";
         } else {
-            String key = qiniuService.upload("chk/file/qiniu".getBytes(), null);
+            String key = qiniuService.upload((StrUtil.isEmpty(text) ? "chk/file/qiniu" : text).getBytes(), null);
             msg = key == null ? "fail to upload" : String.format("%s%s", qiniuConfig.getUrl(), key);
         }
 
@@ -240,10 +242,22 @@ public class CheckController {
     }
 
     @AccessLimited(count = 1)
+    @ApiOperation("百度地址服务")
+    @GetMapping("/location")
+    public Object location(@RequestAttribute(required = false) String ip) {
+        return new HashMap<String, Object>() {{
+            put("chk", "location");
+            put("msg", locationService.getAddress(ip));
+        }};
+    }
+
+    @AccessLimited(count = 1)
     @ApiOperation("百度AI语音处理")
-    @GetMapping("/ai/tts")
-    public Object tts() {
-        String text = "检查百度AI语音合成";
+    @GetMapping("/speech/tts")
+    public Object tts(@RequestParam(required = false) String text) {
+        if (StrUtil.isEmpty(text)) {
+            text = "检查百度AI语音合成";
+        }
         FileTypeEnum type = FileTypeEnum.Audio;
         String fileName = String.format("%s%s.%s", type.getFlag(), Md5Util.md5(text), BaiduService.FILE_EXT);
 
@@ -265,22 +279,30 @@ public class CheckController {
     }
 
     @AccessLimited(count = 1)
-    @ApiOperation("图灵机器人智能聊天")
-    @GetMapping("/ai/chat")
-    public Object chat(@RequestAttribute(required = false) String ip, @RequestParam(required = false) String text) {
+    @ApiOperation("百度AI语音处理")
+    @GetMapping("/speech/asr")
+    public Object asr(@RequestParam(required = false) String text) {
+        RespData resp = baiduService.tts(StrUtil.isEmpty(text) ? "检查百度AI语音识别" : text);
+        long len = resp.getContentLength();
+        String b64Str = B64Util.encode(resp.getBytes());
+        String format = resp.getFileExt();
+
+        // Call asr
+        Object ret = baiduService.asr(format, b64Str, len);
+
         return new HashMap<String, Object>() {{
-            put("chk", "ai/chat");
-            put("msg", tulingService.chat(StrUtil.isEmpty(text) ? "天气" : text, ip));
+            put("chk", "ai/asr");
+            put("msg", ret);
         }};
     }
 
     @AccessLimited(count = 1)
-    @ApiOperation("百度地址服务")
-    @GetMapping("/location")
-    public Object location(@RequestAttribute(required = false) String ip) {
+    @ApiOperation("图灵机器人智能聊天")
+    @GetMapping("/speech/chat")
+    public Object chat(@RequestAttribute(required = false) String ip, @RequestParam(required = false) String text) {
         return new HashMap<String, Object>() {{
-            put("chk", "location");
-            put("msg", locationService.getAddress(ip));
+            put("chk", "ai/chat");
+            put("msg", tulingService.chat(StrUtil.isEmpty(text) ? "天气" : text, ip));
         }};
     }
 }

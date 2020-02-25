@@ -66,10 +66,8 @@ public class LocationService {
             JSONObject ret = httpService.sendHttpGet(paramsStr, new RespJsonObj());
 
             cacheValue = ret.getJSONObject("content");
-            if (!EmptyUtil.isEmpty((JSONObject) cacheValue)) {
-                redisService.set1Month(cacheKey, cacheValue);
-                return cacheValue;
-            }
+            redisService.set1Month(cacheKey, cacheValue);
+            return cacheValue;
         } catch (UnsupportedEncodingException e) {
             System.out.println(e.getMessage());
         }

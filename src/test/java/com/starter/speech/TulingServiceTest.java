@@ -1,4 +1,4 @@
-package com.starter.ai;
+package com.starter.speech;
 
 import com.common.util.LogUtil;
 import org.junit.jupiter.api.Assertions;

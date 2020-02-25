@@ -1,10 +1,10 @@
-package com.starter.ai;
+package com.starter.speech;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ConfigurationProperties("ai.baidu")
+@ConfigurationProperties("speech.baidu")
 public class BaiduConfig {
     String clientId;
     String clientSecret;

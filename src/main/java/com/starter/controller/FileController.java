@@ -92,7 +92,7 @@ public class FileController {
         }
 
         // Return file names
-        Map<String, Object> ret = RespUtil.respOK();
+        Map<String, Object> ret = RespUtil.ok();
         ret.put("files", urlList);
         return ret;
     }
@@ -103,7 +103,7 @@ public class FileController {
         }
 
         // Check file extension
-        if (!checkFileExt(file, specifiedExtArr)) {
+        if (!FileHelper.checkFileExt(file, specifiedExtArr)) {
             return RespUtil.resp(RespEnum.UNSUPPORTED_MEDIA_TYPE, StrUtil.join(specifiedExtArr, ", "));
         }
 
@@ -125,7 +125,7 @@ public class FileController {
         if (fileDb != null) {
             LogUtil.info("Existed file in db", file.getOriginalFilename(), md5Str);
 
-            Map<String, Object> ret = RespUtil.respOK();
+            Map<String, Object> ret = RespUtil.ok();
             ret.put("name", fileDb.getName());
             ret.put("url", fileHelper.getFileUrl(fileDb));
             return ret;
@@ -165,26 +165,10 @@ public class FileController {
         }};
         fileService.save(fileDb);
 
-        Map<String, Object> ret = RespUtil.respOK();
+        Map<String, Object> ret = RespUtil.ok();
         ret.put("name", name);
         ret.put("url", fileHelper.getFileUrl(fileDb));
         return ret;
-    }
-
-    private boolean checkFileExt(MultipartFile file, String[] specifiedExtArr) {
-        if (EmptyUtil.isEmpty(specifiedExtArr)) {
-            return true;
-        }
-
-        String fileExt = FileUtil.getFileExt(file.getOriginalFilename());
-        if (!StrUtil.isEmpty(fileExt)) {
-            for (String ext : specifiedExtArr) {
-                if (ext.equalsIgnoreCase(fileExt)) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
     @AccessLimited(count = 1)
@@ -224,7 +208,7 @@ public class FileController {
 
         // Read file
         fileHelper.read(response, file);
-        return RespUtil.respOK();
+        return RespUtil.ok();
     }
 
     @AccessLimited(count = 1)
@@ -260,7 +244,7 @@ public class FileController {
         List<com.starter.entity.File> items = fileService.list(query);
         fileHelper.fillInfo(items);
 
-        Map<String, Object> ret = RespUtil.respOK();
+        Map<String, Object> ret = RespUtil.ok();
         ret.put("pageIndex", offset / size);
         ret.put("pageSize", size);
         ret.put("items", items);

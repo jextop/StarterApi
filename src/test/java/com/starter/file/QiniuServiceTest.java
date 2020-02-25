@@ -10,10 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +34,7 @@ public class QiniuServiceTest {
 
         Map<File, Boolean> mapIO = new HashMap<File, Boolean>() {{
             put(null, false);
-//            put(emptyFile, true);
+            put(emptyFile, true);
             put(file, true);
         }};
 
@@ -53,13 +54,13 @@ public class QiniuServiceTest {
             LogUtil.info("upload file", ret);
             Assertions.assertEquals(io.getValue(), !StrUtil.isEmpty(ret));
 
-            // file
+            // file stream
             ret = qiniuService.upload(f == null ? null : new FileInputStream(f), null);
             LogUtil.info("upload file stream", ret);
             Assertions.assertEquals(io.getValue(), !StrUtil.isEmpty(ret));
 
-            // file data. Empty file is not uploaded.
-            ret = qiniuService.upload(f == null ? null : readData(f), null);
+            // file data
+            ret = qiniuService.upload(f == null ? null : Files.readAllBytes(Paths.get(file.getPath())), null);
             LogUtil.info("upload file data", ret);
             Assertions.assertEquals(io.getValue(), !StrUtil.isEmpty(ret));
         }
@@ -71,20 +72,5 @@ public class QiniuServiceTest {
         Collection ret = qiniuService.list();
         LogUtil.info(ret.size());
         Assertions.assertFalse(EmptyUtil.isEmpty(ret));
-    }
-
-    public byte[] readData(File file) throws IOException {
-        FileInputStream fileStream = new FileInputStream(file);
-        BufferedInputStream bufferStream = new BufferedInputStream(fileStream);
-
-        byte[] data = new byte[1024 * 100];
-        int i = bufferStream.read(data);
-        if (i <= 0) {
-            data = null;
-        }
-
-        bufferStream.close();
-        fileStream.close();
-        return data;
     }
 }

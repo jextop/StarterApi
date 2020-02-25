@@ -1,19 +1,23 @@
-package com.starter.ai;
+package com.starter.speech;
 
 import com.common.http.RespEnum;
 import com.common.util.LogUtil;
+import com.common.util.MapUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletResponse;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Map;
 
 @SpringBootTest
-public class AiControllerTest {
+public class SpeechControllerTest {
     @Autowired
-    AiController aiController;
+    SpeechController speechController;
 
     @Test
     public void testTts() throws IOException {
@@ -24,9 +28,29 @@ public class AiControllerTest {
 //                "无论是开发提供API接口，还是通过HttpClient调用其他服务，都请您学习今天的课程吧！",
         }) {
             MockHttpServletResponse response = new MockHttpServletResponse();
-            Object ret = aiController.tts(response, text);
+            Object ret = speechController.tts(response, text);
             LogUtil.info(ret);
-            Assertions.assertEquals(RespEnum.OK.toMap(), ret);
+            Assertions.assertEquals(RespEnum.OK.getCode(), MapUtil.getInt((Map) ret, "code"));
+
+            String fileName = MapUtil.getStr((Map) ret, "msg");
+            MockMultipartFile multipart = new MockMultipartFile(
+                    fileName, fileName, null,
+                    response.getContentAsByteArray()
+            );
+            testAsr(multipart);
         }
+    }
+
+    public void testAsr(MultipartFile file) throws IOException {
+        Object ret = speechController.asr(file);
+        LogUtil.info(ret);
+        Assertions.assertEquals(RespEnum.OK.getCode(), MapUtil.getInt((Map) ret, "code"));
+    }
+
+    @Test
+    public void testChat() {
+        Object ret = speechController.chat(null, "上海浦东张江");
+        LogUtil.info(ret);
+        Assertions.assertNotNull(ret);
     }
 }

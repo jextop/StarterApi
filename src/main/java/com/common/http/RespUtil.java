@@ -24,19 +24,19 @@ public class RespUtil {
         return ret;
     }
 
-    public static Map<String, Object> respOK() {
+    public static Map<String, Object> ok() {
         return resp(RespEnum.OK);
     }
 
-    public static Map<String, Object> respOK(String msg) {
+    public static Map<String, Object> ok(String msg) {
         return resp(RespEnum.OK, msg);
     }
 
-    public static Map<String, Object> respError() {
+    public static Map<String, Object> error() {
         return resp(RespEnum.ERROR);
     }
 
-    public static Map<String, Object> respError(String msg) {
+    public static Map<String, Object> error(String msg) {
         return resp(RespEnum.ERROR, msg);
     }
 

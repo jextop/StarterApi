@@ -306,7 +306,7 @@
 					"response": []
 				},
 				{
-					"name": "{{server}}:{{port}}/chk/ai/tts",
+					"name": "{{server}}:{{port}}/chk/speech/tts",
 					"event": [
 						{
 							"listen": "test",
@@ -328,7 +328,7 @@
 						}
 					],
 					"request": {
-						"url": "{{server}}:{{port}}/chk/ai/tts",
+						"url": "{{server}}:{{port}}/chk/speech/tts",
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -340,7 +340,40 @@
 					"response": []
 				},
 				{
-					"name": "{{server}}:{{port}}/chk/ai/chat",
+					"name": "{{server}}:{{port}}/chk/speech/asr",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Chk\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.chk).to.contains(\"ai\");",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{server}}:{{port}}/chk/speech/asr",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "{{server}}:{{port}}/chk/speech/chat",
 					"event": [
 						{
 							"listen": "test",
@@ -362,7 +395,7 @@
 					],
 					"request": {
 						"url": {
-							"raw": "{{server}}:{{port}}/chk/ai/chat?text=上海",
+							"raw": "{{server}}:{{port}}/chk/speech/chat?text=上海",
 							"auth": {},
 							"host": [
 								"{{server}}"
@@ -370,7 +403,7 @@
 							"port": "{{port}}",
 							"path": [
 								"chk",
-								"ai",
+								"speech",
 								"chat"
 							],
 							"query": [
@@ -509,13 +542,7 @@
 						"description": ""
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "image",
-			"description": "",
-			"item": [
+				},
 				{
 					"name": "{{server}}:{{port}}/image/upload",
 					"event": [
@@ -631,52 +658,151 @@
 			]
 		},
 		{
-			"name": "{{server}}:{{port}}/ai/tts",
-			"event": [
+			"name": "speech",
+			"description": "",
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
-							""
-						]
-					}
-				}
-			],
-			"request": {
-				"url": {
-					"raw": "{{server}}:{{port}}/ai/tts?text=接入百度AI语音合成接口",
-					"auth": {},
-					"host": [
-						"{{server}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"ai",
-						"tts"
-					],
-					"query": [
+					"name": "{{server}}:{{port}}/speech/tts",
+					"event": [
 						{
-							"key": "text",
-							"value": "接入百度AI语音合成接口",
-							"equals": true,
-							"description": ""
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								]
+							}
 						}
 					],
-					"variable": []
+					"request": {
+						"url": {
+							"raw": "{{server}}:{{port}}/speech/tts?text={{text}}",
+							"auth": {},
+							"host": [
+								"{{server}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"speech",
+								"tts"
+							],
+							"query": [
+								{
+									"key": "text",
+									"value": "{{text}}",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
 				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": ""
+				{
+					"name": "{{server}}:{{port}}/speech/asr",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Chk\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    postman.setEnvironmentVariable(\"text\", jsonData.msg);",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{server}}:{{port}}/speech/asr",
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "file",
+									"description": "",
+									"type": "file",
+									"src": "aba6a8d53445e18bdaddff3f78bee7e4c.wav"
+								}
+							]
+						},
+						"description": ""
+					},
+					"response": []
 				},
-				"description": ""
-			},
-			"response": []
+				{
+					"name": "{{server}}:{{port}}/speech/chat",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Chk\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    postman.setEnvironmentVariable(\"text\", jsonData.msg);",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"raw": "{{server}}:{{port}}/speech/chat?text={{text}}",
+							"auth": {},
+							"host": [
+								"{{server}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"speech",
+								"chat"
+							],
+							"query": [
+								{
+									"key": "text",
+									"value": "{{text}}",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "{{server}}:{{port}}/jext",

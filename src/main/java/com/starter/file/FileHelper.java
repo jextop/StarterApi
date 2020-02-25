@@ -1,5 +1,6 @@
 package com.starter.file;
 
+import com.common.file.FileUtil;
 import com.common.util.EmptyUtil;
 import com.common.util.LogUtil;
 import com.common.util.StrUtil;
@@ -7,6 +8,7 @@ import com.starter.config.MultipartConfig;
 import com.starter.config.ServerConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
@@ -54,6 +56,17 @@ public class FileHelper {
         File file = new File(filePath, subPath);
         file.mkdirs();
         return file.getPath();
+    }
+
+    public void fillInfo(List<com.starter.entity.File> itemList) {
+        if (EmptyUtil.isEmpty(itemList)) {
+            return;
+        }
+
+        // Set full url
+        for (com.starter.entity.File item : itemList) {
+            item.setUrl(getFileUrl(item));
+        }
     }
 
     public String save(byte[] bytes, String fileName) throws IOException {
@@ -121,14 +134,19 @@ public class FileHelper {
                 && file.getMd5() != null && !file.getMd5().isEmpty();
     }
 
-    public void fillInfo(List<com.starter.entity.File> itemList) {
-        if (EmptyUtil.isEmpty(itemList)) {
-            return;
+    public static boolean checkFileExt(MultipartFile file, String[] specifiedExtArr) {
+        if (EmptyUtil.isEmpty(specifiedExtArr)) {
+            return true;
         }
 
-        // Set full url
-        for (com.starter.entity.File item : itemList) {
-            item.setUrl(getFileUrl(item));
+        String fileExt = FileUtil.getFileExt(file.getOriginalFilename());
+        if (!StrUtil.isEmpty(fileExt)) {
+            for (String ext : specifiedExtArr) {
+                if (ext.equalsIgnoreCase(fileExt)) {
+                    return true;
+                }
+            }
         }
+        return false;
     }
 }
