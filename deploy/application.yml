@@ -94,11 +94,19 @@ ai:
   baidu:
     clientId: kVcnfD9iW2XVZSMaLMrtLYIz
     clientSecret: O9o1O213UgG5LFn0bDGNtoRN3VWl2du6
+  tuling:
+    apiKey: dbc49960eba44013b34837cdcf88dc94
+    userId: starter
+
+location:
+  baidu:
+    ak: QpTRPM4u1UjPCVPF43sE9Ud1M1pCmB0Z
+    sk: FzUoastL8tgpnxzWsGHOYI0uDbQ5ajbA
 
 file:
   qiniu:
-#    accessKey: xxx
-#    secretKey: xxx
+    accessKey: FAP63KF1QuPRTGa1SaEgZF_PRUry-ovBzZTsXY3S
+    secretKey: Af3yMxsiI5nemg99fSR6zXpDP126y0m2sYes7xy1
     region: 0
     bucket: jext-starter
     url: http://q671m4cqj.bkt.clouddn.com/

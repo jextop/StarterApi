@@ -37,7 +37,7 @@ public class AccessInterceptor implements HandlerInterceptor {
         }
 
         String key = String.format("%s%s_%s:%s",
-                !accessLimited.ip() ? "" : ReqUtil.getIP(request),
+                !accessLimited.ip() ? "" : ReqUtil.getIp(request),
                 !accessLimited.session() ? "" : request.getSession().getId(),
                 request.getMethod(),
                 request.getRequestURI()

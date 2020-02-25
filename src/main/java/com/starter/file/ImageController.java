@@ -1,9 +1,8 @@
-package com.starter.image;
+package com.starter.file;
 
 import com.common.util.LogUtil;
 import com.starter.annotation.AccessLimited;
 import com.starter.controller.FileController;
-import com.starter.file.FileTypeEnum;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;

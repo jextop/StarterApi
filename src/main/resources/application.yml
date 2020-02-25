@@ -98,6 +98,11 @@ ai:
     apiKey: dbc49960eba44013b34837cdcf88dc94
     userId: starter
 
+location:
+  baidu:
+    ak: QpTRPM4u1UjPCVPF43sE9Ud1M1pCmB0Z
+    sk: FzUoastL8tgpnxzWsGHOYI0uDbQ5ajbA
+
 file:
   qiniu:
     accessKey: FAP63KF1QuPRTGa1SaEgZF_PRUry-ovBzZTsXY3S

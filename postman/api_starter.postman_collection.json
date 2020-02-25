@@ -273,6 +273,39 @@
 					"response": []
 				},
 				{
+					"name": "{{server}}:{{port}}/chk/location",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Chk\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.chk).to.contains(\"location\");",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{server}}:{{port}}/chk/location",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
 					"name": "{{server}}:{{port}}/chk/ai/tts",
 					"event": [
 						{
@@ -296,6 +329,60 @@
 					],
 					"request": {
 						"url": "{{server}}:{{port}}/chk/ai/tts",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "{{server}}:{{port}}/chk/ai/chat",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Chk\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.chk).to.contains(\"ai\");",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": {
+							"raw": "{{server}}:{{port}}/chk/ai/chat?text=上海",
+							"auth": {},
+							"host": [
+								"{{server}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"chk",
+								"ai",
+								"chat"
+							],
+							"query": [
+								{
+									"key": "text",
+									"value": "上海",
+									"equals": true,
+									"description": ""
+								}
+							],
+							"variable": []
+						},
 						"method": "GET",
 						"header": [],
 						"body": {

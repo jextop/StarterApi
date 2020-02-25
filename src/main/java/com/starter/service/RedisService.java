@@ -38,7 +38,7 @@ public class RedisService {
 
     @SuppressWarnings("all")
     @Resource(name = "redisTemplate")
-    HashOperations<Object, Object, Object> hashOps;
+    HashOperations<String, String, Object> hashOps;
 
     @SuppressWarnings("all")
     @Resource(name = "redisTemplate")
@@ -190,28 +190,28 @@ public class RedisService {
     /**
      * HashMap operation
      */
-    public void hDelKey(String key, Object item) {
+    public void hDelKey(String key, String item) {
         hashOps.delete(key, item);
     }
 
-    public boolean hHasKey(String key, Object item) {
+    public boolean hHasKey(String key, String item) {
         Boolean ret = hashOps.hasKey(key, item);
         return ret == null ? false : ret;
     }
 
-    public Object hGet(String key, Object item) {
+    public Object hGet(String key, String item) {
         return hashOps.get(key, item);
     }
 
-    public Map<Object, Object> hGet(String key) {
+    public Map<String, Object> hGet(String key) {
         return hashOps.entries(key);
     }
 
-    public void hSet(String key, Object item, Object value) {
+    public void hSet(String key, String item, Object value) {
         hashOps.put(key, item, value);
     }
 
-    public void hSet(String key, Map<Object, Object> map) {
+    public void hSet(String key, Map<String, Object> map) {
         hashOps.putAll(key, map);
     }
 

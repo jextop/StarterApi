@@ -101,23 +101,23 @@ public class RedisServiceTest {
         redisService.del(key);
         Assertions.assertTrue(redisService.hGet(key).isEmpty());
 
-        redisService.hSet(key, 1, 10);
-        redisService.hSet(key, 2, 20);
-        redisService.hSet(key, 3, 30);
-        redisService.hDelKey(key, 1);
-        redisService.hSet(key, new HashMap<Object, Object>(){{
-            put(4, 40);
-            put(5, 50);
+        redisService.hSet(key, "1", 10);
+        redisService.hSet(key, "2", 20);
+        redisService.hSet(key, "3", 30);
+        redisService.hDelKey(key, "1");
+        redisService.hSet(key, new HashMap<String, Object>(){{
+            put("4", 40);
+            put("5", 50);
         }});
 
-        Map<Object, Object> ret = redisService.hGet(key);
+        Map<String, Object> ret = redisService.hGet(key);
         LogUtil.info(ret);
         Assertions.assertFalse(ret.isEmpty());
 
-        LogUtil.info(redisService.hGet(key, 1));
-        LogUtil.info(redisService.hGet(key, 4));
-        Assertions.assertFalse(redisService.hGet(key, 1) != null);
-        Assertions.assertTrue(redisService.hHasKey(key, 4));
+        LogUtil.info(redisService.hGet(key, "1"));
+        LogUtil.info(redisService.hGet(key, "4"));
+        Assertions.assertFalse(redisService.hGet(key, "1") != null);
+        Assertions.assertTrue(redisService.hHasKey(key, "4"));
         redisService.del(key);
     }
 

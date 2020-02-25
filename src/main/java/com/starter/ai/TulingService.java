@@ -3,8 +3,11 @@ package com.starter.ai;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.common.http.RespJsonObj;
+import com.common.util.EmptyUtil;
+import com.common.util.MapUtil;
 import com.common.util.StrUtil;
 import com.starter.http.HttpService;
+import com.starter.http.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +17,9 @@ import java.util.Map;
 @Service
 public class TulingService {
     static final String API_URL = "http://openapi.tuling123.com/openapi/api/v2";
+
+    @Autowired
+    LocationService locationService;
 
     @Autowired
     HttpService httpService;
@@ -32,12 +38,14 @@ public class TulingService {
                     put("text", text);
                 }});
 
-                if (!StrUtil.isEmpty(ip)) {
+                Map<String, Object> address = locationService.getAddress(ip);
+                if (!EmptyUtil.isEmpty(address)) {
+                    Map<String, Object> detail = MapUtil.getMap(address, "address_detail");
                     put("selfInfo", new HashMap<String, Object>() {{
                         put("location", new HashMap<String, Object>() {{
-                            put("city", "");
-                            put("province", "");
-                            put("street", "");
+                            put("city", detail.get("city"));
+                            put("province", detail.get("province"));
+                            put("street", detail.get("street"));
                         }});
                     }});
                 }

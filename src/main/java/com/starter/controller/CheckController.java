@@ -16,6 +16,7 @@ import com.starter.file.FileTypeEnum;
 import com.starter.file.QiniuConfig;
 import com.starter.file.QiniuService;
 import com.starter.http.HttpService;
+import com.starter.http.LocationService;
 import com.starter.jext.JextService;
 import com.starter.job.QuartzJob;
 import com.starter.mq.MqService;
@@ -34,6 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -71,10 +73,13 @@ public class CheckController {
     @Autowired
     TulingService tulingService;
 
+    @Autowired
+    LocationService locationService;
+
     @AccessLimited(count = 1)
     @ApiOperation("检查服务是否运行")
-    @GetMapping("/")
-    public Object chk(@RequestAttribute(required = false) String ip) {
+    @GetMapping
+    public Object chk(@RequestAttribute(required = false) String ip, @RequestParam(required = false) String text) {
         return new HashMap<String, Object>() {{
             put("chk", "ok");
             put("msg", String.format("%s_消息", ip));
@@ -88,7 +93,8 @@ public class CheckController {
                 add(json(ip));
                 add(file());
                 add(tts());
-                add(chat(ip));
+                add(chat(ip, text));
+                add(location(ip));
             }});
         }};
     }
@@ -261,10 +267,20 @@ public class CheckController {
     @AccessLimited(count = 1)
     @ApiOperation("图灵机器人智能聊天")
     @GetMapping("/ai/chat")
-    public Object chat(@RequestAttribute(required = false) String ip) {
+    public Object chat(@RequestAttribute(required = false) String ip, @RequestParam(required = false) String text) {
         return new HashMap<String, Object>() {{
             put("chk", "ai/chat");
-            put("msg", tulingService.chat("天气", ip));
+            put("msg", tulingService.chat(StrUtil.isEmpty(text) ? "天气" : text, ip));
+        }};
+    }
+
+    @AccessLimited(count = 1)
+    @ApiOperation("百度地址服务")
+    @GetMapping("/location")
+    public Object location(@RequestAttribute(required = false) String ip) {
+        return new HashMap<String, Object>() {{
+            put("chk", "location");
+            put("msg", locationService.getAddress(ip));
         }};
     }
 }

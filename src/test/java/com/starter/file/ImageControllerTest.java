@@ -1,4 +1,4 @@
-package com.starter.image;
+package com.starter.file;
 
 import com.common.file.FileUtil;
 import com.common.http.RespEnum;
