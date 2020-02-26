@@ -36,6 +36,10 @@ public class ParamUtil {
         return MapUtil.getInteger(paramMap, key);
     }
 
+    public Long getLong(String key) {
+        return MapUtil.getLong(paramMap, key);
+    }
+
     /**
      * Special check for params
      *

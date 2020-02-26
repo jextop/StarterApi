@@ -1,6 +1,9 @@
 package com.starter.speech;
 
+import com.common.enc.B64Util;
+import com.common.file.FileUtil;
 import com.common.http.RespEnum;
+import com.common.util.JsonUtil;
 import com.common.util.LogUtil;
 import com.common.util.MapUtil;
 import org.junit.jupiter.api.Assertions;
@@ -12,6 +15,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
 @SpringBootTest
@@ -28,7 +32,7 @@ public class SpeechControllerTest {
 //                "无论是开发提供API接口，还是通过HttpClient调用其他服务，都请您学习今天的课程吧！",
         }) {
             MockHttpServletResponse response = new MockHttpServletResponse();
-            Object ret = speechController.tts(response, text);
+            Object ret = speechController.tts(response, text, null, null);
             LogUtil.info(ret);
             Assertions.assertEquals(RespEnum.OK.getCode(), MapUtil.getInt((Map) ret, "code"));
 
@@ -37,19 +41,52 @@ public class SpeechControllerTest {
                     fileName, fileName, null,
                     response.getContentAsByteArray()
             );
-            testAsr(multipart);
+
+            // asr with Multipart
+            ret = testAsr(multipart);
+
+            // asr with b64 passed in json
+            long len = response.getContentLength();
+            String b64Str = B64Util.encode(response.getContentAsByteArray());
+            String format = FileUtil.getFileExt(fileName).replace(".", "");
+            String body = JsonUtil.toStr(new HashMap<String, Object>(){{
+                put("size", len);
+                put("format", format);
+                put("audio", b64Str);
+            }});
+            Assertions.assertEquals(ret, speechController.asr(null, body));
         }
     }
 
-    public void testAsr(MultipartFile file) throws IOException {
-        Object ret = speechController.asr(file);
+    public Object testAsr(MultipartFile file) throws IOException {
+        Object ret = speechController.asr(file, null);
         LogUtil.info(ret);
         Assertions.assertEquals(RespEnum.OK.getCode(), MapUtil.getInt((Map) ret, "code"));
+        return ret;
     }
 
     @Test
     public void testChat() {
         Object ret = speechController.chat(null, "上海浦东张江");
+        LogUtil.info(ret);
+        Assertions.assertNotNull(ret);
+    }
+
+    @Test
+    public void testWalle() throws IOException {
+        MockHttpServletResponse response = new MockHttpServletResponse();
+        Object ret = speechController.tts(response, "AI语音聊天接口", null, null);
+        LogUtil.info(ret);
+        Assertions.assertNotNull(ret);
+
+        String fileName = MapUtil.getStr((Map) ret, "msg");
+        MockMultipartFile multipart = new MockMultipartFile(
+                fileName, fileName, null,
+                response.getContentAsByteArray()
+        );
+
+        response = new MockHttpServletResponse();
+        ret = speechController.walle(response, null, multipart, null, null, null);
         LogUtil.info(ret);
         Assertions.assertNotNull(ret);
     }
