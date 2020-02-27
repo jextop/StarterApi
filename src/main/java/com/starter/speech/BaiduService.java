@@ -63,6 +63,8 @@ public class BaiduService {
     }
 
     public RespData tts(String text) {
+        // todo: cache
+
         Map<String, String> headers = new HashMap<String, String>() {{
             put("Content-Type", "application/x-www-form-urlencoded");
         }};
