@@ -34,24 +34,30 @@ public class FileHelper {
     QiniuConfig qiniuConfig;
 
     public String getFileUrl(com.starter.entity.File file) {
-        String url = file.getUrl();
-        if (!StrUtil.isEmpty(url) && file.getLocation() != null) {
-            Integer location = file.getLocation();
-            if (location == LocationEnum.Service.getId()) {
-                String serverUrl = serverConfig.getServerUrl();
-                String specifiedUrl = FileTypeEnum.get(file.getFileType()).getName();
-                url = String.format("%s/%s/%s", serverUrl, specifiedUrl, url);
-            } else if (location == LocationEnum.Qiniu.getId() && qiniuConfig != null) {
-                url =  qiniuConfig.getFileUrl(url);
-            }
+        return file == null ? null : getFileUrl(LocationEnum.get(file.getLocation()), file.getUrl());
+    }
+
+    public String getFileUrl(LocationEnum location, String fileName) {
+        if (location == null) {
+            return fileName;
         }
-        return url;
+
+        if (location == LocationEnum.Service) {
+            String specifiedUrl = getFileType(fileName).getName();
+            String serverUrl = serverConfig.getServerUrl();
+            return String.format("%s/%s/%s", serverUrl, specifiedUrl, fileName);
+        } else if (location == LocationEnum.Qiniu && qiniuConfig != null) {
+            return qiniuConfig.getFileUrl(fileName);
+        }
+        return fileName;
+    }
+
+    public FileTypeEnum getFileType(String fileName) {
+        return StrUtil.isEmpty(fileName) ? FileTypeEnum.File : FileTypeEnum.getByFlag(fileName.substring(0, 1));
     }
 
     public String getFilePath(String fileName) {
-        FileTypeEnum type = FileTypeEnum.getByFlag(fileName.substring(0, 1));
-        String subPath = type == null ? "tmp" : type.getName();
-
+        String subPath = getFileType(fileName).getName();
         String filePath = multipartConfig.getLocation();
         File file = new File(filePath, subPath);
         file.mkdirs();

@@ -15,6 +15,7 @@ import com.common.util.StrUtil;
 import com.starter.annotation.AccessLimited;
 import com.starter.file.FileHelper;
 import com.starter.file.FileTypeEnum;
+import com.starter.file.LocationEnum;
 import com.starter.file.QiniuConfig;
 import com.starter.file.QiniuService;
 import io.swagger.annotations.Api;
@@ -81,8 +82,12 @@ public class SpeechController {
                 fileHelper.read(response, file);
             }
 
-            if (retUrl && qiniuConfig != null) {
-                fileName = qiniuConfig.getFileUrl(fileName);
+            if (retUrl) {
+                if (qiniuConfig != null) {
+                    fileName = qiniuConfig.getFileUrl(fileName);
+                } else {
+                    fileName = fileHelper.getFileUrl(LocationEnum.Service, fileName);
+                }
             }
             return RespUtil.ok(fileName);
         }
@@ -98,10 +103,14 @@ public class SpeechController {
             LogUtil.error("Error when save tts data", e.getMessage());
         }
 
-        // upload to cloud service
-        if (retUrl && qiniuService != null) {
-            fileName = qiniuService.upload(dataBytes, fileName);
-            fileName = qiniuConfig.getFileUrl(fileName);
+        if (retUrl) {
+            if (qiniuService != null) {
+                // upload to cloud service
+                fileName = qiniuService.upload(dataBytes, fileName);
+                fileName = qiniuConfig.getFileUrl(fileName);
+            } else {
+                fileName = fileHelper.getFileUrl(LocationEnum.Service, fileName);
+            }
         }
 
         if (retData) {
