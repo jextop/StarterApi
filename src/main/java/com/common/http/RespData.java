@@ -8,8 +8,10 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.util.EntityUtils;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -68,6 +70,22 @@ public class RespData implements ResponseHandler<byte[]> {
             return null;
         }
         return path.toString();
+    }
+
+    public void read(HttpServletResponse response) {
+        if (response == null || bytes == null) {
+            return;
+        }
+
+        try {
+            OutputStream outputStream = response.getOutputStream();
+            outputStream.write(bytes);
+        } catch (IOException e) {
+            LogUtil.error("Error when RespData.read()", e.getMessage());
+        }
+
+        response.setContentLength(getContentLength());
+        response.setContentType(contentType);
     }
 
     private String getHeader(HttpResponse response, String header) {

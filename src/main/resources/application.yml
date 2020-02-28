@@ -104,8 +104,8 @@ location:
 
 file:
   qiniu:
-    accessKey: FAP63KF1QuPRTGa1SaEgZF_PRUry-ovBzZTsXY3S
-    secretKey: Af3yMxsiI5nemg99fSR6zXpDP126y0m2sYes7xy1
+#    accessKey: xxx
+#    secretKey: xxx
     region: 0
     bucket: jext-starter
     url: http://q671m4cqj.bkt.clouddn.com/

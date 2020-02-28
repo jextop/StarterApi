@@ -51,7 +51,7 @@ public class LocationService {
         paramsMap.put("ak", locationConfig.getAk());
 
         try {
-            // 调用下面的toQueryString方法，对LinkedHashMap内所有value作utf8编码，拼接返回结果ip=yourip&ak=yourak
+            // 调用toQueryString方法，对LinkedHashMap内所有value作utf8编码，拼接返回结果ip=yourip&ak=yourak
             String paramsStr = toQueryString(paramsMap);
 
             // 对paramsStr前面拼接上/location/ip?，后面直接拼接yoursk得到/location/ip?ip=yourip&ak=yourakyoursk
@@ -60,7 +60,7 @@ public class LocationService {
             // 对上面wholeStr再作utf8编码
             String tempStr = URLEncoder.encode(wholeStr, "UTF-8");
 
-            // 调用下面的MD5方法得到最后的sn签名7de5a22212ffaa9e326444c75a58f9a0
+            // 调用MD5得到最后的sn签名7de5a22212ffaa9e326444c75a58f9a0
             String sn = Md5Util.md5(tempStr);
             paramsStr = String.format("%s?%s&sn=%s", API_URL, paramsStr, sn);
             JSONObject ret = httpService.sendHttpGet(paramsStr, new RespJsonObj());

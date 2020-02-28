@@ -9,11 +9,15 @@ import com.common.http.UrlUtil;
 import com.common.util.EmptyUtil;
 import com.common.util.LogUtil;
 import com.common.util.StrUtil;
+import com.starter.file.FileHelper;
+import com.starter.file.FileTypeEnum;
 import com.starter.http.HttpService;
 import com.starter.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,9 +25,9 @@ import java.util.Map;
 @Service
 public class BaiduService {
     public static final String FILE_EXT = "wav";
-    static final String TOKEN_URL = "https://openapi.baidu.com/oauth/2.0/token";
-    static final String TTS_URL = "https://tsn.baidu.com/text2audio";
-    static final String ASR_URL = "http://vop.baidu.com/server_api";
+    private static final String TOKEN_URL = "https://openapi.baidu.com/oauth/2.0/token";
+    private static final String TTS_URL = "https://tsn.baidu.com/text2audio";
+    private static final String ASR_URL = "http://vop.baidu.com/server_api";
 
     @Autowired
     HttpService httpService;
@@ -34,8 +38,11 @@ public class BaiduService {
     @Autowired
     RedisService redisService;
 
-    String token;
-    Date expireDate;
+    @Autowired
+    FileHelper fileHelper;
+
+    private String token;
+    private Date expireDate;
 
     public String token() {
         if (StrUtil.isEmpty(token) || new Date().after(expireDate)) {
@@ -45,9 +52,9 @@ public class BaiduService {
                         put("Content-Type", "application/x-www-form-urlencoded");
                     }};
                     Map<String, Object> params = new HashMap<String, Object>() {{
-                        put("grant_type", "client_credentials");
-                        put("client_id", baiduConfig.clientId);
-                        put("client_secret", baiduConfig.clientSecret);
+                        put("grant_type", "client_credentials"); // 固定为“client_credentials”
+                        put("client_id", baiduConfig.clientId); // 应用的API Key
+                        put("client_secret", baiduConfig.clientSecret); // 应用的Secret Key
                     }};
 
                     JSONObject ret = httpService.sendHttpForm(TOKEN_URL, headers, params, new RespJsonObj());
@@ -62,22 +69,51 @@ public class BaiduService {
         return token;
     }
 
-    public RespData tts(String text) {
-        // todo: cache
+    public Map<String, Object> ttsCached(String text) {
+        // Find the saved file
+        FileTypeEnum type = FileTypeEnum.Audio;
+        String fileName = String.format("%s%s.%s", type.getFlag(), Md5Util.md5(text), BaiduService.FILE_EXT);
+        String filePath = fileHelper.getFilePath(fileName);
 
+        File file = new File(filePath, fileName);
+        if (file.exists()) {
+            return new HashMap<String, Object>() {{
+                put("file", file);
+                put("fileName", fileName);
+            }};
+        }
+
+        // Call tts api
+        RespData dataResp = tts(text);
+        byte[] dataBytes = dataResp.getBytes();
+
+        // Save file to local storage
+        try {
+            fileHelper.save(dataBytes, fileName);
+        } catch (IOException e) {
+            LogUtil.error("Error when save tts data", e.getMessage());
+        }
+
+        return new HashMap<String, Object>() {{
+            put("data", dataResp);
+            put("fileName", fileName);
+        }};
+    }
+
+    public RespData tts(String text) {
         Map<String, String> headers = new HashMap<String, String>() {{
             put("Content-Type", "application/x-www-form-urlencoded");
         }};
         Map<String, Object> params = new HashMap<String, Object>() {{
-            put("tex", UrlUtil.encode(text));
-            put("tok", token());
-            put("cuid", "starter_api");
-            put("ctp", "1");
-            put("lan", "zh");
-            put("spd", "6");
-            put("pit", "5");
-            put("vol", "5");
-            put("per", "0");
+            put("tex", UrlUtil.encode(text)); // 合成文本，UTF-8编码，2048个中文字或者英文数字
+            put("tok", token()); // 调用鉴权认证接口获取到的access_token
+            put("cuid", "starter_api"); // 用户唯一标识，用来计算UV值，长度为60字符，常用用户MAC地址或IMEI码
+            put("ctp", "1"); // 客户端类型选择，web端填写固定值1
+            put("lan", "zh"); // 语言选择,目前只有中英文混合模式，固定值zh
+            put("spd", "6"); // 语速，取值0-15，默认为5中语速
+            put("pit", "5"); // 音调，取值0-15，默认为5中语调
+            put("vol", "5"); // 音量，取值0-15，默认为5中音量
+            put("per", "0"); // 0为普通女声，1为普通男生，3为情感合成-度逍遥，4为情感合成-度丫丫
             put("aue", "6"); // 3为mp3格式(默认)； 4为pcm-16k；5为pcm-8k；6为wav（内容同pcm-16k）
         }};
 
@@ -100,14 +136,14 @@ public class BaiduService {
         }};
 
         Map<String, Object> params = new HashMap<String, Object>() {{
-            put("format", format);
-            put("rate", 16000);
-            put("dev_pid", 1537);
-            put("channel", 1);
-            put("cuid", "starter_api");
-            put("token", token());
-            put("len", len);
-            put("speech", b64Data); // base64（FILE_CONTENT）
+            put("format", format); // 音频格式：pcm/wav/amr/m4a，推荐pcm
+            put("rate", 16000); // 音频采样频率，固定值16000
+            put("dev_pid", 1537); // 语音模型，默认1537普通话，1737英语
+            put("channel", 1); // 声道数量，仅支持单声道1
+            put("cuid", "starter_api"); // 用户唯一标识，用来计算UV值，长度为60字符，常用用户MAC地址或IMEI码
+            put("token", token()); // 调用鉴权认证接口获取到的access_token
+            put("len", len); // 音频长度，base64前
+            put("speech", b64Data); // 音频数据，base64（FILE_CONTENT）
         }};
 
         RespJsonObj resp = new RespJsonObj();

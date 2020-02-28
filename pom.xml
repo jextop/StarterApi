@@ -13,6 +13,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>StarterApi</name>
     <description>StarterApi</description>
+    <url>https://github.com/jextop/</url>
 
     <properties>
         <java.version>1.8</java.version>

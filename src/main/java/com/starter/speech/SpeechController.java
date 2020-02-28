@@ -37,7 +37,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Map;
 
-@Api(tags = {"AI云服务调用"})
+@Api(tags = {"AI语音聊天"})
 @RestController
 @RequestMapping("/speech")
 public class SpeechController {
@@ -68,15 +68,14 @@ public class SpeechController {
             @RequestParam(value = "data", required = false) String hasData
     ) {
         LogUtil.info("/speech/tts", text, hasUrl, hasData);
-        FileTypeEnum type = FileTypeEnum.Audio;
-        String fileName = String.format("%s%s.%s", type.getFlag(), Md5Util.md5(text), BaiduService.FILE_EXT);
-
-        // Find the saved file
         boolean retUrl = !StrUtil.isEmpty(hasUrl) && "1".equals(hasUrl);
         boolean retData = !retUrl || StrUtil.isEmpty(hasData) || !"0".equals(hasData);
-        String filePath = fileHelper.getFilePath(fileName);
-        File file = new File(filePath, fileName);
-        if (file.exists()) {
+
+        Map<String, Object> ttsMap = baiduService.ttsCached(text);
+        String fileName = MapUtil.getStr(ttsMap,"fileName");
+        if (ttsMap.containsKey("file")) {
+            File file = (File) ttsMap.get("file");
+
             if (retData) {
                 // Read file
                 fileHelper.read(response, file);
@@ -92,39 +91,22 @@ public class SpeechController {
             return RespUtil.ok(fileName);
         }
 
-        // Call baidu api
-        RespData dataResp = baiduService.tts(text);
-        byte[] dataBytes = dataResp.getBytes();
-
-        // Save file to local storage
-        try {
-            fileHelper.save(dataBytes, fileName);
-        } catch (IOException e) {
-            LogUtil.error("Error when save tts data", e.getMessage());
+        RespData dataResp = (RespData) ttsMap.get("data");
+        if (retData) {
+            // Return data directly
+            dataResp.read(response);
         }
 
         if (retUrl) {
             if (qiniuService != null) {
-                // upload to cloud service
+                // Upload file to cloud service
+                byte[] dataBytes = dataResp.getBytes();
                 fileName = qiniuService.upload(dataBytes, fileName);
+
                 fileName = qiniuConfig.getFileUrl(fileName);
             } else {
                 fileName = fileHelper.getFileUrl(LocationEnum.Service, fileName);
             }
-        }
-
-        if (retData) {
-            // Return data directly
-            try {
-                OutputStream outputStream = response.getOutputStream();
-                outputStream.write(dataResp.getBytes());
-            } catch (IOException e) {
-                LogUtil.error("Error when return tts", e.getMessage());
-                return RespUtil.resp(RespEnum.ERROR, e.getMessage());
-            }
-
-            response.setContentLength(dataResp.getContentLength());
-            response.setContentType(dataResp.getContentType());
         }
         return RespUtil.ok(fileName);
     }

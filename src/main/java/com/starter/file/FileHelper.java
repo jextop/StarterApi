@@ -110,11 +110,14 @@ public class FileHelper {
             OutputStream outputStream = response.getOutputStream();
 
             byte[] buffer = new byte[1024 * 100];
-            int i;
-            while ((i = bufferStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, i);
+            int count;
+            while ((count = bufferStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, count);
             }
-            LogUtil.info("Success download", file.getPath());
+
+            count = (int) file.length();
+            response.setContentLength(count);
+            LogUtil.info("Success download", file.getPath(), count);
         } catch (Exception e) {
             LogUtil.error("Error when download", file.getPath(), e.getMessage());
         } finally {

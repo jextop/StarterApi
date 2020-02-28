@@ -7,13 +7,14 @@ import com.common.http.RespData;
 import com.common.util.CodeUtil;
 import com.common.util.DateUtil;
 import com.common.util.LogUtil;
+import com.common.util.MapUtil;
 import com.common.util.StrUtil;
-import com.starter.speech.BaiduService;
-import com.starter.speech.TulingService;
 import com.starter.annotation.AccessLimited;
 import com.starter.entity.Log;
 import com.starter.entity.User;
+import com.starter.file.FileHelper;
 import com.starter.file.FileTypeEnum;
+import com.starter.file.LocationEnum;
 import com.starter.file.QiniuConfig;
 import com.starter.file.QiniuService;
 import com.starter.http.HttpService;
@@ -23,6 +24,8 @@ import com.starter.job.QuartzJob;
 import com.starter.mq.MqService;
 import com.starter.service.RedisService;
 import com.starter.service.impl.LogServiceImpl;
+import com.starter.speech.BaiduService;
+import com.starter.speech.TulingService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.quartz.JobBuilder;
@@ -42,6 +45,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 @Api(tags = {"运行状态"})
 @RestController
@@ -76,6 +80,9 @@ public class CheckController {
 
     @Autowired
     LocationService locationService;
+
+    @Autowired
+    FileHelper fileHelper;
 
     @AccessLimited(count = 1)
     @ApiOperation("检查服务是否运行")
@@ -255,26 +262,13 @@ public class CheckController {
     @ApiOperation("百度AI语音处理")
     @GetMapping("/speech/tts")
     public Object tts(@RequestParam(required = false) String text) {
-        if (StrUtil.isEmpty(text)) {
-            text = "检查百度AI语音合成";
-        }
-        FileTypeEnum type = FileTypeEnum.Audio;
-        String fileName = String.format("%s%s.%s", type.getFlag(), Md5Util.md5(text), BaiduService.FILE_EXT);
+        // Call baidu tts
+        Map<String, Object> dataResp = baiduService.ttsCached(StrUtil.isEmpty(text) ? "检查百度AI语音合成" : text);
+        String fileName = MapUtil.getStr(dataResp, "fileName");
 
-        // Call baidu api
-        RespData dataResp = baiduService.tts(text);
-        byte[] dataBytes = dataResp.getBytes();
-
-        // upload to cloud service
-        if (qiniuService != null) {
-            fileName = qiniuService.upload(dataBytes, fileName);
-            fileName = qiniuConfig.getFileUrl(fileName);
-        }
-
-        String fileUrl = fileName;
         return new HashMap<String, Object>() {{
             put("chk", "ai/tts");
-            put("msg", fileUrl);
+            put("msg", fileHelper.getFileUrl(LocationEnum.Service, fileName));
         }};
     }
 
@@ -282,13 +276,20 @@ public class CheckController {
     @ApiOperation("百度AI语音处理")
     @GetMapping("/speech/asr")
     public Object asr(@RequestParam(required = false) String text) {
-        RespData resp = baiduService.tts(StrUtil.isEmpty(text) ? "检查百度AI语音识别" : text);
-        long len = resp.getContentLength();
-        String b64Str = B64Util.encode(resp.getBytes());
-        String format = resp.getFileExt();
+        Object ret;
+        Map<String, Object> ttsMap = baiduService.ttsCached(StrUtil.isEmpty(text) ? "检查百度AI语音识别" : text);
+        if (ttsMap.containsKey("data")) {
+            RespData resp = (RespData) ttsMap.get("data");
 
-        // Call asr
-        Object ret = baiduService.asr(format, b64Str, len);
+            long len = resp.getContentLength();
+            String b64Str = B64Util.encode(resp.getBytes());
+            String format = resp.getFileExt();
+
+            // Call asr
+            ret = baiduService.asr(format, b64Str, len);
+        } else {
+            ret = ttsMap.get("fileName");
+        }
 
         return new HashMap<String, Object>() {{
             put("chk", "ai/asr");
