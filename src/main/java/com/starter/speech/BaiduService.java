@@ -72,7 +72,7 @@ public class BaiduService {
     public Map<String, Object> ttsCached(String text) {
         // Find the saved file
         FileTypeEnum type = FileTypeEnum.Audio;
-        String fileName = String.format("%s%s.%s", type.getFlag(), Md5Util.md5(text), BaiduService.FILE_EXT);
+        String fileName = String.format("%s%s.%s", type.getFlag(), Md5Util.md5(text), FILE_EXT);
         String filePath = fileHelper.getFilePath(fileName);
 
         File file = new File(filePath, fileName);
@@ -146,8 +146,7 @@ public class BaiduService {
             put("speech", b64Data); // 音频数据，base64（FILE_CONTENT）
         }};
 
-        RespJsonObj resp = new RespJsonObj();
-        JSONObject ret = httpService.sendHttpPost(ASR_URL, headers, params, resp);
+        JSONObject ret = httpService.sendHttpPost(ASR_URL, headers, params, new RespJsonObj());
         cacheValue = ret.getJSONArray("result");
         redisService.set1Month(cacheKey, cacheValue);
         return cacheValue;
