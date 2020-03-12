@@ -170,7 +170,7 @@ public class CheckController {
             @RequestParam(required = false) String text,
             @RequestParam(required = false) String topic
     ) {
-        String msg = String.format("check mq from java, %s, %s, 消息队列", text, ip);
+        String msg = String.format("check mq from java, %s, %s, 消息队列", ip, text);
 
         // to service
         Map<String, Object> mqMsg = new HashMap<String, Object>() {{
@@ -187,6 +187,7 @@ public class CheckController {
         return new HashMap<String, Object>() {{
             put("chk", "mq");
             put("msg", msg);
+            put("text", text);
         }};
     }
 
