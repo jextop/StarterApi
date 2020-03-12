@@ -25,7 +25,6 @@ public class MqUtil {
             }
         }
 
-        // todo: support more message types when it's necessary
         LogUtil.info("Receive msg", msg.getClass().getSimpleName());
         return null;
     }

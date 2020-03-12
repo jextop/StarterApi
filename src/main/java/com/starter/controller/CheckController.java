@@ -87,7 +87,11 @@ public class CheckController {
     @AccessLimited(count = 1)
     @ApiOperation("检查服务是否运行")
     @GetMapping
-    public Object chk(@RequestAttribute(required = false) String ip, @RequestParam(required = false) String text) {
+    public Object chk(
+            @RequestAttribute(required = false) String ip,
+            @RequestParam(required = false) String text,
+            @RequestParam(required = false) String topic
+    ) {
         return new HashMap<String, Object>() {{
             put("chk", "ok");
             put("msg", String.format("%s_消息", ip));
@@ -95,7 +99,7 @@ public class CheckController {
             put("services", new ArrayList<Object>() {{
                 add(db(ip, text));
                 add(cache(ip, text));
-                add(mq(ip, text));
+                add(mq(ip, text, topic));
                 add(http());
                 add(job());
                 add(json(ip, text));
@@ -158,17 +162,27 @@ public class CheckController {
         }};
     }
 
-    @AccessLimited(count = 1)
+    @AccessLimited(count = 30)
     @ApiOperation("检查消息队列")
     @GetMapping("/mq")
-    public Object mq(@RequestAttribute(required = false) String ip, @RequestParam(required = false) String text) {
+    public Object mq(
+            @RequestAttribute(required = false) String ip,
+            @RequestParam(required = false) String text,
+            @RequestParam(required = false) String topic
+    ) {
         String msg = String.format("check mq from java, %s, %s, 消息队列", text, ip);
 
         // to service
-        mqService.sendQueue(new HashMap<String, Object>() {{
+        Map<String, Object> mqMsg = new HashMap<String, Object>() {{
             put("msg", msg);
             put("date", DateUtil.format(new Date()));
-        }});
+        }};
+
+        if (!StrUtil.isEmpty(topic)) {
+            mqService.sendTopic(mqMsg);
+        } else {
+            mqService.sendQueue(mqMsg);
+        }
 
         return new HashMap<String, Object>() {{
             put("chk", "mq");
