@@ -1,6 +1,7 @@
 package com.starter.speech;
 
 import com.common.util.LogUtil;
+import com.common.util.MacUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class TulingServiceTest {
           ]
         }
         */
-        Object ret = tulingService.chat("你知道上海的天气吗？", null);
+        Object ret = tulingService.chat("你知道上海的天气吗？", null, MacUtil.gtMacAddr());
         LogUtil.info(ret);
         Assertions.assertNotNull(ret);
     }

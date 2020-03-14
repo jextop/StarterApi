@@ -5,6 +5,7 @@ import com.common.file.FileUtil;
 import com.common.http.RespEnum;
 import com.common.util.JsonUtil;
 import com.common.util.LogUtil;
+import com.common.util.MacUtil;
 import com.common.util.MapUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,7 @@ public class SpeechControllerTest {
 //                "无论是开发提供API接口，还是通过HttpClient调用其他服务，都请您学习今天的课程吧！",
         }) {
             MockHttpServletResponse response = new MockHttpServletResponse();
-            Object ret = speechController.tts(response, text, null, null);
+            Object ret = speechController.tts(response, text, null, null, MacUtil.gtMacAddr());
             LogUtil.info(ret);
             Assertions.assertEquals(RespEnum.OK.getCode(), MapUtil.getInt((Map) ret, "code"));
 
@@ -54,12 +55,12 @@ public class SpeechControllerTest {
                 put("format", format);
                 put("audio", b64Str);
             }});
-            Assertions.assertEquals(ret, speechController.asr(null, body));
+            Assertions.assertEquals(ret, speechController.asr(null, body, MacUtil.gtMacAddr()));
         }
     }
 
     public Object testAsr(MultipartFile file) throws IOException {
-        Object ret = speechController.asr(file, null);
+        Object ret = speechController.asr(file, null, MacUtil.gtMacAddr());
         LogUtil.info(ret);
         Assertions.assertEquals(RespEnum.OK.getCode(), MapUtil.getInt((Map) ret, "code"));
         return ret;
@@ -67,7 +68,7 @@ public class SpeechControllerTest {
 
     @Test
     public void testChat() {
-        Object ret = speechController.chat(null, "上海浦东张江");
+        Object ret = speechController.chat(null, "上海浦东张江", MacUtil.gtMacAddr());
         LogUtil.info(ret);
         Assertions.assertNotNull(ret);
     }
@@ -75,7 +76,7 @@ public class SpeechControllerTest {
     @Test
     public void testWalle() throws IOException {
         MockHttpServletResponse response = new MockHttpServletResponse();
-        Object ret = speechController.tts(response, "AI语音聊天接口", null, null);
+        Object ret = speechController.tts(response, "AI语音聊天接口", null, null, MacUtil.gtMacAddr());
         LogUtil.info(ret);
         Assertions.assertNotNull(ret);
 
@@ -86,7 +87,7 @@ public class SpeechControllerTest {
         );
 
         response = new MockHttpServletResponse();
-        ret = speechController.walle(response, null, multipart, null, null, null);
+        ret = speechController.walle(response, null, multipart, null, null, null, MacUtil.gtMacAddr());
         LogUtil.info(ret);
         Assertions.assertNotNull(ret);
     }

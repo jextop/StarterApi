@@ -2,9 +2,11 @@ package com.starter.speech;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.common.enc.Md5Util;
 import com.common.http.RespJsonObj;
 import com.common.util.EmptyUtil;
 import com.common.util.MapUtil;
+import com.common.util.StrUtil;
 import com.starter.http.HttpService;
 import com.starter.http.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +28,7 @@ public class TulingService {
     @Autowired
     TulingConfig tulingConfig;
 
-    public JSONArray chat(String text, String ip) {
+    public JSONArray chat(String text, String ip, String uid) {
         Map<String, String> headers = new HashMap<String, String>() {{
             put("Content-Type", "application/json");
         }};
@@ -51,7 +53,7 @@ public class TulingService {
             }});
             put("userInfo", new HashMap<String, Object>() {{
                 put("apiKey", tulingConfig.getApiKey()); // 机器人标识
-                put("userId", "starter"); // 用户唯一标识
+                put("userId", StrUtil.isEmpty(uid) ? "starter" : Md5Util.md5(uid)); // 用户唯一标识
             }});
         }};
 

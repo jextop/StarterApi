@@ -69,7 +69,7 @@ public class BaiduService {
         return token;
     }
 
-    public Map<String, Object> ttsCached(String text) {
+    public Map<String, Object> ttsCached(String text, String uid) {
         // Find the saved file
         FileTypeEnum type = FileTypeEnum.Audio;
         String fileName = String.format("%s%s.%s", type.getFlag(), Md5Util.md5(text), FILE_EXT);
@@ -84,7 +84,7 @@ public class BaiduService {
         }
 
         // Call tts api
-        RespData dataResp = tts(text);
+        RespData dataResp = tts(text, uid);
         byte[] dataBytes = dataResp.getBytes();
 
         // Save file to local storage
@@ -100,14 +100,14 @@ public class BaiduService {
         }};
     }
 
-    public RespData tts(String text) {
+    public RespData tts(String text, String uid) {
         Map<String, String> headers = new HashMap<String, String>() {{
             put("Content-Type", "application/x-www-form-urlencoded");
         }};
         Map<String, Object> params = new HashMap<String, Object>() {{
             put("tex", UrlUtil.encode(text)); // 合成文本，UTF-8编码，2048个中文字或者英文数字
             put("tok", token()); // 调用鉴权认证接口获取到的access_token
-            put("cuid", "starter_api"); // 用户唯一标识，用来计算UV值，长度为60字符，常用用户MAC地址或IMEI码
+            put("cuid", StrUtil.isEmpty(uid) ? "starter_api" : uid); // 用户唯一标识，长度为60字符，常用MAC地址或IMEI码
             put("ctp", "1"); // 客户端类型选择，web端填写固定值1
             put("lan", "zh"); // 语言选择,目前只有中英文混合模式，固定值zh
             put("spd", "6"); // 语速，取值0-15，默认为5中语速
@@ -122,7 +122,7 @@ public class BaiduService {
         return resp;
     }
 
-    public JSONArray asr(String format, String b64Data, long len) {
+    public JSONArray asr(String format, String b64Data, long len, String uid) {
         // Get md5 and check duplicated files
         String md5Str = Md5Util.md5(b64Data);
         String cacheKey = String.format("speech_asr_%s", md5Str);
@@ -140,7 +140,7 @@ public class BaiduService {
             put("rate", 16000); // 音频采样频率，固定值16000
             put("dev_pid", 1537); // 语音模型，默认1537普通话，1737英语
             put("channel", 1); // 声道数量，仅支持单声道1
-            put("cuid", "starter_api"); // 用户唯一标识，用来计算UV值，长度为60字符，常用用户MAC地址或IMEI码
+            put("cuid", StrUtil.isEmpty(uid) ? "starter_api" : uid); // 用户唯一标识，长度为60字符，常用MAC地址或IMEI码
             put("token", token()); // 调用鉴权认证接口获取到的access_token
             put("len", len); // 音频长度，base64前
             put("speech", b64Data); // 音频数据，base64（FILE_CONTENT）

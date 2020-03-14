@@ -4,6 +4,7 @@ import com.common.enc.B64Util;
 import com.common.file.FileUtil;
 import com.common.http.RespData;
 import com.common.util.LogUtil;
+import com.common.util.MacUtil;
 import com.starter.file.FileHelper;
 import com.starter.http.HttpService;
 import org.junit.jupiter.api.Assertions;
@@ -35,7 +36,7 @@ public class BaiduServiceTest {
 
     @Test
     public void testTts() {
-        RespData ret = baiduService.tts("test tts测试语音合成接口");
+        RespData ret = baiduService.tts("test tts测试语音合成接口", MacUtil.gtMacAddr());
         LogUtil.info(ret.getContentType(), ret.getContentLength());
         Assertions.assertNotNull(ret.getBytes());
 
@@ -48,7 +49,7 @@ public class BaiduServiceTest {
 
     @Test
     public void testTtsCached() {
-        Map<String, Object> ret = baiduService.ttsCached("test tts测试语音合成接口");
+        Map<String, Object> ret = baiduService.ttsCached("test tts测试语音合成接口", MacUtil.gtMacAddr());
         LogUtil.info(ret);
         Assertions.assertTrue(ret.containsKey("file") || ret.containsKey("data"));
 
@@ -85,7 +86,7 @@ public class BaiduServiceTest {
           "sn": "383242169911582945835"
         }
         */
-        Object ret = baiduService.asr(format, b64Str, len);
+        Object ret = baiduService.asr(format, b64Str, len, MacUtil.gtMacAddr());
         LogUtil.info(ret);
         Assertions.assertNotNull(ret);
     }

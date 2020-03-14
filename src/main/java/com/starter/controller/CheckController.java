@@ -90,7 +90,8 @@ public class CheckController {
     public Object chk(
             @RequestAttribute(required = false) String ip,
             @RequestParam(required = false) String text,
-            @RequestParam(required = false) String topic
+            @RequestParam(required = false) String topic,
+            @RequestParam(required = false) String uid
     ) {
         return new HashMap<String, Object>() {{
             put("chk", "ok");
@@ -105,9 +106,9 @@ public class CheckController {
                 add(json(ip, text));
                 add(file(text));
                 add(location(ip));
-                add(tts(text));
-                add(asr(text));
-                add(chat(ip, text));
+                add(tts(text, uid));
+                add(asr(text, uid));
+                add(chat(ip, text, uid));
             }});
         }};
     }
@@ -276,9 +277,9 @@ public class CheckController {
     @AccessLimited(count = 1)
     @ApiOperation("百度AI语音处理")
     @GetMapping("/speech/tts")
-    public Object tts(@RequestParam(required = false) String text) {
+    public Object tts(@RequestParam(required = false) String text, @RequestParam(required = false) String uid) {
         // Call baidu tts
-        Map<String, Object> dataResp = baiduService.ttsCached(StrUtil.isEmpty(text) ? "检查百度AI语音合成" : text);
+        Map<String, Object> dataResp = baiduService.ttsCached(StrUtil.isEmpty(text) ? "检查AI语音合成" : text, uid);
         String fileName = MapUtil.getStr(dataResp, "fileName");
 
         return new HashMap<String, Object>() {{
@@ -290,9 +291,9 @@ public class CheckController {
     @AccessLimited(count = 1)
     @ApiOperation("百度AI语音处理")
     @GetMapping("/speech/asr")
-    public Object asr(@RequestParam(required = false) String text) {
+    public Object asr(@RequestParam(required = false) String text, @RequestParam(required = false) String uid) {
         Object ret;
-        Map<String, Object> ttsMap = baiduService.ttsCached(StrUtil.isEmpty(text) ? "检查百度AI语音识别" : text);
+        Map<String, Object> ttsMap = baiduService.ttsCached(StrUtil.isEmpty(text) ? "检查AI语音识别" : text, uid);
         if (ttsMap.containsKey("data")) {
             RespData resp = (RespData) ttsMap.get("data");
 
@@ -301,7 +302,7 @@ public class CheckController {
             String format = resp.getFileExt();
 
             // Call asr
-            ret = baiduService.asr(format, b64Str, len);
+            ret = baiduService.asr(format, b64Str, len, uid);
         } else {
             ret = ttsMap.get("fileName");
         }
@@ -315,10 +316,14 @@ public class CheckController {
     @AccessLimited(count = 1)
     @ApiOperation("图灵机器人智能聊天")
     @GetMapping("/speech/chat")
-    public Object chat(@RequestAttribute(required = false) String ip, @RequestParam(required = false) String text) {
+    public Object chat(
+            @RequestAttribute(required = false) String ip,
+            @RequestParam(required = false) String text,
+            @RequestParam(required = false) String uid
+    ) {
         return new HashMap<String, Object>() {{
             put("chk", "ai/chat");
-            put("msg", tulingService.chat(StrUtil.isEmpty(text) ? "天气" : text, ip));
+            put("msg", tulingService.chat(StrUtil.isEmpty(text) ? "天气" : text, ip, uid));
         }};
     }
 }

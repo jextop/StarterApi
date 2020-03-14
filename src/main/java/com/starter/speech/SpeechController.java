@@ -65,13 +65,14 @@ public class SpeechController {
             HttpServletResponse response,
             @RequestParam("text") String text,
             @RequestParam(value = "url", required = false) String hasUrl,
-            @RequestParam(value = "data", required = false) String hasData
+            @RequestParam(value = "data", required = false) String hasData,
+            @RequestParam(required = false) String uid
     ) {
         LogUtil.info("/speech/tts", text, hasUrl, hasData);
         boolean retUrl = !StrUtil.isEmpty(hasUrl) && "1".equals(hasUrl);
         boolean retData = !retUrl || StrUtil.isEmpty(hasData) || !"0".equals(hasData);
 
-        Map<String, Object> ttsMap = baiduService.ttsCached(text);
+        Map<String, Object> ttsMap = baiduService.ttsCached(text, uid);
         String fileName = MapUtil.getStr(ttsMap,"fileName");
         if (ttsMap.containsKey("file")) {
             File file = (File) ttsMap.get("file");
@@ -116,7 +117,8 @@ public class SpeechController {
     @PostMapping("/asr")
     public Object asr(
             @RequestPart(value = "file", required = false) MultipartFile file,
-            @RequestBody(required = false) String body
+            @RequestBody(required = false) String body,
+            @RequestParam(required = false) String uid
     ) throws IOException {
         JSONArray result = null;
         if (file != null) {
@@ -132,7 +134,7 @@ public class SpeechController {
             String format = FileUtil.getFileExt(file.getOriginalFilename()).replace(".", "");
 
             // Call asr
-            result = baiduService.asr(format, b64Str, len);
+            result = baiduService.asr(format, b64Str, len, uid);
         } else if (!StrUtil.isEmpty(body)) {
             // Parse params
             ParamUtil paramUtil = new ParamUtil(body);
@@ -140,8 +142,12 @@ public class SpeechController {
             String b64Str = paramUtil.getStr("audio");
             String format = paramUtil.getStr("format");
 
+            if (StrUtil.isEmpty(uid)) {
+                uid = paramUtil.getStr("uid");
+            }
+
             // Call asr
-            result = baiduService.asr(format, b64Str, len);
+            result = baiduService.asr(format, b64Str, len, uid);
         }
 
         return EmptyUtil.isEmpty(result) ? RespUtil.error() : RespUtil.ok(result.getString(0));
@@ -150,11 +156,15 @@ public class SpeechController {
     @AccessLimited(count = 1)
     @ApiOperation("智能聊天")
     @GetMapping("/chat")
-    public Object chat(@RequestAttribute(required = false) String ip, @RequestParam("text") String text) {
+    public Object chat(
+            @RequestAttribute(required = false) String ip,
+            @RequestParam String text,
+            @RequestParam(required = false) String uid
+    ) {
         LogUtil.info("/speech/chat", text);
 
         // Call chat
-        JSONArray result = tulingService.chat(text, ip);
+        JSONArray result = tulingService.chat(text, ip, uid);
         return RespUtil.ok(result.getJSONObject(0).getJSONObject("values").getString("text"));
     }
 
@@ -164,26 +174,13 @@ public class SpeechController {
     public Object walle(
             HttpServletResponse response,
             @RequestAttribute(required = false) String ip,
-            @RequestPart(value = "file", required = false) MultipartFile file,
+            @RequestPart(required = false) MultipartFile file,
             @RequestBody(required = false) String body,
-            @RequestParam(value = "url", required = false) String url,
-            @RequestParam(value = "data", required = false) String data
+            @RequestParam(required = false) String url,
+            @RequestParam(required = false) String data,
+            @RequestParam(required = false) String uid
     ) throws IOException {
-        // asr
-        Map asrMap = (Map) asr(file, body);
-        String asrStr = MapUtil.getStr(asrMap, "msg");
-        if (MapUtil.getInt(asrMap, "code") == RespEnum.ERROR.getCode() || StrUtil.isEmpty(asrStr)) {
-            return RespUtil.error();
-        }
-
-        // chat
-        Map chatMap = (Map) chat(ip, asrStr);
-        String chatStr = MapUtil.getStr(chatMap, "msg");
-        if (StrUtil.isEmpty(chatStr)) {
-            return RespUtil.error();
-        }
-
-        // tts
+        // params
         if (!StrUtil.isEmpty(body)) {
             ParamUtil paramUtil = new ParamUtil(body);
             if (StrUtil.isEmpty(url)) {
@@ -192,8 +189,27 @@ public class SpeechController {
             if (StrUtil.isEmpty(data)) {
                 data = paramUtil.getStr("data");
             }
+            if (StrUtil.isEmpty(uid)) {
+                uid = paramUtil.getStr("uid");
+            }
         }
-        Map<String, Object> ttsMap = (Map<String, Object>) tts(response, chatStr, url, data);
+
+        // asr
+        Map asrMap = (Map) asr(file, body, uid);
+        String asrStr = MapUtil.getStr(asrMap, "msg");
+        if (MapUtil.getInt(asrMap, "code") == RespEnum.ERROR.getCode() || StrUtil.isEmpty(asrStr)) {
+            return RespUtil.error();
+        }
+
+        // chat
+        Map chatMap = (Map) chat(ip, asrStr, uid);
+        String chatStr = MapUtil.getStr(chatMap, "msg");
+        if (StrUtil.isEmpty(chatStr)) {
+            return RespUtil.error();
+        }
+
+        // tts
+        Map<String, Object> ttsMap = (Map<String, Object>) tts(response, chatStr, url, data, uid);
         ttsMap.put("asr", asrStr);
         ttsMap.put("chat", chatStr);
         return ttsMap;
