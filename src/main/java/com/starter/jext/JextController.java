@@ -17,7 +17,7 @@ public class JextController {
 
     @AccessLimited(count = 6)
     @ApiOperation("获取社区信息")
-    @GetMapping(value = "")
+    @GetMapping
     public Object info() {
         return jextService.getInfo(false);
     }

@@ -8,6 +8,7 @@ import com.starter.mq.MqService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,8 +37,20 @@ public class TrackController {
         ParamUtil paramUtil = new ParamUtil(body);
         Map<String, Object> paramMap = paramUtil.getMap();
         paramMap.put("uid", uid);
-        mqService.sendMsg(trackPosition, paramUtil.getMap());
+        paramMap.put("time", System.currentTimeMillis());
+        mqService.sendMsg(trackPosition, paramMap);
 
-        return RespUtil.ok(paramUtil.getStr("addr"));
+        return RespUtil.ok(String.format("%s: %s", uid.substring(uid.length() - 2), paramUtil.getStr("addr")));
+    }
+
+    @AccessLimited(count = 10)
+    @ApiOperation("查询信息")
+    @GetMapping
+    public Object info() {
+        LogUtil.info("/track/info");
+
+        Map<String, Object> ret = RespUtil.ok();
+        ret.put("items", TrackConsumer.trackMap.values());
+        return ret;
     }
 }
