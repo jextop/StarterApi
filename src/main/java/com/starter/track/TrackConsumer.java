@@ -2,6 +2,7 @@ package com.starter.track;
 
 import com.common.util.LogUtil;
 import com.common.util.MapUtil;
+import com.common.util.StrUtil;
 import com.starter.mq.MqUtil;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,9 @@ public class TrackConsumer {
     public void listenTopic(Message msg) {
         Map<String, Object> msgMap = MqUtil.parseMsg(msg);
         String uid = MapUtil.getStr(msgMap, "uid");
+        if (StrUtil.isEmpty(uid)) {
+            uid = "";
+        }
         LogUtil.info("Receive track position", uid, msgMap);
 
         // 临时存储位置信息

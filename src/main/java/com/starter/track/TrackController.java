@@ -3,6 +3,7 @@ package com.starter.track;
 import com.common.http.ParamUtil;
 import com.common.http.RespUtil;
 import com.common.util.LogUtil;
+import com.common.util.StrUtil;
 import com.starter.annotation.AccessLimited;
 import com.starter.mq.MqService;
 import io.swagger.annotations.Api;
@@ -40,7 +41,10 @@ public class TrackController {
         paramMap.put("time", System.currentTimeMillis());
         mqService.sendMsg(trackPosition, paramMap);
 
-        return RespUtil.ok(String.format("%s: %s", uid.substring(uid.length() - 2), paramUtil.getStr("addr")));
+        return RespUtil.ok(String.format("%s: %s",
+                StrUtil.isEmpty(uid) ? "" : uid.substring(uid.length() - 2),
+                paramUtil.getStr("addr"))
+        );
     }
 
     @AccessLimited(count = 10)
