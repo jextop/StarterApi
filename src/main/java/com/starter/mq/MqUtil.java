@@ -9,12 +9,12 @@ import javax.jms.TextMessage;
 import java.util.Map;
 
 public class MqUtil {
-    public static String formatMsg(Map<String, ?> msgMap) {
+    public static String formatMsg(Map<String, Object> msgMap) {
         // 指定使用字符串格式。Python使用STOMP协议，简单文本格式。
         return JsonUtil.toStr(msgMap);
     }
 
-    public static Map<String, ?> parseMsg(Message msg) {
+    public static Map<String, Object> parseMsg(Message msg) {
         // 解析字符消息。Python使用STOMP协议，简单文本格式。
         if (msg instanceof TextMessage) {
             try {

@@ -22,15 +22,15 @@ public class MqService {
     @Autowired
     private Topic topic;
 
-    public void sendQueue(Map<String, ?> msgMap) {
+    public void sendQueue(Map<String, Object> msgMap) {
         sendMsg(queue, msgMap);
     }
 
-    public void sendTopic(Map<String, ?> msgMap) {
+    public void sendTopic(Map<String, Object> msgMap) {
         sendMsg(topic, msgMap);
     }
 
-    public void sendMsg(Destination dest, Map<String, ?> msgMap) {
+    public void sendMsg(Destination dest, Map<String, Object> msgMap) {
         String msgStr = MqUtil.formatMsg(msgMap);
         LogUtil.info(dest.getClass().getSimpleName(), "Send msg", msgStr);
 

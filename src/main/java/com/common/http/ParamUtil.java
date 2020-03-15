@@ -21,7 +21,7 @@ public class ParamUtil {
     }
 
     public Map<String, Object> getMap() {
-        return paramMap == null ? null : new HashMap<>(paramMap);
+        return paramMap == null ? new HashMap<String, Object>() : new HashMap<>(paramMap);
     }
 
     public Map<String, Object> getMap(String key) {

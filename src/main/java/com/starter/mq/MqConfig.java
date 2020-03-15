@@ -1,5 +1,6 @@
 package com.starter.mq;
 
+import com.starter.track.TrackConsumer;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.activemq.command.ActiveMQTopic;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +24,11 @@ public class MqConfig {
     @Bean
     public Topic topic() {
         return new ActiveMQTopic(MqConsumer.TOPIC);
+    }
+
+    @Bean
+    public Topic trackPosition() {
+        return new ActiveMQTopic(TrackConsumer.POSITION_TOPIC);
     }
 
     /**
