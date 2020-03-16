@@ -9,16 +9,16 @@ IntelliJ IDEA, Maven
 
 # 启动依赖服务
 ## 安装Docker
-https://docs.docker.com/install/linux/docker-ce/ubuntu/
-https://docs.docker.com/docker-for-windows/install/
+- https://docs.docker.com/install/linux/docker-ce/ubuntu/
+- https://docs.docker.com/docker-for-windows/install/
 
 ## 拉取镜像
 ./pull.sh
 
-# 启动服务
+## 启动服务
 ./up.sh
 
-# 查看日志
+## 查看日志
 ./logs.sh
 
 ## 停止服务
@@ -36,3 +36,5 @@ https://docs.docker.com/docker-for-windows/install/
 | API服务检查      | http://localhost:8011/chk               | |
 | Swagger接口文档  | http://localhost:8011/swagger-ui.html   | |
 | Actuator服务监控 | http://localhost:8011/actuator          | |
+
+![](https://github.com/jextop/StarterApi/blob/master/api.png)
