@@ -1,4 +1,28 @@
-# Api Starter based on Java + SpringBoot
+# Web服务脚手架
+Java + SpringBoot + MySQL + Redis + ActiveMQ + ...
+
+# 依赖环境
+JRE或者JDK 8
+
+# 开发环境
+IntelliJ IDEA, Maven
+
+# 启动依赖服务
+## 安装Docker
+https://docs.docker.com/install/linux/docker-ce/ubuntu/
+https://docs.docker.com/docker-for-windows/install/
+
+## 拉取镜像
+./pull.sh
+
+# 启动服务
+./up.sh
+
+# 查看日志
+./logs.sh
+
+## 停止服务
+./down.sh
 
 | 开发运行环境     | URL:Port                                |  备注              |
 | ------------     | --------------------------------------  | :----------------- |
@@ -6,18 +30,9 @@
 | MySQL Admin      | http://localhost:3006                   | |
 | Redis缓存        | http://localhost:6379                   | |
 | ActiveMQ消息队列 | http://localhost:8161, admin/admin      | launchActiveMQ.bat |
-| LogStash日志处理 | http://localhost:9600                   | launchLogStash.bat |
-| LogStash Check   | http://localhost:9601                   | |
 
 | 管理工具         | URL:Port                                |  备注              |
 | ------------     | --------------------------------------  | :----------------- |
 | API服务检查      | http://localhost:8011/chk               | |
 | Swagger接口文档  | http://localhost:8011/swagger-ui.html   | |
 | Actuator服务监控 | http://localhost:8011/actuator          | |
-| AlertManager     | http://localhost:9093                   | |
-| Prometheus       | http://localhost:9090                   | |
-| Prometheus Alerts| http://localhost:9090/alerts            | |
-| Grafana          | http://localhost:3000, admin/admin      | |
-| ElasticSearch    | http://localhost:9200                   | launchElasticSearch.bat |
-| Kibana           | http://localhost:5601                   | launchKibana.bat        |
-| Kibana Status    | http://localhost:5601/status            | |
