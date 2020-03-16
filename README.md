@@ -1,10 +1,10 @@
 # Web服务脚手架
 Java + SpringBoot + MySQL + Redis + ActiveMQ + ...
 
-# 依赖环境
+## 依赖环境
 JRE或者JDK 8
 
-# 开发环境
+## 开发环境
 IntelliJ IDEA, Maven
 
 # 启动依赖服务
