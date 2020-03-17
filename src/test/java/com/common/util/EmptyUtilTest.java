@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * Created by user on 2017/9/23.
  */
-@SpringBootTest(classes = StarterApplication.class)
+@SpringBootTest(classes = StarterApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class EmptyUtilTest {
     @Test
     public void testIsEmptyStr() {

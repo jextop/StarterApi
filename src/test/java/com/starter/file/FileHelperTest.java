@@ -1,6 +1,7 @@
 package com.starter.file;
 
 import com.common.util.LogUtil;
+import com.starter.StarterApplication;
 import com.starter.config.MultipartConfig;
 import com.starter.config.ServerConfig;
 import org.junit.jupiter.api.Assertions;
@@ -11,8 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.HashMap;
 import java.util.Map;
 
-
-@SpringBootTest
+@SpringBootTest(classes = StarterApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class FileHelperTest {
     @Autowired
     FileHelper fileHelper;

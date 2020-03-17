@@ -4,7 +4,7 @@ import com.starter.StarterApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest(classes = StarterApplication.class)
+@SpringBootTest(classes = StarterApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class LogUtilTest {
     @Test
     public void testLog() {

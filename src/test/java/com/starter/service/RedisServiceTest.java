@@ -1,6 +1,7 @@
 package com.starter.service;
 
 import com.common.util.LogUtil;
+import com.starter.StarterApplication;
 import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@SpringBootTest
+@SpringBootTest(classes = StarterApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class RedisServiceTest {
     @Autowired
     RedisService redisService;

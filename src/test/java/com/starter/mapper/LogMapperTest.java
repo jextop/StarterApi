@@ -2,6 +2,7 @@ package com.starter.mapper;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.common.util.LogUtil;
+import com.starter.StarterApplication;
 import com.starter.entity.Log;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Date;
 import java.util.List;
 
-@SpringBootTest
+@SpringBootTest(classes = StarterApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class LogMapperTest {
     @Autowired
     LogMapper logMapper;

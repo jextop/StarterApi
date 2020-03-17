@@ -6,6 +6,7 @@ import com.common.util.CodeUtil;
 import com.common.util.EmptyUtil;
 import com.common.util.JsonUtil;
 import com.common.util.LogUtil;
+import com.starter.StarterApplication;
 import com.starter.controller.FileController;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -22,7 +23,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-@SpringBootTest
+@SpringBootTest(classes = StarterApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class FileControllerTest {
     @Autowired
     FileController fileController;

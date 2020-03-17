@@ -1,12 +1,13 @@
 package com.starter.http;
 
 import com.common.util.LogUtil;
+import com.starter.StarterApplication;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+@SpringBootTest(classes = StarterApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class LocationServiceTest {
     @Autowired(required = false)
     LocationConfig locationConfig;

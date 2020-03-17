@@ -6,6 +6,7 @@ import com.common.http.RespJsonObj;
 import com.common.http.UrlUtil;
 import com.common.util.LogUtil;
 import com.common.util.StrUtil;
+import com.starter.StarterApplication;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.HashMap;
 import java.util.Map;
 
-@SpringBootTest
+@SpringBootTest(classes = StarterApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class HttpServiceTest {
     @Autowired
     HttpService httpService;

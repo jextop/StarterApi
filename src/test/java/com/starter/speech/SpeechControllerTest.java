@@ -7,6 +7,7 @@ import com.common.util.JsonUtil;
 import com.common.util.LogUtil;
 import com.common.util.MacUtil;
 import com.common.util.MapUtil;
+import com.starter.StarterApplication;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-@SpringBootTest
+@SpringBootTest(classes = StarterApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class SpeechControllerTest {
     @Autowired
     SpeechController speechController;

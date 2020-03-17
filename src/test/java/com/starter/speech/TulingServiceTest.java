@@ -2,12 +2,13 @@ package com.starter.speech;
 
 import com.common.util.LogUtil;
 import com.common.util.MacUtil;
+import com.starter.StarterApplication;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+@SpringBootTest(classes = StarterApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class TulingServiceTest {
     @Autowired
     TulingService tulingService;
