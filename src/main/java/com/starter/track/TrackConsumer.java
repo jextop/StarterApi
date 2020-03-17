@@ -25,11 +25,12 @@ public class TrackConsumer {
         }
         LogUtil.info("Receive track position", uid, msgMap);
 
+        // 推送数据给后台管理系统
+        TrackSocket.sendMessage(msgMap);
+
         // 临时存储位置信息
         clientMap.put(uid, msgMap);
 
         // todo: 保存历史定位信息
-
-        // todo: 推送数据给后台管理系统
     }
 }
