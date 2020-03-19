@@ -17,7 +17,7 @@ public class LocationServiceTest {
 
     @Test
     public void testGetAddress() {
-        Object ret = locationService.getAddress("218.192.3.42");
+        Object ret = locationService.getAddress("101.229.196.154");
         LogUtil.info(ret);
         Assertions.assertTrue(ret != null || locationConfig == null);
     }

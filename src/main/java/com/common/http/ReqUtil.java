@@ -14,38 +14,31 @@ public class ReqUtil {
             return null;
         }
 
-        String s = request.getHeader("X-Forwarded-For");
-        if (StringUtils.isNotEmpty(s) && !UNKNOWN.equalsIgnoreCase(s)) {
+        String ip = request.getHeader("X-Forwarded-For");
+        if (StringUtils.isNotEmpty(ip) && !UNKNOWN.equalsIgnoreCase(ip)) {
             // 多次反向代理后会有多个ip值，第一个ip才是真实ip
-            int index = s.indexOf(",");
-            return index < 0 ? s : s.substring(0, index);
+            int index = ip.indexOf(",");
+            return index < 0 ? ip : ip.substring(0, index);
         }
 
-        s = request.getHeader("X-Real-IP");
-        if (StringUtils.isBlank(s) || UNKNOWN.equalsIgnoreCase(s)) {
-            s = request.getHeader("Proxy-Client-IP");
+        ip = request.getHeader("X-Real-IP");
+        if (StringUtils.isBlank(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
         }
-        if (StringUtils.isBlank(s) || UNKNOWN.equalsIgnoreCase(s)) {
-            s = request.getHeader("WL-Proxy-Client-IP");
+        if (StringUtils.isBlank(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
         }
-        if (StringUtils.isBlank(s) || UNKNOWN.equalsIgnoreCase(s)) {
-            s = request.getHeader("HTTP_CLIENT_IP");
+        if (StringUtils.isBlank(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_CLIENT_IP");
         }
-        if (StringUtils.isBlank(s) || UNKNOWN.equalsIgnoreCase(s)) {
-            s = request.getHeader("HTTP_X_FORWARDED_FOR");
+        if (StringUtils.isBlank(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
+            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
         }
-        if (StringUtils.isBlank(s) || UNKNOWN.equalsIgnoreCase(s)) {
-            s = request.getRemoteAddr();
+        if (StringUtils.isBlank(ip) || UNKNOWN.equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
         }
 
-        // 获取本地ip
-        if ("127.0.0.1".equals(s) || "0:0:0:0:0:0:0:1".equals(s)) {
-            try {
-                s = InetAddress.getLocalHost().getHostAddress();
-            } catch (UnknownHostException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-        return s;
+        // 过滤本地ip
+        return "127.0.0.1".equals(ip) || "0:0:0:0:0:0:0:1".equals(ip) ? null : ip;
     }
 }

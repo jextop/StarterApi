@@ -6,6 +6,7 @@ import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
@@ -22,9 +23,8 @@ public class IpUtil {
 
     public static String getLocalIP() {
         try {
-            InetAddress ia = InetAddress.getLocalHost();
-            return ia.getHostAddress();
-        } catch (Exception e) {
+            return InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
             LogUtil.error("Error when getLocalIP", e.getMessage());
         }
         return null;
