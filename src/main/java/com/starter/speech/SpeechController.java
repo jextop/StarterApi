@@ -183,6 +183,10 @@ public class SpeechController {
         // params
         if (!StrUtil.isEmpty(body)) {
             ParamUtil paramUtil = new ParamUtil(body);
+            if (StrUtil.isEmpty(ip)) {
+                ip = paramUtil.getStr("ip");
+            }
+
             if (StrUtil.isEmpty(url)) {
                 url = paramUtil.getStr("url");
             }
