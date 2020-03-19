@@ -5,7 +5,6 @@ import com.common.file.FileUtil;
 import com.common.http.RespData;
 import com.common.util.LogUtil;
 import com.common.util.MacUtil;
-import com.starter.StarterApplication;
 import com.starter.file.FileHelper;
 import com.starter.http.HttpService;
 import org.junit.jupiter.api.Assertions;
@@ -17,7 +16,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import java.io.File;
 import java.util.Map;
 
-@SpringBootTest(classes = StarterApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class BaiduServiceTest {
     @Autowired
     BaiduService baiduService;

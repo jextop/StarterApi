@@ -1,7 +1,6 @@
 package com.starter.service;
 
 import com.common.util.LogUtil;
-import com.starter.StarterApplication;
 import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -15,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@SpringBootTest(classes = StarterApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class RedisServiceTest {
     @Autowired
     RedisService redisService;
@@ -87,7 +86,7 @@ public class RedisServiceTest {
         LogUtil.info(list);
         Assertions.assertEquals(list, Arrays.asList(new Object[]{2, 3, 4, 5}));
 
-        redisService.lTrim(key, 1,-2);
+        redisService.lTrim(key, 1, -2);
         list = redisService.lGet(key);
         LogUtil.info(list);
         Assertions.assertEquals(list, Arrays.asList(new Object[]{3, 4}));
@@ -106,7 +105,7 @@ public class RedisServiceTest {
         redisService.hSet(key, "2", 20);
         redisService.hSet(key, "3", 30);
         redisService.hDelKey(key, "1");
-        redisService.hSet(key, new HashMap<String, Object>(){{
+        redisService.hSet(key, new HashMap<String, Object>() {{
             put("4", 40);
             put("5", 50);
         }});

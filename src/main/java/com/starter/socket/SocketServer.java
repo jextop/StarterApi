@@ -33,7 +33,7 @@ public class SocketServer {
         }
     }
 
-    private void sendMessage(Map<String, Object> msg) {
+    public void sendMessage(Map<String, Object> msg) {
         try {
             session.getBasicRemote().sendText(JsonUtil.toStr(msg));
         } catch (IOException e) {

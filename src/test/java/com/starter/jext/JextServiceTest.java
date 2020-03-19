@@ -2,7 +2,6 @@ package com.starter.jext;
 
 import com.common.util.JsonUtil;
 import com.common.util.LogUtil;
-import com.starter.StarterApplication;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.Map;
 
-@SpringBootTest(classes = StarterApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class JextServiceTest {
     @Autowired
     JextService jextService;
