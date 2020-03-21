@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-@ConditionalOnBean({BucketManager.class, UploadManager.class})
+@ConditionalOnBean(QiniuConfig.class)
 public class QiniuService {
     @Autowired
     BucketManager bucketManager;

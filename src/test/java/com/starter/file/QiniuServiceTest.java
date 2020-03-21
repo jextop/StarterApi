@@ -22,11 +22,15 @@ import java.util.Map;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @ConditionalOnBean(QiniuService.class)
 public class QiniuServiceTest {
-    @Autowired
+    @Autowired(required = false)
     QiniuService qiniuService;
 
     @Test
     public void testUpload() throws IOException {
+        if (qiniuService == null) {
+            return;
+        }
+
         File emptyFile = File.createTempFile("tmp", ".txt");
 
         File file = File.createTempFile("tmp", ".txt");
