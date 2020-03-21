@@ -1,6 +1,7 @@
 package com.starter.file;
 
 import com.common.util.StrUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -65,11 +66,11 @@ public enum FileTypeEnum {
     }
 
     public static FileTypeEnum get(String idStr) {
-        return StrUtil.isEmpty(idStr) ? Image : get(Integer.valueOf(idStr));
+        return StringUtils.isEmpty(idStr) ? Image : get(Integer.valueOf(idStr));
     }
 
     public static FileTypeEnum getByFlag(String flag) {
-        if (StrUtil.isEmpty(flag)) {
+        if (StringUtils.isEmpty(flag)) {
             return FileTypeEnum.File;
         }
 

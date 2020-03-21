@@ -4,11 +4,12 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.common.enc.Md5Util;
 import com.common.http.RespJsonObj;
-import com.common.util.EmptyUtil;
 import com.common.util.MapUtil;
 import com.common.util.StrUtil;
 import com.starter.http.HttpService;
 import com.starter.http.LocationService;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,7 +41,7 @@ public class TulingService {
                 }});
 
                 Map<String, Object> address = locationService.getAddress(ip);
-                if (!EmptyUtil.isEmpty(address)) {
+                if (MapUtils.isNotEmpty(address)) {
                     Map<String, Object> detail = MapUtil.getMap(address, "address_detail");
                     put("selfInfo", new HashMap<String, Object>() {{
                         put("location", new HashMap<String, Object>() {{
@@ -53,7 +54,7 @@ public class TulingService {
             }});
             put("userInfo", new HashMap<String, Object>() {{
                 put("apiKey", tulingConfig.getApiKey()); // 机器人标识
-                put("userId", StrUtil.isEmpty(uid) ? "starter" : Md5Util.md5(uid)); // 用户唯一标识
+                put("userId", StringUtils.isEmpty(uid) ? "starter" : Md5Util.md5(uid)); // 用户唯一标识
             }});
         }};
 

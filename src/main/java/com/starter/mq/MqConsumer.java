@@ -7,11 +7,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
+import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Queue;
 import javax.jms.Topic;
 import java.util.Map;
 
+/**
+ * @author ding
+ */
 @Component
 public class MqConsumer {
     private static final String QUEUE = "starter.process";
@@ -28,13 +32,13 @@ public class MqConsumer {
     }
 
 //    @JmsListener(destination = QUEUE)
-//    public void listenQueue(Message msg) {
+//    public void listenQueue(Message msg) throws JMSException {
 //        Map<String, ?> msgMap = MqUtil.parseMsg(msg);
 //        LogUtil.info("(Queue) Receive process msg", msgMap);
 //    }
 
     @JmsListener(destination = TOPIC, containerFactory = "jmsTopicListenerContainerFactory")
-    public void listenTopic(Message msg) {
+    public void listenTopic(Message msg) throws JMSException {
         Map<String, ?> msgMap = MqUtil.parseMsg(msg);
         LogUtil.info("(Topic) Receive status msg", msgMap);
     }

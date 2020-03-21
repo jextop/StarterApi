@@ -23,7 +23,9 @@ public class QuartzConfig {
 
     @Bean
     public Trigger quartzTrigger() {
-        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cron);
+        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder
+                .cronSchedule(cron)
+                .withMisfireHandlingInstructionDoNothing();
 
         return TriggerBuilder.newTrigger()
                 .forJob(quartzJob())

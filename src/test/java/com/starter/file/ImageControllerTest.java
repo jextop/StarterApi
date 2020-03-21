@@ -3,9 +3,9 @@ package com.starter.file;
 import com.common.file.FileUtil;
 import com.common.http.RespEnum;
 import com.common.util.CodeUtil;
-import com.common.util.EmptyUtil;
 import com.common.util.JsonUtil;
 import com.common.util.LogUtil;
+import org.apache.commons.collections4.CollectionUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class ImageControllerTest {
     @Autowired
     ImageController imageController;
@@ -89,6 +89,6 @@ public class ImageControllerTest {
         Object ret = imageController.list("");
         ret = ((Map<String, ?>) ret).get("items");
         LogUtil.info(JsonUtil.toStr(ret));
-        Assertions.assertFalse(EmptyUtil.isEmpty((Collection) ret));
+        Assertions.assertTrue(CollectionUtils.isNotEmpty((Collection) ret));
     }
 }

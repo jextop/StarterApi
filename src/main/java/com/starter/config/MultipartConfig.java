@@ -5,6 +5,9 @@ import org.springframework.context.annotation.Configuration;
 
 import java.io.File;
 
+/**
+ * @author ding
+ */
 @Configuration
 @ConfigurationProperties("spring.servlet.multipart")
 public class MultipartConfig {

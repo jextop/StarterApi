@@ -1,9 +1,9 @@
 package com.common.http;
 
 import com.common.util.JsonUtil;
-import com.common.util.LogUtil;
 import com.common.util.MapUtil;
 import com.common.util.StrUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,7 +15,7 @@ public class ParamUtil {
     private Map<String, Object> paramMap = null;
 
     public ParamUtil(String paramStr) {
-        if (!StrUtil.isEmpty(paramStr)) {
+        if (StringUtils.isNotEmpty(paramStr)) {
             this.paramMap = JsonUtil.parseObj(paramStr);
         }
     }
@@ -32,8 +32,12 @@ public class ParamUtil {
         return MapUtil.getStr(paramMap, key);
     }
 
-    public Integer getInt(String key) {
+    public Integer getInteger(String key) {
         return MapUtil.getInteger(paramMap, key);
+    }
+
+    public int getInt(String key) {
+        return MapUtil.getInt(paramMap, key);
     }
 
     public Long getLong(String key) {
@@ -46,12 +50,12 @@ public class ParamUtil {
      * @return
      */
     public int getPageIndex() {
-        Integer v = getInt("pageIndex");
+        Integer v = getInteger("pageIndex");
         return v == null || v < 0 ? 0 : v;
     }
 
     public int getPageSize() {
-        Integer v = getInt("pageSize");
+        Integer v = getInteger("pageSize");
         return v == null || v <= 0 || v > MAX_PAGE_SIZE ? DEFAULT_PAGE_SIZE : v;
     }
 }

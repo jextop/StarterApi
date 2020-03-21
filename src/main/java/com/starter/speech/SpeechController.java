@@ -2,24 +2,23 @@ package com.starter.speech;
 
 import com.alibaba.fastjson.JSONArray;
 import com.common.enc.B64Util;
-import com.common.enc.Md5Util;
 import com.common.file.FileUtil;
 import com.common.http.ParamUtil;
 import com.common.http.RespData;
 import com.common.http.RespEnum;
 import com.common.http.RespUtil;
-import com.common.util.EmptyUtil;
 import com.common.util.LogUtil;
 import com.common.util.MapUtil;
 import com.common.util.StrUtil;
 import com.starter.annotation.AccessLimited;
 import com.starter.file.FileHelper;
-import com.starter.file.FileTypeEnum;
 import com.starter.file.LocationEnum;
 import com.starter.file.QiniuConfig;
 import com.starter.file.QiniuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,7 +33,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Map;
 
 @Api(tags = {"AI语音聊天"})
@@ -69,11 +67,11 @@ public class SpeechController {
             @RequestParam(required = false) String uid
     ) {
         LogUtil.info("/speech/tts", text, hasUrl, hasData);
-        boolean retUrl = !StrUtil.isEmpty(hasUrl) && "1".equals(hasUrl);
-        boolean retData = !retUrl || StrUtil.isEmpty(hasData) || !"0".equals(hasData);
+        boolean retUrl = StringUtils.isNotEmpty(hasUrl) && "1".equals(hasUrl);
+        boolean retData = !retUrl || StringUtils.isEmpty(hasData) || !"0".equals(hasData);
 
         Map<String, Object> ttsMap = baiduService.ttsCached(text, uid);
-        String fileName = MapUtil.getStr(ttsMap,"fileName");
+        String fileName = MapUtil.getStr(ttsMap, "fileName");
         if (ttsMap.containsKey("file")) {
             File file = (File) ttsMap.get("file");
 
@@ -135,14 +133,14 @@ public class SpeechController {
 
             // Call asr
             result = baiduService.asr(format, b64Str, len, uid);
-        } else if (!StrUtil.isEmpty(body)) {
+        } else if (StringUtils.isNotEmpty(body)) {
             // Parse params
             ParamUtil paramUtil = new ParamUtil(body);
-            Integer len = paramUtil.getInt("size");
+            Integer len = paramUtil.getInteger("size");
             String b64Str = paramUtil.getStr("audio");
             String format = paramUtil.getStr("format");
 
-            if (StrUtil.isEmpty(uid)) {
+            if (StringUtils.isEmpty(uid)) {
                 uid = paramUtil.getStr("uid");
             }
 
@@ -150,7 +148,7 @@ public class SpeechController {
             result = baiduService.asr(format, b64Str, len, uid);
         }
 
-        return EmptyUtil.isEmpty(result) ? RespUtil.error() : RespUtil.ok(result.getString(0));
+        return CollectionUtils.isEmpty(result) ? RespUtil.error() : RespUtil.ok(result.getString(0));
     }
 
     @AccessLimited(count = 1)
@@ -181,19 +179,19 @@ public class SpeechController {
             @RequestParam(required = false) String uid
     ) throws IOException {
         // params
-        if (!StrUtil.isEmpty(body)) {
+        if (StringUtils.isNotEmpty(body)) {
             ParamUtil paramUtil = new ParamUtil(body);
-            if (StrUtil.isEmpty(ip)) {
+            if (StringUtils.isEmpty(ip)) {
                 ip = paramUtil.getStr("ip");
             }
 
-            if (StrUtil.isEmpty(url)) {
+            if (StringUtils.isEmpty(url)) {
                 url = paramUtil.getStr("url");
             }
-            if (StrUtil.isEmpty(data)) {
+            if (StringUtils.isEmpty(data)) {
                 data = paramUtil.getStr("data");
             }
-            if (StrUtil.isEmpty(uid)) {
+            if (StringUtils.isEmpty(uid)) {
                 uid = paramUtil.getStr("uid");
             }
         }
@@ -201,14 +199,14 @@ public class SpeechController {
         // asr
         Map asrMap = (Map) asr(file, body, uid);
         String asrStr = MapUtil.getStr(asrMap, "msg");
-        if (MapUtil.getInt(asrMap, "code") == RespEnum.ERROR.getCode() || StrUtil.isEmpty(asrStr)) {
+        if (MapUtil.getInt(asrMap, "code") == RespEnum.ERROR.getCode() || StringUtils.isEmpty(asrStr)) {
             return RespUtil.error();
         }
 
         // chat
         Map chatMap = (Map) chat(ip, asrStr, uid);
         String chatStr = MapUtil.getStr(chatMap, "msg");
-        if (StrUtil.isEmpty(chatStr)) {
+        if (StringUtils.isEmpty(chatStr)) {
             return RespUtil.error();
         }
 

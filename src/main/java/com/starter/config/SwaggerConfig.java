@@ -10,6 +10,9 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+/**
+ * @author ding
+ */
 @Configuration
 @EnableSwagger2
 public class SwaggerConfig {
@@ -23,7 +26,7 @@ public class SwaggerConfig {
                 .build();
     }
 
-    private ApiInfo apiInfo() {
+    protected ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("SpringBoot搭建分布式Web服务脚手架")
                 .license("Github开源项目")

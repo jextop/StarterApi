@@ -12,6 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * @author ding
+ */
 @Component
 public class CorsFilter implements Filter {
     @Override
@@ -19,8 +22,8 @@ public class CorsFilter implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-        HttpServletResponse response = (HttpServletResponse) res;
+    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
+        HttpServletResponse response = (HttpServletResponse) resp;
         HttpServletRequest request = (HttpServletRequest) req;
         response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
         response.setHeader("Access-Control-Allow-Credentials", "true");
@@ -30,7 +33,7 @@ public class CorsFilter implements Filter {
                 "X-Requested-With, Content-Type, Accept, " +
                 "key, secret, access_token, name, password, user_token"
         );
-        chain.doFilter(req, res);
+        chain.doFilter(req, resp);
     }
 
     @Override

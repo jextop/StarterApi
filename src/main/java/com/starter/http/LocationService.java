@@ -3,9 +3,8 @@ package com.starter.http;
 import com.alibaba.fastjson.JSONObject;
 import com.common.enc.Md5Util;
 import com.common.http.RespJsonObj;
-import com.common.util.EmptyUtil;
-import com.common.util.StrUtil;
-import com.starter.service.RedisService;
+import com.starter.cache.CacheService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,15 +26,15 @@ public class LocationService {
     HttpService httpService;
 
     @Autowired
-    RedisService redisService;
+    CacheService cacheService;
 
     public Map<String, Object> getAddress(String ip) {
-        if (StrUtil.isEmpty(ip)) {
+        if (StringUtils.isEmpty(ip)) {
             return null;
         }
 
         String cacheKey = String.format("ip_address_%s", ip);
-        Map<String, Object> cacheValue = (Map<String, Object>) redisService.get(cacheKey);
+        Map<String, Object> cacheValue = (Map<String, Object>) cacheService.get(cacheKey);
         if (cacheValue != null || locationConfig == null) {
             return cacheValue;
         }
@@ -66,7 +65,7 @@ public class LocationService {
             JSONObject ret = httpService.sendHttpGet(paramsStr, new RespJsonObj());
 
             cacheValue = ret.getJSONObject("content");
-            redisService.set1Month(cacheKey, cacheValue);
+            cacheService.set1Month(cacheKey, cacheValue);
             return cacheValue;
         } catch (UnsupportedEncodingException e) {
             System.out.println(e.getMessage());

@@ -2,6 +2,7 @@ package com.common.file;
 
 import com.common.util.StrUtil;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
@@ -15,14 +16,14 @@ public class FileWriter {
     private boolean showInfo = true;
 
     public FileWriter(String filePath) {
-        if (StrUtil.isEmpty(filePath)) {
+        if (StringUtils.isEmpty(filePath)) {
             filePath = "fw";
         }
         this.filePath = filePath;
     }
 
     public FileWriter(String filePath, boolean showInfo) {
-        if (StrUtil.isEmpty(filePath)) {
+        if (StringUtils.isEmpty(filePath)) {
             filePath = "fw";
         }
         this.filePath = filePath;
@@ -130,7 +131,7 @@ public class FileWriter {
             return;
         }
 
-        if (StrUtil.isEmpty(str)) {
+        if (StringUtils.isEmpty(str)) {
             return;
         }
 

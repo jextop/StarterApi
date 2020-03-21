@@ -1,15 +1,12 @@
 package com.common.util;
 
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
 
 public class MapUtil {
-    public static boolean isEmpty(Map<?, ?> map) {
-        return MapUtils.isEmpty(map);
-    }
-
     public static String getStr(Map<String, Object> map, String key) {
         return (String) getValue(map, key);
     }
@@ -41,6 +38,6 @@ public class MapUtil {
     }
 
     public static Object getValue(Map<String, Object> map, String key) {
-        return StrUtil.isEmpty(key) || isEmpty(map) || !map.containsKey(key) ? null : map.get(key);
+        return StringUtils.isEmpty(key) || MapUtils.isEmpty(map) || !map.containsKey(key) ? null : map.get(key);
     }
 }

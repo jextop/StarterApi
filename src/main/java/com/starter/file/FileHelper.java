@@ -1,11 +1,13 @@
 package com.starter.file;
 
 import com.common.file.FileUtil;
-import com.common.util.EmptyUtil;
 import com.common.util.LogUtil;
 import com.common.util.StrUtil;
 import com.starter.config.MultipartConfig;
 import com.starter.config.ServerConfig;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -53,7 +55,7 @@ public class FileHelper {
     }
 
     public FileTypeEnum getFileType(String fileName) {
-        return StrUtil.isEmpty(fileName) ? FileTypeEnum.File : FileTypeEnum.getByFlag(fileName.substring(0, 1));
+        return StringUtils.isEmpty(fileName) ? FileTypeEnum.File : FileTypeEnum.getByFlag(fileName.substring(0, 1));
     }
 
     public String getFilePath(String fileName) {
@@ -65,7 +67,7 @@ public class FileHelper {
     }
 
     public void fillInfo(List<com.starter.entity.File> itemList) {
-        if (EmptyUtil.isEmpty(itemList)) {
+        if (CollectionUtils.isEmpty(itemList)) {
             return;
         }
 
@@ -144,12 +146,12 @@ public class FileHelper {
     }
 
     public static boolean checkFileExt(MultipartFile file, String[] specifiedExtArr) {
-        if (EmptyUtil.isEmpty(specifiedExtArr)) {
+        if (ArrayUtils.isEmpty(specifiedExtArr)) {
             return true;
         }
 
         String fileExt = FileUtil.getFileExt(file.getOriginalFilename());
-        if (!StrUtil.isEmpty(fileExt)) {
+        if (StringUtils.isNotEmpty(fileExt)) {
             for (String ext : specifiedExtArr) {
                 if (ext.equalsIgnoreCase(fileExt)) {
                     return true;

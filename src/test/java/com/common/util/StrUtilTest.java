@@ -8,23 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.HashMap;
 import java.util.Map;
 
-@SpringBootTest(classes = StarterApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(classes = StarterApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class StrUtilTest {
-    @Test
-    public void testIsEmpty() {
-        Map<String, Boolean> mapIO = new HashMap<String, Boolean>() {{
-            put(null, true);
-            put("", true);
-            put(" ", true);
-            put("t", false);
-        }};
-
-        for (Map.Entry<String, Boolean> io : mapIO.entrySet()) {
-            boolean ret = StrUtil.isEmpty(io.getKey());
-            Assertions.assertEquals(io.getValue(), ret);
-        }
-    }
-
     @Test
     public void testParse() {
         Map<String, Integer> mapIO = new HashMap<String, Integer>() {{

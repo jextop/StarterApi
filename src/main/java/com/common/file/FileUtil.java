@@ -2,6 +2,7 @@ package com.common.file;
 
 import com.common.util.StrUtil;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -16,7 +17,7 @@ import java.util.List;
 
 public class FileUtil {
     public static boolean mkdirs(String filePath) {
-        if (StrUtil.isEmpty(filePath)) {
+        if (StringUtils.isEmpty(filePath)) {
             return false;
         }
 
@@ -38,7 +39,7 @@ public class FileUtil {
     }
 
     public static boolean write(String filePath, String[] lines) {
-        if (StrUtil.isEmpty(filePath)) {
+        if (StringUtils.isEmpty(filePath)) {
             return false;
         }
 
@@ -61,7 +62,7 @@ public class FileUtil {
     }
 
     public static boolean write(String filePath, byte[] data) {
-        if (StrUtil.isEmpty(filePath) || data == null || data.length <= 0) {
+        if (StringUtils.isEmpty(filePath) || data == null || data.length <= 0) {
             return false;
         }
 
@@ -104,7 +105,7 @@ public class FileUtil {
     }
 
     public static String[] read(String filePath) {
-        if (StrUtil.isEmpty(filePath)) {
+        if (StringUtils.isEmpty(filePath)) {
             return null;
         }
 
@@ -142,29 +143,29 @@ public class FileUtil {
     }
 
     public static String appendFileExt(String fileName, String fileExt) {
-        if (StrUtil.isEmpty(fileName)) {
+        if (StringUtils.isEmpty(fileName)) {
             return null;
         }
         fileName = fileName.trim();
-        if (!StrUtil.isEmpty(fileExt) && !fileName.toLowerCase().endsWith(fileExt.toLowerCase())) {
+        if (StringUtils.isNotEmpty(fileExt) && !fileName.toLowerCase().endsWith(fileExt.toLowerCase())) {
             fileName = String.format("%s%s", fileName, fileExt);
         }
         return fileName;
     }
 
     public static String removeFileExt(String fileName, String fileExt) {
-        if (StrUtil.isEmpty(fileName)) {
+        if (StringUtils.isEmpty(fileName)) {
             return null;
         }
         fileName = fileName.trim();
-        if (!StrUtil.isEmpty(fileExt) && fileName.endsWith(fileExt.toLowerCase())) {
+        if (StringUtils.isNotEmpty(fileExt) && fileName.endsWith(fileExt.toLowerCase())) {
             fileName = fileName.substring(0, fileName.length() - fileExt.length());
         }
         return fileName;
     }
 
     public static String removeFileExt(String fileName) {
-        if (StrUtil.isEmpty(fileName)) {
+        if (StringUtils.isEmpty(fileName)) {
             return null;
         }
 
@@ -176,7 +177,7 @@ public class FileUtil {
     }
 
     public static String getFileExt(String fileName) {
-        if (StrUtil.isEmpty(fileName)) {
+        if (StringUtils.isEmpty(fileName)) {
             return null;
         }
 
@@ -192,14 +193,14 @@ public class FileUtil {
     }
 
     public static String getFileName(String filePath, String basePath) {
-        if (StrUtil.isEmpty(filePath)) {
+        if (StringUtils.isEmpty(filePath)) {
             return null;
         }
 
         // Append the file name directly
         File src = new File(filePath);
         String fileName = src.getName();
-        if (!StrUtil.isEmpty(basePath)) {
+        if (StringUtils.isNotEmpty(basePath)) {
             File baseFile = new File(basePath);
             if (baseFile.isFile()) {
                 basePath = baseFile.getParent();
@@ -240,7 +241,7 @@ public class FileUtil {
     }
 
     public static File[] findFiles(String filePath, final String fileNamePrefix, final String fileExt, final String ignoreFileNamePostfix, final boolean recursive) {
-        if (StrUtil.isEmpty(filePath)) {
+        if (StringUtils.isEmpty(filePath)) {
             return null;
         }
 
@@ -251,7 +252,7 @@ public class FileUtil {
 
         // File or directory, while not iterate sub folders
         File[] files = null;
-        if (file.isFile() && (StrUtil.isEmpty(fileExt) || filePath.toLowerCase().endsWith(fileExt.toLowerCase()))) {
+        if (file.isFile() && (StringUtils.isEmpty(fileExt) || filePath.toLowerCase().endsWith(fileExt.toLowerCase()))) {
             files = new File[]{file};
         } else if (file.isDirectory()) {
             files = file.listFiles(new FileFilter() {
@@ -260,17 +261,17 @@ public class FileUtil {
                         return recursive;
                     } else if (pathname.isFile()) {
                         String name = pathname.getName();
-                        if (StrUtil.isEmpty(name)) {
+                        if (StringUtils.isEmpty(name)) {
                             return false;
                         }
 
                         String str = name.toLowerCase();
-                        if (!StrUtil.isEmpty(fileNamePrefix) && !str.startsWith(fileNamePrefix.toLowerCase())
-                                || !StrUtil.isEmpty(fileExt) && !str.endsWith(fileExt.toLowerCase())
+                        if (StringUtils.isNotEmpty(fileNamePrefix) && !str.startsWith(fileNamePrefix.toLowerCase())
+                                || StringUtils.isNotEmpty(fileExt) && !str.endsWith(fileExt.toLowerCase())
                                 ) {
                             return false;
                         }
-                        return StrUtil.isEmpty(ignoreFileNamePostfix) || !str.endsWith(ignoreFileNamePostfix.toLowerCase());
+                        return StringUtils.isEmpty(ignoreFileNamePostfix) || !str.endsWith(ignoreFileNamePostfix.toLowerCase());
                     }
                     return false;
                 }
@@ -307,7 +308,7 @@ public class FileUtil {
     }
 
     public static File[] findSubFolders(String filePath, boolean recursive) {
-        if (StrUtil.isEmpty(filePath)) {
+        if (StringUtils.isEmpty(filePath)) {
             return null;
         }
 

@@ -3,6 +3,9 @@ package com.common.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @author ding
+ */
 public class LogUtil {
     private static final Logger log = LoggerFactory.getLogger(LogUtil.class);
 

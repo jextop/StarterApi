@@ -1,6 +1,7 @@
 package com.common.file;
 
 import com.common.util.StrUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,14 +13,14 @@ public class FileReader {
     private Boolean showInfo = true;
 
     public FileReader(String filePath) {
-        if (StrUtil.isEmpty(filePath)) {
+        if (StringUtils.isEmpty(filePath)) {
             filePath = "fr";
         }
         this.filePath = filePath;
     }
 
     public FileReader(String filePath, boolean showInfo) {
-        if (StrUtil.isEmpty(filePath)) {
+        if (StringUtils.isEmpty(filePath)) {
             filePath = "fr";
         }
         this.filePath = filePath;

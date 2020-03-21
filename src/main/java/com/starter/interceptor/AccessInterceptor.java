@@ -4,7 +4,7 @@ import com.common.util.LogUtil;
 import com.common.http.ReqUtil;
 import com.starter.annotation.AccessLimited;
 import com.starter.exception.AccessLimitException;
-import com.starter.service.RedisService;
+import com.starter.cache.CacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.RedisConnectionFailureException;
 import org.springframework.stereotype.Component;
@@ -16,10 +16,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 
+/**
+ * @author ding
+ */
 @Component
 public class AccessInterceptor implements HandlerInterceptor {
+    private CacheService cacheService;
+
     @Autowired
-    private RedisService redisService;
+    public AccessInterceptor(CacheService cacheService) {
+        this.cacheService = cacheService;
+    }
 
     @Override
     public boolean preHandle(
@@ -29,9 +36,9 @@ public class AccessInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        final HandlerMethod handlerMethod = (HandlerMethod) handler;
-        final Method method = handlerMethod.getMethod();
-        final AccessLimited accessLimited = method.getAnnotation(AccessLimited.class);
+        HandlerMethod handlerMethod = (HandlerMethod) handler;
+        Method method = handlerMethod.getMethod();
+        AccessLimited accessLimited = method.getAnnotation(AccessLimited.class);
         if (accessLimited == null) {
             return true;
         }
@@ -43,10 +50,10 @@ public class AccessInterceptor implements HandlerInterceptor {
                 request.getRequestURI()
         );
         try {
-            long count = redisService.incr(key);
+            long count = cacheService.incr(key);
             if (count <= accessLimited.count()) {
                 if (count == 1) {
-                    redisService.expire(key, accessLimited.seconds());
+                    cacheService.expire(key, accessLimited.seconds());
                 }
                 return true;
             }

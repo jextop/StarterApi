@@ -6,15 +6,19 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest(classes = StarterApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+/**
+ * @author ding
+ * @date 3/21/2020
+ */
+@SpringBootTest(classes = StarterApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class JsonUtilTest {
     @Test
-    public void testJsonUtil() {
+    public void testParseObj() {
         String str = "{\"ext\":\".groovy\",\"patterns\":[\"\\\\w*[Tt].groovy\",\"[Tt]\\\\w*.groovy\"]}";
         JSONObject obj = JsonUtil.parseObj(str);
+        Assertions.assertNotNull(obj);
 
         String ret = JsonUtil.toStr(obj);
-        LogUtil.info(ret, str);
         Assertions.assertTrue(str.equals(ret));
     }
 }

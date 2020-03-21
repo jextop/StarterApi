@@ -6,6 +6,8 @@ import com.common.http.RespJsonObj;
 import com.common.http.UrlUtil;
 import com.common.util.LogUtil;
 import com.common.util.StrUtil;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.HashMap;
 import java.util.Map;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class HttpServiceTest {
     @Autowired
     HttpService httpService;
@@ -24,7 +26,7 @@ public class HttpServiceTest {
         String html = httpService.sendHttpGet("https://blog.51cto.com/13851865");
         String[] ret = StrUtil.parse(html, "<span>[1-9]\\d*</span>");
         LogUtil.info(ret);
-        Assertions.assertNotNull(ret);
+        Assertions.assertTrue(ArrayUtils.isNotEmpty(ret) || StringUtils.isNotEmpty(html));
     }
 
     @Test

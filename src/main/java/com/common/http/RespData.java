@@ -2,6 +2,7 @@ package com.common.http;
 
 import com.common.util.LogUtil;
 import com.common.util.StrUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -40,14 +41,14 @@ public class RespData implements ResponseHandler<byte[]> {
     }
 
     public int getContentLength() {
-        return StrUtil.isEmpty(contentLength) ? 0 : Integer.valueOf(contentLength);
+        return StringUtils.isEmpty(contentLength) ? 0 : Integer.valueOf(contentLength);
     }
 
     public String saveFile(String filePath) {
-        if (StrUtil.isEmpty(filePath)) {
+        if (StringUtils.isEmpty(filePath)) {
             filePath = fileName;
         }
-        if (StrUtil.isEmpty(filePath) || bytes == null || bytes.length <= 0) {
+        if (StringUtils.isEmpty(filePath) || bytes == null || bytes.length <= 0) {
             return null;
         }
 
@@ -101,13 +102,13 @@ public class RespData implements ResponseHandler<byte[]> {
 
         // 读取文件名称，Header: Content-Disposition: attachment;fileName=abc.txt
         String disposition = getHeader(response, "Content-Disposition");
-        if (!StrUtil.isEmpty(disposition) && disposition.contains("=")) {
+        if (StringUtils.isNotEmpty(disposition) && disposition.contains("=")) {
             fileName = disposition.split("=")[1];
         }
 
         // 读取ContentType: audio/mp3
         contentType = getHeader(response, "Content-Type");
-        if (!StrUtil.isEmpty(contentType) && contentType.contains("/")) {
+        if (StringUtils.isNotEmpty(contentType) && contentType.contains("/")) {
             fileExt = contentType.split("/")[1];
         }
 

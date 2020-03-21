@@ -1,5 +1,7 @@
 package com.common.util;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -29,7 +31,7 @@ public class DateUtil {
     }
 
     public static String format(Date date, String format, Locale locale) {
-        if (date == null || StrUtil.isEmpty(format)) {
+        if (date == null || StringUtils.isEmpty(format)) {
             return "";
         }
 
@@ -47,7 +49,7 @@ public class DateUtil {
     }
 
     public static Date parse(String value, String[] formatArray, boolean showError) {
-        if (!StrUtil.isEmpty(value) && formatArray != null && formatArray.length > 0) {
+        if (StringUtils.isNotEmpty(value) && formatArray != null && formatArray.length > 0) {
             for (String format : formatArray) {
                 Date date = parse(value, format, showError);
                 if (date != null) {
@@ -71,7 +73,7 @@ public class DateUtil {
     }
 
     public static Date parse(String str, String format, boolean showError) {
-        if (StrUtil.isEmpty(str) || StrUtil.isEmpty(str.trim()) || StrUtil.isEmpty(format)) {
+        if (StringUtils.isEmpty(str) || StringUtils.isEmpty(format)) {
             return null;
         }
 
@@ -138,7 +140,7 @@ public class DateUtil {
     }
 
     public static Date getMonthStart(String dateStr) {
-        return StrUtil.isEmpty(dateStr) ? null : getMonthStart(parse(dateStr, "yyyy-MM-dd"));
+        return StringUtils.isEmpty(dateStr) ? null : getMonthStart(parse(dateStr, "yyyy-MM-dd"));
     }
 
     public static Date getMonthStart(Date date) {
@@ -153,7 +155,7 @@ public class DateUtil {
     }
 
     public static Date getMonthEnd(String dateStr) {
-        return StrUtil.isEmpty(dateStr) ? null : getMonthEnd(parse(dateStr, "yyyy-MM-dd"));
+        return StringUtils.isEmpty(dateStr) ? null : getMonthEnd(parse(dateStr, "yyyy-MM-dd"));
     }
 
     public static Date getMonthEnd(Date date) {

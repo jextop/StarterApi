@@ -3,9 +3,10 @@ package com.common.http;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
+/**
+ * @author ding
+ */
 public class ReqUtil {
     private static final String UNKNOWN = "unknown";
 

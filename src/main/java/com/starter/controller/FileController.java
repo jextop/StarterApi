@@ -7,7 +7,6 @@ import com.common.http.ParamUtil;
 import com.common.http.RespEnum;
 import com.common.http.RespUtil;
 import com.common.util.CodeUtil;
-import com.common.util.EmptyUtil;
 import com.common.util.LogUtil;
 import com.common.util.StrUtil;
 import com.starter.annotation.AccessLimited;
@@ -20,6 +19,7 @@ import com.starter.file.QiniuService;
 import com.starter.service.impl.FileServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,7 +70,7 @@ public class FileController {
             return doUpload(FileTypeEnum.File, file, null);
         }
 
-        if (!EmptyUtil.isEmpty(files)) {
+        if (ArrayUtils.isNotEmpty(files)) {
             LogUtil.info("/file/upload", files.length);
             return doUpload(FileTypeEnum.File, files, null);
         }
@@ -232,7 +232,7 @@ public class FileController {
                 .orderByDesc("id");
 
         // Set file type
-        if (!EmptyUtil.isEmpty(typeArr)) {
+        if (ArrayUtils.isNotEmpty(typeArr)) {
             List<Integer> typeList = new ArrayList<>();
             for (FileTypeEnum type : typeArr) {
                 typeList.add(type.getId());

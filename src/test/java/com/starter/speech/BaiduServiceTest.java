@@ -16,7 +16,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import java.io.File;
 import java.util.Map;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BaiduServiceTest {
     @Autowired
     BaiduService baiduService;

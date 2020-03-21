@@ -1,12 +1,12 @@
 package com.starter.jext;
 
-import com.common.util.EmptyUtil;
 import com.common.util.JsonUtil;
 import com.common.util.LogUtil;
 import com.common.util.StrUtil;
 import com.starter.http.HttpService;
-import com.starter.service.RedisService;
+import com.starter.cache.CacheService;
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,13 +20,13 @@ public class JextService {
     public static final String INFO_KEY = "jext.info";
 
     @Autowired
-    RedisService redisService;
+    CacheService cacheService;
 
     @Autowired
     HttpService httpService;
 
     public Map<String, Object> getInfo(boolean forceUpdateCache) {
-        Map<String, Object> infoMap = forceUpdateCache ? null : JsonUtil.parseObj(redisService.getStr(INFO_KEY));
+        Map<String, Object> infoMap = forceUpdateCache ? null : JsonUtil.parseObj(cacheService.getStr(INFO_KEY));
         if (!MapUtils.isEmpty(infoMap)) {
             return infoMap;
         }
@@ -85,7 +85,7 @@ public class JextService {
         }};
 
         // Set cache
-        redisService.setStr1Hour(INFO_KEY, JsonUtil.toStr(infoMap));
+        cacheService.setStr1Hour(INFO_KEY, JsonUtil.toStr(infoMap));
         return infoMap;
     }
 
@@ -95,7 +95,7 @@ public class JextService {
 
     private Object[] parseNum(String[] strArr, String regex) {
         String[] numArr = StrUtil.parse(StrUtil.join(strArr, ", "), regex);
-        if (EmptyUtil.isEmpty(numArr)) {
+        if (ArrayUtils.isEmpty(numArr)) {
             return null;
         }
 

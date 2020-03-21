@@ -1,4 +1,4 @@
-package com.starter.service;
+package com.starter.cache;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
@@ -16,8 +16,11 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author ding
+ */
 @Service
-public class RedisService {
+public class CacheService {
     @Autowired
     StringRedisTemplate stringRedisTemplate;
 
@@ -26,15 +29,15 @@ public class RedisService {
     ValueOperations<String, String> strOps;
 
     @Autowired
-    RedisTemplate<Object, Object> redisTemplate;
+    RedisTemplate<String, Object> redisTemplate;
 
     @SuppressWarnings("all")
     @Resource(name = "redisTemplate")
-    ValueOperations<Object, Object> valueOps;
+    ValueOperations<String, Object> valueOps;
 
     @SuppressWarnings("all")
     @Resource(name = "redisTemplate")
-    ListOperations<Object, Object> listOps;
+    ListOperations<String, Object> listOps;
 
     @SuppressWarnings("all")
     @Resource(name = "redisTemplate")
@@ -42,7 +45,7 @@ public class RedisService {
 
     @SuppressWarnings("all")
     @Resource(name = "redisTemplate")
-    SetOperations<Object, Object> setOps;
+    SetOperations<String, Object> setOps;
 
     public long incr(String key) {
         Long ret = strOps.increment(key, 1L);
@@ -55,12 +58,14 @@ public class RedisService {
     }
 
     public long getExpire(String key) {
-        Long ret = redisTemplate.getExpire(key, TimeUnit.SECONDS);
+        Long ret = stringRedisTemplate.getExpire(key, TimeUnit.SECONDS);
         return ret == null ? 0 : ret;
     }
 
-    public void del(Object key) {
-        redisTemplate.delete(key);
+    public void del(String key) {
+        if (redisTemplate.hasKey(key)) {
+            redisTemplate.delete(key);
+        }
     }
 
     /**
@@ -113,35 +118,35 @@ public class RedisService {
         return valueOps.get(key);
     }
 
-    public void set(Object key, Object v) {
+    public void set(String key, Object v) {
         valueOps.set(key, v);
     }
 
-    public void set(Object key, Object v, long seconds) {
+    public void set(String key, Object v, long seconds) {
         valueOps.set(key, v, seconds, TimeUnit.SECONDS);
     }
 
-    public void set1Minute(Object key, Object v) {
+    public void set1Minute(String key, Object v) {
         set(key, v, 60);
     }
 
-    public void set5Minutes(Object key, Object v) {
+    public void set5Minutes(String key, Object v) {
         set(key, v, 60 * 5);
     }
 
-    public void set1Hour(Object key, Object v) {
+    public void set1Hour(String key, Object v) {
         set(key, v, 3600);
     }
 
-    public void set1Day(Object key, Object v) {
+    public void set1Day(String key, Object v) {
         set(key, v, 3600 * 24);
     }
 
-    public void set1Week(Object key, Object v) {
+    public void set1Week(String key, Object v) {
         set(key, v, 3600 * 24 * 7);
     }
 
-    public void set1Month(Object key, Object v) {
+    public void set1Month(String key, Object v) {
         set(key, v, 3600 * 24 * 30);
     }
 
@@ -190,8 +195,15 @@ public class RedisService {
     /**
      * HashMap operation
      */
+    public long hSize(String key) {
+        Long size = hashOps.size(key);
+        return size == null ? 0 : size;
+    }
+
     public void hDelKey(String key, String item) {
-        hashOps.delete(key, item);
+        if (hHasKey(key, item)) {
+            hashOps.delete(key, item);
+        }
     }
 
     public boolean hHasKey(String key, String item) {

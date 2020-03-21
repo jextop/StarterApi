@@ -4,6 +4,9 @@ import com.common.util.MapUtil;
 
 import java.util.Map;
 
+/**
+ * @author ding
+ */
 public class RespUtil {
     public static boolean isSuccess(Map<String, Object> resp) {
         int code = MapUtil.getInt(resp, "code");

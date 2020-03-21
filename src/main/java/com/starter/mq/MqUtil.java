@@ -1,31 +1,27 @@
 package com.starter.mq;
 
-import com.common.util.JsonUtil;
-import com.common.util.LogUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.TextMessage;
-import java.util.Map;
 
+/**
+ * @author ding
+ */
 public class MqUtil {
-    public static String formatMsg(Map<String, Object> msgMap) {
-        // 指定使用字符串格式。Python使用STOMP协议，简单文本格式。
-        return JsonUtil.toStr(msgMap);
+    public static String formatMsg(Object msg) {
+        // Specify to use test message
+        return JSON.toJSONString(msg);
     }
 
-    public static Map<String, Object> parseMsg(Message msg) {
-        // 解析字符消息。Python使用STOMP协议，简单文本格式。
+    public static JSONObject parseMsg(Message msg) throws JMSException {
+        // Parse text message to Object
         if (msg instanceof TextMessage) {
-            try {
-                String msgStr = ((TextMessage) msg).getText();
-                return JsonUtil.parseObj(msgStr);
-            } catch (JMSException e) {
-                LogUtil.error(e.getMessage());
-            }
+            String msgStr = ((TextMessage) msg).getText();
+            return JSON.parseObject(msgStr);
         }
-
-        LogUtil.info("Receive msg", msg.getClass().getSimpleName());
         return null;
     }
 }

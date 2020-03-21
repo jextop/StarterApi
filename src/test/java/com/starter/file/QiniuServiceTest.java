@@ -1,9 +1,10 @@
 package com.starter.file;
 
 import com.common.file.FileUtil;
-import com.common.util.EmptyUtil;
 import com.common.util.LogUtil;
 import com.common.util.StrUtil;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ConditionalOnBean(QiniuService.class)
 public class QiniuServiceTest {
     @Autowired(required = false)
@@ -46,27 +47,27 @@ public class QiniuServiceTest {
             File f = io.getKey();
             String ret = qiniuService.uploadFile(f == null ? null : f.getPath(), null);
             LogUtil.info("uploadFile", ret);
-            Assertions.assertEquals(io.getValue(), !StrUtil.isEmpty(ret));
+            Assertions.assertEquals(io.getValue(), StringUtils.isNotEmpty(ret));
 
             // file path
             ret = qiniuService.upload(f == null ? null : f.getPath(), null);
             LogUtil.info("upload file path", ret);
-            Assertions.assertEquals(io.getValue(), !StrUtil.isEmpty(ret));
+            Assertions.assertEquals(io.getValue(), StringUtils.isNotEmpty(ret));
 
             // file
             ret = qiniuService.upload(f, null);
             LogUtil.info("upload file", ret);
-            Assertions.assertEquals(io.getValue(), !StrUtil.isEmpty(ret));
+            Assertions.assertEquals(io.getValue(), StringUtils.isNotEmpty(ret));
 
             // file stream
             ret = qiniuService.upload(f == null ? null : new FileInputStream(f), null);
             LogUtil.info("upload file stream", ret);
-            Assertions.assertEquals(io.getValue(), !StrUtil.isEmpty(ret));
+            Assertions.assertEquals(io.getValue(), StringUtils.isNotEmpty(ret));
 
             // file data
             ret = qiniuService.upload(f == null ? null : Files.readAllBytes(Paths.get(file.getPath())), null);
             LogUtil.info("upload file data", ret);
-            Assertions.assertEquals(io.getValue(), !StrUtil.isEmpty(ret));
+            Assertions.assertEquals(io.getValue(), StringUtils.isNotEmpty(ret));
         }
 
         testList();
@@ -75,6 +76,6 @@ public class QiniuServiceTest {
     public void testList() {
         Collection ret = qiniuService.list();
         LogUtil.info(ret.size());
-        Assertions.assertFalse(EmptyUtil.isEmpty(ret));
+        Assertions.assertTrue(CollectionUtils.isNotEmpty(ret));
     }
 }

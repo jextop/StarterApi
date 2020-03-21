@@ -1,6 +1,7 @@
 package com.common.util;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -10,18 +11,10 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @author ding
+ */
 public class StrUtil {
-    /**
-     * String is null or empty
-     */
-    public static boolean isEmpty(String str) {
-        return isEmpty(str, true);
-    }
-
-    public static boolean isEmpty(String str, boolean trim) {
-        return str == null || str.isEmpty() || (trim && str.trim().isEmpty());
-    }
-
     public static boolean chkLen(String str, int minLen, int maxLen) {
         return str != null
                 && str.length() >= Math.max(minLen, 0)
@@ -33,7 +26,7 @@ public class StrUtil {
     }
 
     public static String mask(String str, int minLen, int maxLen) {
-        if (isEmpty(str)) {
+        if (StringUtils.isEmpty(str)) {
             return "";
         }
 
@@ -73,7 +66,7 @@ public class StrUtil {
     }
 
     public static boolean matches(String str, String pattern) {
-        if (isEmpty(str) || isEmpty(pattern)) {
+        if (StringUtils.isEmpty(str) || StringUtils.isEmpty(pattern)) {
             return false;
         }
         Pattern p = Pattern.compile(pattern);
@@ -82,7 +75,7 @@ public class StrUtil {
     }
 
     public static String[] parse(String str, String pattern) {
-        if (isEmpty(str) || isEmpty(pattern)) {
+        if (StringUtils.isEmpty(str) || StringUtils.isEmpty(pattern)) {
             return null;
         }
 
@@ -106,7 +99,7 @@ public class StrUtil {
     }
 
     public static boolean contains(String str, String subStr, String separator) {
-        if (isEmpty(str) || isEmpty(subStr)) {
+        if (StringUtils.isEmpty(str) || StringUtils.isEmpty(subStr)) {
             return false;
         }
 
@@ -132,7 +125,7 @@ public class StrUtil {
     }
 
     public static String[] split(String str, String separator) {
-        if (isEmpty(str) || isEmpty(separator)) {
+        if (StringUtils.isEmpty(str) || StringUtils.isEmpty(separator)) {
             return null;
         }
         return str.split(separator);
@@ -148,9 +141,9 @@ public class StrUtil {
         }
 
         List<String> strList = new ArrayList<String>();
-        for (Object obj : objList) {
+        objList.forEach(obj -> {
             strList.add(obj == null ? "" : obj.toString());
-        }
+        });
         return join(strList, separator);
     }
 
@@ -164,10 +157,10 @@ public class StrUtil {
         }
 
         StringBuilder sb = new StringBuilder();
-        for (String str : strList) {
+        strList.forEach(str -> {
             sb.append(separator);
             sb.append(str);
-        }
+        });
         return sb.substring(separator.length());
     }
 
@@ -178,6 +171,7 @@ public class StrUtil {
         if (str == null) {
             return null;
         }
+
         try {
             return str.getBytes("UTF-8");
         } catch (UnsupportedEncodingException e) {
@@ -187,6 +181,6 @@ public class StrUtil {
     }
 
     public static String trimChinese(String str) {
-        return isEmpty(str) ? "" : str.replaceAll("[\u4e00-\u9fa5]+", "");
+        return StringUtils.isEmpty(str) ? "" : str.replaceAll("[\u4e00-\u9fa5]+", "");
     }
 }

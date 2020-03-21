@@ -6,13 +6,13 @@ import com.common.enc.Md5Util;
 import com.common.http.RespData;
 import com.common.http.RespJsonObj;
 import com.common.http.UrlUtil;
-import com.common.util.EmptyUtil;
 import com.common.util.LogUtil;
-import com.common.util.StrUtil;
 import com.starter.file.FileHelper;
 import com.starter.file.FileTypeEnum;
 import com.starter.http.HttpService;
-import com.starter.service.RedisService;
+import com.starter.cache.CacheService;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +36,7 @@ public class BaiduService {
     BaiduConfig baiduConfig;
 
     @Autowired
-    RedisService redisService;
+    CacheService cacheService;
 
     @Autowired
     FileHelper fileHelper;
@@ -45,9 +45,9 @@ public class BaiduService {
     private Date expireDate;
 
     public String token() {
-        if (StrUtil.isEmpty(token) || new Date().after(expireDate)) {
+        if (StringUtils.isEmpty(token) || new Date().after(expireDate)) {
             synchronized (BaiduService.class) {
-                if (StrUtil.isEmpty(token) || new Date().after(expireDate)) {
+                if (StringUtils.isEmpty(token) || new Date().after(expireDate)) {
                     Map<String, String> headers = new HashMap<String, String>() {{
                         put("Content-Type", "application/x-www-form-urlencoded");
                     }};
@@ -107,7 +107,7 @@ public class BaiduService {
         Map<String, Object> params = new HashMap<String, Object>() {{
             put("tex", UrlUtil.encode(text)); // 合成文本，UTF-8编码，2048个中文字或者英文数字
             put("tok", token()); // 调用鉴权认证接口获取到的access_token
-            put("cuid", StrUtil.isEmpty(uid) ? "starter_api" : uid); // 用户唯一标识，长度为60字符，常用MAC地址或IMEI码
+            put("cuid", StringUtils.isEmpty(uid) ? "starter_api" : uid); // 用户唯一标识，长度为60字符，常用MAC地址或IMEI码
             put("ctp", "1"); // 客户端类型选择，web端填写固定值1
             put("lan", "zh"); // 语言选择,目前只有中英文混合模式，固定值zh
             put("spd", "6"); // 语速，取值0-15，默认为5中语速
@@ -126,8 +126,8 @@ public class BaiduService {
         // Get md5 and check duplicated files
         String md5Str = Md5Util.md5(b64Data);
         String cacheKey = String.format("speech_asr_%s", md5Str);
-        JSONArray cacheValue = (JSONArray) redisService.get(cacheKey);
-        if (!EmptyUtil.isEmpty(cacheValue)) {
+        JSONArray cacheValue = (JSONArray) cacheService.get(cacheKey);
+        if (CollectionUtils.isNotEmpty(cacheValue)) {
             return cacheValue;
         }
 
@@ -140,7 +140,7 @@ public class BaiduService {
             put("rate", 16000); // 音频采样频率，固定值16000
             put("dev_pid", 1537); // 语音模型，默认1537普通话，1737英语
             put("channel", 1); // 声道数量，仅支持单声道1
-            put("cuid", StrUtil.isEmpty(uid) ? "starter_api" : uid); // 用户唯一标识，长度为60字符，常用MAC地址或IMEI码
+            put("cuid", StringUtils.isEmpty(uid) ? "starter_api" : uid); // 用户唯一标识，长度为60字符，常用MAC地址或IMEI码
             put("token", token()); // 调用鉴权认证接口获取到的access_token
             put("len", len); // 音频长度，base64前
             put("speech", b64Data); // 音频数据，base64（FILE_CONTENT）
@@ -148,7 +148,7 @@ public class BaiduService {
 
         JSONObject ret = httpService.sendHttpPost(ASR_URL, headers, params, new RespJsonObj());
         cacheValue = ret.getJSONArray("result");
-        redisService.set1Month(cacheKey, cacheValue);
+        cacheService.set1Month(cacheKey, cacheValue);
         return cacheValue;
     }
 }

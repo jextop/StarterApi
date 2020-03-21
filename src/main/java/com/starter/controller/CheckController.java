@@ -2,7 +2,6 @@ package com.starter.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.common.enc.B64Util;
-import com.common.enc.Md5Util;
 import com.common.http.RespData;
 import com.common.util.CodeUtil;
 import com.common.util.DateUtil;
@@ -13,7 +12,6 @@ import com.starter.annotation.AccessLimited;
 import com.starter.entity.Log;
 import com.starter.entity.User;
 import com.starter.file.FileHelper;
-import com.starter.file.FileTypeEnum;
 import com.starter.file.LocationEnum;
 import com.starter.file.QiniuConfig;
 import com.starter.file.QiniuService;
@@ -22,16 +20,18 @@ import com.starter.http.LocationService;
 import com.starter.jext.JextService;
 import com.starter.job.QuartzJob;
 import com.starter.mq.MqService;
-import com.starter.service.RedisService;
+import com.starter.cache.CacheService;
 import com.starter.service.impl.LogServiceImpl;
 import com.starter.speech.BaiduService;
 import com.starter.speech.TulingService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang3.StringUtils;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
+import org.quartz.SimpleScheduleBuilder;
 import org.quartz.SimpleTrigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
@@ -55,7 +55,7 @@ public class CheckController {
     LogServiceImpl logService;
 
     @Autowired
-    RedisService redisService;
+    CacheService cacheService;
 
     @Autowired
     MqService mqService;
@@ -147,14 +147,14 @@ public class CheckController {
         String key = String.format("cache_test_%s_%s_缓存_%s", ip, CodeUtil.getCode(), text);
 
         // Set cache
-        redisService.setStr(key, key, 3);
+        cacheService.setStr(key, key, 3);
 
         // Get cache
-        String str = redisService.getStr(key);
+        String str = cacheService.getStr(key);
         LogUtil.info("Check cache to set str", key, str);
 
         // Delete key
-        redisService.delStr(key);
+        cacheService.delStr(key);
 
         return new HashMap<String, Object>() {{
             put("chk", "cache");
@@ -179,7 +179,7 @@ public class CheckController {
             put("date", DateUtil.format(new Date()));
         }};
 
-        if (!StrUtil.isEmpty(topic)) {
+        if (StringUtils.isNotEmpty(topic)) {
             mqService.sendTopic(mqMsg);
         } else {
             mqService.sendQueue(mqMsg);
@@ -213,6 +213,7 @@ public class CheckController {
         SimpleTrigger trigger = (SimpleTrigger) TriggerBuilder.newTrigger()
                 .forJob(job)
                 .startAt(new Date())
+                .withSchedule(SimpleScheduleBuilder.simpleSchedule().withMisfireHandlingInstructionFireNow())
                 .build();
 
         Date date = null;
@@ -223,7 +224,7 @@ public class CheckController {
             date = scheduler.scheduleJob(job, trigger);
             scheduler.startDelayed(1);
         } catch (SchedulerException e) {
-            e.printStackTrace();
+            LogUtil.error(e.getMessage());
         }
 
         final Date jobDate = date;
@@ -254,7 +255,7 @@ public class CheckController {
         if (qiniuService == null) {
             msg = "not configured";
         } else {
-            String key = qiniuService.upload((StrUtil.isEmpty(text) ? "chk/file/qiniu" : text).getBytes(), null);
+            String key = qiniuService.upload((StringUtils.isEmpty(text) ? "chk/file/qiniu" : text).getBytes(), null);
             msg = key == null ? "fail to upload" : String.format("%s%s", qiniuConfig.getUrl(), key);
         }
 
@@ -279,7 +280,7 @@ public class CheckController {
     @GetMapping("/speech/tts")
     public Object tts(@RequestParam(required = false) String text, @RequestParam(required = false) String uid) {
         // Call baidu tts
-        Map<String, Object> dataResp = baiduService.ttsCached(StrUtil.isEmpty(text) ? "检查AI语音合成" : text, uid);
+        Map<String, Object> dataResp = baiduService.ttsCached(StringUtils.isEmpty(text) ? "检查AI语音合成" : text, uid);
         String fileName = MapUtil.getStr(dataResp, "fileName");
 
         return new HashMap<String, Object>() {{
@@ -293,7 +294,7 @@ public class CheckController {
     @GetMapping("/speech/asr")
     public Object asr(@RequestParam(required = false) String text, @RequestParam(required = false) String uid) {
         Object ret;
-        Map<String, Object> ttsMap = baiduService.ttsCached(StrUtil.isEmpty(text) ? "检查AI语音识别" : text, uid);
+        Map<String, Object> ttsMap = baiduService.ttsCached(StringUtils.isEmpty(text) ? "检查AI语音识别" : text, uid);
         if (ttsMap.containsKey("data")) {
             RespData resp = (RespData) ttsMap.get("data");
 
@@ -323,7 +324,7 @@ public class CheckController {
     ) {
         return new HashMap<String, Object>() {{
             put("chk", "ai/chat");
-            put("msg", tulingService.chat(StrUtil.isEmpty(text) ? "天气" : text, ip, uid));
+            put("msg", tulingService.chat(StringUtils.isEmpty(text) ? "天气" : text, ip, uid));
         }};
     }
 }

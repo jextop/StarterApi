@@ -11,6 +11,9 @@ import javax.jms.Queue;
 import javax.jms.Topic;
 import java.util.Map;
 
+/**
+ * @author ding
+ */
 @Service
 public class MqService {
     @Autowired
@@ -23,16 +26,16 @@ public class MqService {
     private Topic topic;
 
     public void sendQueue(Map<String, Object> msgMap) {
-        sendMsg(queue, msgMap);
+        sendMessage(queue, msgMap);
     }
 
     public void sendTopic(Map<String, Object> msgMap) {
-        sendMsg(topic, msgMap);
+        sendMessage(topic, msgMap);
     }
 
-    public void sendMsg(Destination dest, Map<String, Object> msgMap) {
-        String msgStr = MqUtil.formatMsg(msgMap);
-        LogUtil.info(dest.getClass().getSimpleName(), "Send msg", msgStr);
+    public void sendMessage(Destination dest, Object msg) {
+        String msgStr = MqUtil.formatMsg(msg);
+        LogUtil.info(dest.getClass().getSimpleName(), "Send message", msgStr);
 
         try {
             jmsMessagingTemplate.convertAndSend(dest, msgStr);

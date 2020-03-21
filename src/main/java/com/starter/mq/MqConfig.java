@@ -8,11 +8,14 @@ import org.springframework.jms.config.JmsListenerContainerFactory;
 
 import javax.jms.ConnectionFactory;
 
+/**
+ * @author ding
+ */
 @EnableJms
 @Configuration
 public class MqConfig {
     /**
-     * 使用topic类型消息时，需要配置factory
+     * Config factory for topic message
      */
     @Bean
     public JmsListenerContainerFactory jmsTopicListenerContainerFactory(ConnectionFactory connectionFactory) {

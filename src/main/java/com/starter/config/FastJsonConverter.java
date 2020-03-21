@@ -7,8 +7,11 @@ import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @author ding
+ */
 @Configuration
-public class JsonConfig {
+public class FastJsonConverter {
     @Bean
     public HttpMessageConverters fastJsonHttpMessageConverters() {
         FastJsonConfig config = new FastJsonConfig();

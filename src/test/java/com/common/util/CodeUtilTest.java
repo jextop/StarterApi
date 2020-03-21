@@ -8,7 +8,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.HashSet;
 import java.util.Set;
 
-@SpringBootTest(classes = StarterApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+/**
+ * @author ding
+ */
+@SpringBootTest(classes = StarterApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CodeUtilTest {
     @Test
     public void testGetCode() {
@@ -17,17 +20,16 @@ public class CodeUtilTest {
         for (int i = 0; i < count; i++) {
             String code = CodeUtil.getCode();
             if (set.contains(code)) {
-                LogUtil.info("duplicated", code);
                 continue;
             }
             set.add(code);
-
-            if (i == count - 1) {
-                LogUtil.info("The last code", code);
-            }
         }
-
-        LogUtil.info("code count", count, "duplicated", count - set.size());
         Assertions.assertEquals(count, set.size());
+    }
+
+    @Test
+    public void testUtil() {
+        // To keep 100% unit-testing coverage
+        Assertions.assertNotNull(new CodeUtil());
     }
 }

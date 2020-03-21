@@ -19,10 +19,14 @@ import java.util.concurrent.ConcurrentHashMap;
 @ServerEndpoint("/ws/{uid}")
 @Component
 public class SocketServer {
-    private static ConcurrentHashMap<String, SocketServer> webSocketMap = new ConcurrentHashMap<>();
+    private static Map<String, SocketServer> webSocketMap;
 
     private Session session;
     private String uid;
+
+    static {
+        webSocketMap = new ConcurrentHashMap<>();
+    }
 
     public static void sendMessage(String uid, Map<String, Object> msg) {
         System.out.printf("Send message: %s, %s\n", uid, msg);
@@ -34,11 +38,7 @@ public class SocketServer {
     }
 
     public void sendMessage(Map<String, Object> msg) {
-        try {
-            session.getBasicRemote().sendText(JsonUtil.toStr(msg));
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
+        session.getAsyncRemote().sendText(JsonUtil.toStr(msg));
     }
 
     @OnMessage

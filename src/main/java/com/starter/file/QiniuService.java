@@ -1,6 +1,5 @@
 package com.starter.file;
 
-import com.common.util.EmptyUtil;
 import com.common.util.JsonUtil;
 import com.common.util.LogUtil;
 import com.common.util.StrUtil;
@@ -11,6 +10,8 @@ import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
 import com.qiniu.storage.model.FileInfo;
 import com.qiniu.util.Auth;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.stereotype.Service;
@@ -50,7 +51,7 @@ public class QiniuService {
         while (iterator.hasNext()) {
             //处理获取的file list结果
             FileInfo[] items = iterator.next();
-            if (!EmptyUtil.isEmpty(items)) {
+            if (ArrayUtils.isNotEmpty(items)) {
                 fileList.addAll(Arrays.asList(items));
             }
         }
@@ -91,7 +92,7 @@ public class QiniuService {
     }
 
     public String uploadFile(String filePath, String fileName) {
-        if (StrUtil.isEmpty(filePath) || !new File(filePath).exists()) {
+        if (StringUtils.isEmpty(filePath) || !new File(filePath).exists()) {
             return null;
         }
 

@@ -4,6 +4,21 @@ server:
     enabled: true
     mime-types: application/json
 
+kitchen:
+  shelves: [frozen, cold, hot]
+  capacities: [15, 15, 15]
+  overflow: 20
+
+  mock:
+    order:
+      auto: false
+      lambda: 3.25
+      cron: 0/1 * * * * ?
+    driver:
+      auto: false
+      min: 2
+      max: 10
+
 job:
   quartz:
     cron: 0 0/23 * * * ?
@@ -115,6 +130,7 @@ logging:
   level:
     com.common: info
     com.starter: info
+    org.quartz: warn
   file:
     path: logs
     max-size: 10MB
