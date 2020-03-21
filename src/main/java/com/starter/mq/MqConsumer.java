@@ -1,16 +1,31 @@
 package com.starter.mq;
 
 import com.common.util.LogUtil;
+import org.apache.activemq.command.ActiveMQQueue;
+import org.apache.activemq.command.ActiveMQTopic;
+import org.springframework.context.annotation.Bean;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
 import javax.jms.Message;
+import javax.jms.Queue;
+import javax.jms.Topic;
 import java.util.Map;
 
 @Component
 public class MqConsumer {
-    public static final String QUEUE = "starter.process";
-    public static final String TOPIC = "starter.status";
+    private static final String QUEUE = "starter.process";
+    private static final String TOPIC = "starter.status";
+
+    @Bean
+    public Queue queue() {
+        return new ActiveMQQueue(QUEUE);
+    }
+
+    @Bean
+    public Topic topic() {
+        return new ActiveMQTopic(TOPIC);
+    }
 
 //    @JmsListener(destination = QUEUE)
 //    public void listenQueue(Message msg) {

@@ -54,7 +54,7 @@ public class TrackController {
         LogUtil.info("/track/info");
 
         Map<String, Object> ret = RespUtil.ok();
-        ret.put("items", TrackConsumer.clientMap.values());
+        ret.put("items", TrackConsumer.CLIENT_MAP.values());
         return ret;
     }
 }
