@@ -141,7 +141,7 @@ public class KitchenServiceTest {
         verify(kitchenService, times(1)).scheduleJob();
 
         verify(driverSystem, times(1)).pickUpOrder(order);
-        verify(activeMqService, times(1)).sendMessage(null, order);
+        verify(activeMqService, times(1)).sendMessage(orderStatus, order);
 
         // Waste directly
         when(order.getPickupValue()).thenReturn(-1.0);
@@ -157,7 +157,7 @@ public class KitchenServiceTest {
         kitchenService.waste(order);
 
         verify(driverSystem, times(1)).cancelOrder(order);
-        verify(activeMqService, times(1)).sendMessage(null, order);
+        verify(activeMqService, times(1)).sendMessage(orderStatus, order);
     }
 
     @Test
