@@ -128,8 +128,7 @@ file:
 logging:
   config: classpath:logback.xml
   level:
-    com.common: info
-    com.starter: info
+    root: info
     org.quartz: warn
   file:
     path: logs
