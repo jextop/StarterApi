@@ -51,7 +51,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/chk")
 public class CheckController {
-    @Autowired
     LogServiceImpl logService;
 
     @Autowired
@@ -83,6 +82,11 @@ public class CheckController {
 
     @Autowired
     FileHelper fileHelper;
+
+    @Autowired
+    public CheckController(LogServiceImpl logService) {
+        this.logService = logService;
+    }
 
     @AccessLimited(count = 1)
     @ApiOperation("检查服务是否运行")
@@ -116,7 +120,7 @@ public class CheckController {
     @AccessLimited(count = 1)
     @ApiOperation("检查数据库")
     @GetMapping("/db")
-    public Object db(@RequestAttribute(required = false) String ip, @RequestParam(required = false) String text) {
+    public HashMap<String, Object> db(@RequestAttribute(required = false) String ip, @RequestParam(required = false) String text) {
         // Write a log to db
         Log log = new Log() {{
             setSummary(String.format("db_test_%s_%s_数据库_%s", ip, DateUtil.format(new Date()), text));
