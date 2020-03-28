@@ -17,9 +17,6 @@ public class DashboardUtil {
         infoList.forEach(infoMap -> {
             List<Order> orderList = (List<Order>) infoMap.get("items");
 
-            // Sort by normalized value
-            orderList.sort(Comparator.comparing(Order::getNormalizedValue));
-
             List<Map<String, Object>> itemList = new ArrayList<Map<String, Object>>();
             orderList.forEach(order -> {
                 itemList.add(new HashMap<String, Object>() {{

@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import javax.jms.Topic;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -289,6 +290,9 @@ public class KitchenService {
                 shelves.add(info);
             }
         });
+
+        // Sort by normalized value
+        overflowOrders.sort(Comparator.comparing(Order::getNormalizedValue));
 
         // Set overflow orders
         shelves.add(new HashMap<String, Object>(2) {{

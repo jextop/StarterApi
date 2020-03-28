@@ -95,6 +95,9 @@ public class Shelf {
     public Map<String, Object> getInfo() {
         List<Order> orders = getOrders();
 
+        // Sort by normalized value
+        orders.sort(Comparator.comparing(Order::getNormalizedValue));
+
         // Virtual overflow shelf
         List<Order> overflowOrders = null;
         if (orders.size() > capacity) {
