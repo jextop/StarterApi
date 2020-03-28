@@ -1,6 +1,12 @@
 package com.starter.kitchen.mock.order;
 
+import org.quartz.CronScheduleBuilder;
+import org.quartz.JobBuilder;
+import org.quartz.JobDetail;
+import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -12,6 +18,25 @@ public class MockOrderConfig {
     private String cron;
     private double lambda;
     private boolean auto;
+
+    @Bean
+    public JobDetail orderJob() {
+        return JobBuilder.newJob(MockOrderJob.class)
+                .storeDurably()
+                .build();
+    }
+
+    @Bean
+    public Trigger orderTrigger() {
+        CronScheduleBuilder scheduleBuilder = CronScheduleBuilder
+                .cronSchedule(cron)
+                .withMisfireHandlingInstructionDoNothing();
+
+        return TriggerBuilder.newTrigger()
+                .forJob(orderJob())
+                .withSchedule(scheduleBuilder)
+                .build();
+    }
 
     public boolean isAuto() {
         return auto;

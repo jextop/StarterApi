@@ -1,6 +1,7 @@
 package com.common.util;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.UnsupportedEncodingException;
@@ -130,9 +131,8 @@ public class StrUtil {
         }
         return str.split(separator);
     }
-
     public static String joinObj(Object[] objArr, String separator) {
-        return objArr == null ? null : joinObj(Arrays.asList(objArr), separator);
+        return ArrayUtils.isEmpty(objArr) ? null : joinObj(Arrays.asList(objArr), separator);
     }
 
     public static String joinObj(Collection<Object> objList, String separator) {
@@ -148,7 +148,7 @@ public class StrUtil {
     }
 
     public static String join(String[] strArr, String separator) {
-        return strArr == null ? null : join(Arrays.asList(strArr), separator);
+        return ArrayUtils.isEmpty(strArr) ? null : join(Arrays.asList(strArr), separator);
     }
 
     public static String join(Collection<String> strList, String separator) {

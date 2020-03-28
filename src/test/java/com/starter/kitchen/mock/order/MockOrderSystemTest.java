@@ -49,14 +49,4 @@ public class MockOrderSystemTest {
         orderSystem.setAutoSendOrders(false);
         Assertions.assertFalse(orderSystem.isAutoSendOrders());
     }
-
-    @Test
-    public void testOrderJob() {
-        Assertions.assertNotNull(orderSystem.orderJob());
-    }
-
-    @Test
-    public void testOrderTrigger() {
-        Assertions.assertNotNull(orderSystem.orderTrigger());
-    }
 }

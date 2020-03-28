@@ -11,7 +11,7 @@ kitchen:
 
   mock:
     order:
-      auto: true
+      auto: false
       lambda: 3.25
       cron: 0/1 * * * * ?
     driver:

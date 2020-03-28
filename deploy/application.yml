@@ -15,7 +15,7 @@ kitchen:
       lambda: 3.25
       cron: 0/1 * * * * ?
     driver:
-      auto: false
+      auto: true
       min: 2
       max: 10
 

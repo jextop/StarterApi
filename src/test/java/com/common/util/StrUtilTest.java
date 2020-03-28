@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -65,19 +66,32 @@ public class StrUtilTest {
             Assertions.assertArrayEquals(io.getValue(), ret);
         }
     }
+    @Test
+    public void testJoinObj() {
+        new HashMap<String, String[]>() {{
+            put(null, null);
+            put("t", new String[]{"t"});
+            put("t, a", new String[]{"t", "a"});
+        }}.forEach((key, value) -> {
+            String ret = StrUtil.joinObj(value, ", ");
+            Assertions.assertEquals(key, ret);
+        });
+
+        Assertions.assertNull(StrUtil.joinObj(new ArrayList<>(), ","));
+    }
 
     @Test
     public void testJoin() {
-        Map<String, String[]> mapIO = new HashMap<String, String[]>() {{
+        new HashMap<String, String[]>() {{
             put(null, null);
-            put("t", new String[] {"t"});
-            put("t, a", new String[] {"t", "a"});
-        }};
+            put("t", new String[]{"t"});
+            put("t, a", new String[]{"t", "a"});
+        }}.forEach((key, value) -> {
+            String ret = StrUtil.join(value, ", ");
+            Assertions.assertEquals(key, ret);
+        });
 
-        for (Map.Entry<String, String[]> io : mapIO.entrySet()) {
-            String ret = StrUtil.join(io.getValue(), ", ");
-            Assertions.assertEquals(io.getKey(), ret);
-        }
+        Assertions.assertNull(StrUtil.join(new ArrayList<>(), ","));
     }
 
     @Test
@@ -109,5 +123,11 @@ public class StrUtilTest {
         for (Map.Entry<String, String> io : mapIO.entrySet()) {
             Assertions.assertEquals(io.getValue(), StrUtil.trimChinese(io.getKey()));
         }
+    }
+
+    @Test
+    public void testStrUtil() {
+        // To keep 100% unit-testing coverage
+        Assertions.assertNotNull(new StrUtil());
     }
 }

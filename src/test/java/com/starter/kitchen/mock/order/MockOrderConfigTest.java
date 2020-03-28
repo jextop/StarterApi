@@ -14,6 +14,16 @@ public class MockOrderConfigTest {
     MockOrderConfig orderConfig;
 
     @Test
+    public void testOrderJob() {
+        Assertions.assertNotNull(orderConfig.orderJob());
+    }
+
+    @Test
+    public void testOrderTrigger() {
+        Assertions.assertNotNull(orderConfig.orderTrigger());
+    }
+
+    @Test
     public void testConfig() {
         // To keep 100% unit-testing coverage
         Assertions.assertNotNull(orderConfig.toString());
