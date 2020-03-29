@@ -1,7 +1,7 @@
 package com.starter.mapper;
 
-import com.starter.entity.File;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.starter.entity.File;
 
 /**
  * <p>

@@ -1,7 +1,6 @@
 package com.starter.cache;
 
 import com.common.util.LogUtil;
-import com.starter.kitchen.Order;
 import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

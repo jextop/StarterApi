@@ -1,7 +1,6 @@
 package com.common.http;
 
 import com.common.util.LogUtil;
-import com.common.util.StrUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;

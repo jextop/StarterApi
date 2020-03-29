@@ -7,9 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import springfox.documentation.service.ApiInfo;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.only;
 import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**

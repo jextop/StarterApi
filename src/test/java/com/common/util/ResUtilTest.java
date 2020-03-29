@@ -1,6 +1,5 @@
 package com.common.util;
 
-import com.common.util.ResUtil;
 import com.starter.StarterApplication;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

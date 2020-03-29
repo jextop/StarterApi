@@ -2,7 +2,6 @@ package com.starter.file;
 
 import com.common.util.JsonUtil;
 import com.common.util.LogUtil;
-import com.common.util.StrUtil;
 import com.qiniu.common.QiniuException;
 import com.qiniu.http.Response;
 import com.qiniu.storage.BucketManager;

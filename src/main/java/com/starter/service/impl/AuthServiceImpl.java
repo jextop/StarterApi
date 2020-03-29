@@ -1,9 +1,9 @@
 package com.starter.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.starter.entity.Auth;
 import com.starter.mapper.AuthMapper;
 import com.starter.service.IAuthService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 /**

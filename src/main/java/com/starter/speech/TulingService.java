@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.common.enc.Md5Util;
 import com.common.http.RespJsonObj;
 import com.common.util.MapUtil;
-import com.common.util.StrUtil;
 import com.starter.http.HttpService;
 import com.starter.http.LocationService;
 import org.apache.commons.collections4.MapUtils;

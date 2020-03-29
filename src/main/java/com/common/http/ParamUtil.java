@@ -2,7 +2,6 @@ package com.common.http;
 
 import com.common.util.JsonUtil;
 import com.common.util.MapUtil;
-import com.common.util.StrUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;

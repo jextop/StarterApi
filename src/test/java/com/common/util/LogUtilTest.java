@@ -1,7 +1,6 @@
 package com.common.util;
 
 import com.starter.StarterApplication;
-import com.starter.kitchen.util.DashboardUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

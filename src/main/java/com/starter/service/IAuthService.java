@@ -1,7 +1,7 @@
 package com.starter.service;
 
-import com.starter.entity.Auth;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.starter.entity.Auth;
 
 /**
  * <p>

@@ -2,10 +2,8 @@ package com.starter.kitchen;
 
 import com.starter.kitchen.service.RedisService;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.ListUtils;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;

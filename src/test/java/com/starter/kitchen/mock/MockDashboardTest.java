@@ -1,8 +1,5 @@
 package com.starter.kitchen.mock;
 
-import com.common.util.CodeUtil;
-import com.starter.kitchen.Order;
-import com.starter.kitchen.util.DashboardUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

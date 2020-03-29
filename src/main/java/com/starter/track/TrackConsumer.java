@@ -2,7 +2,6 @@ package com.starter.track;
 
 import com.common.util.LogUtil;
 import com.common.util.MapUtil;
-import com.common.util.StrUtil;
 import com.starter.mq.MqUtil;
 import org.apache.activemq.command.ActiveMQTopic;
 import org.apache.commons.lang3.StringUtils;

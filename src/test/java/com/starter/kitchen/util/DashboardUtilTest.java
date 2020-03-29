@@ -1,6 +1,5 @@
 package com.starter.kitchen.util;
 
-import com.common.util.CodeUtil;
 import com.starter.kitchen.Order;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

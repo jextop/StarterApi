@@ -1,6 +1,5 @@
 package com.common.file;
 
-import com.common.util.StrUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.BufferedReader;

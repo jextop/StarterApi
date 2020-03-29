@@ -1,7 +1,5 @@
 package com.starter.kitchen.mock.driver;
 
-import com.starter.kitchen.KitchenJob;
-import com.starter.kitchen.KitchenService;
 import org.junit.jupiter.api.Test;
 import org.quartz.JobExecutionContext;
 import org.quartz.Scheduler;
@@ -9,8 +7,6 @@ import org.quartz.SchedulerContext;
 import org.quartz.SchedulerException;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
