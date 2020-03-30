@@ -72,10 +72,7 @@ public class StrUtilTest {
             put(null, null);
             put("t", new String[]{"t"});
             put("t, a", new String[]{"t", "a"});
-        }}.forEach((key, value) -> {
-            String ret = StrUtil.joinObj(value, ", ");
-            Assertions.assertEquals(key, ret);
-        });
+        }}.forEach((key, value) -> Assertions.assertEquals(key, StrUtil.joinObj(value, ", ")));
 
         Assertions.assertNull(StrUtil.joinObj(new ArrayList<>(), ","));
     }
@@ -86,10 +83,7 @@ public class StrUtilTest {
             put(null, null);
             put("t", new String[]{"t"});
             put("t, a", new String[]{"t", "a"});
-        }}.forEach((key, value) -> {
-            String ret = StrUtil.join(value, ", ");
-            Assertions.assertEquals(key, ret);
-        });
+        }}.forEach((key, value) -> Assertions.assertEquals(key, StrUtil.join(value, ", ")));
 
         Assertions.assertNull(StrUtil.join(new ArrayList<>(), ","));
     }

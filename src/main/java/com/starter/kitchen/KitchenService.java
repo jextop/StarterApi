@@ -190,7 +190,10 @@ public class KitchenService {
         double interval = minOrder.getLife();
         long time = System.currentTimeMillis() + Math.max(100, (long) (interval * 1000));
 
-        JobDetail job = JobBuilder.newJob(KitchenJob.class).build();
+        JobDetail job = JobBuilder.newJob(KitchenJob.class)
+                .storeDurably()
+                .build();
+
         shelfJob = job.getKey();
 
         SimpleTrigger trigger = TriggerBuilder.newTrigger()

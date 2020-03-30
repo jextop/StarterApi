@@ -16,14 +16,18 @@ import java.util.Map;
  */
 @Service
 public class MqService {
-    @Autowired
-    private JmsMessagingTemplate jmsMessagingTemplate;
+    JmsMessagingTemplate jmsMessagingTemplate;
 
     @Autowired
-    private Queue queue;
+    Queue queue;
 
     @Autowired
-    private Topic topic;
+    Topic topic;
+
+    @Autowired
+    public MqService(JmsMessagingTemplate jmsMessagingTemplate) {
+        this.jmsMessagingTemplate = jmsMessagingTemplate;
+    }
 
     public void sendQueue(Map<String, Object> msgMap) {
         sendMessage(queue, msgMap);
@@ -41,7 +45,6 @@ public class MqService {
             jmsMessagingTemplate.convertAndSend(dest, msgStr);
         } catch (MessagingException e) {
             LogUtil.error(e.getMessage());
-            throw e;
         }
     }
 }

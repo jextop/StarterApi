@@ -109,7 +109,10 @@ public class MockDriverSystem {
         // Create job to pickup
         time = Math.max(getMinPickupTime(), System.currentTimeMillis() + 100);
 
-        JobDetail job = JobBuilder.newJob(MockDriverJob.class).build();
+        JobDetail job = JobBuilder.newJob(MockDriverJob.class)
+                .storeDurably()
+                .build();
+
         pickupJob = job.getKey();
 
         SimpleTrigger trigger = TriggerBuilder.newTrigger()

@@ -101,9 +101,7 @@ public class KitchenServiceTest {
 
     @AfterEach
     public void destroy() {
-        shelf.getOrders().forEach(item -> {
-            shelf.removeOrder(item);
-        });
+        shelf.getOrders().forEach(item -> shelf.removeOrder(item));
     }
 
     @Test

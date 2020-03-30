@@ -213,7 +213,10 @@ public class CheckController {
     @ApiOperation("检查作业调度")
     @GetMapping("/job")
     public Object job() {
-        JobDetail job = JobBuilder.newJob(QuartzJob.class).build();
+        JobDetail job = JobBuilder.newJob(QuartzJob.class)
+                .storeDurably()
+                .build();
+
         SimpleTrigger trigger = (SimpleTrigger) TriggerBuilder.newTrigger()
                 .forJob(job)
                 .startAt(new Date())
