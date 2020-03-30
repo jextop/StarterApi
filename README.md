@@ -41,6 +41,7 @@ IntelliJ IDEA, Maven
 | Swagger接口文档  | http://localhost:8011/swagger-ui.html   | |
 | Actuator服务监控 | http://localhost:8011/actuator          | |
 
+![](https://github.com/jextop/StarterApi/blob/master/img/architect.png)
 ![](https://github.com/jextop/StarterApi/blob/master/img/postman.png)
 ![](https://github.com/jextop/StarterApi/blob/master/img/swagger.png)
 ![](https://github.com/jextop/StarterApi/blob/master/img/admin.png)
