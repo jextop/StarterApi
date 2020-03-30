@@ -1,6 +1,10 @@
 # Web服务脚手架
 Java + SpringBoot + MySQL + Redis + ActiveMQ + ...
 
+# 一键部署Web服务
+https://github.com/jextop/StarterDeploy
+
+# 开发调试
 ## 依赖环境
 JRE或者JDK 8
 
