@@ -159,7 +159,9 @@ public class KitchenService {
         kitchenSocket.sendMessage(JSON.toJSONString(infoList));
 
         // Print text message
-        MockDashboard.print(infoList);
+        if (KitchenSocket.webSocketMap.size() < 0) {
+            MockDashboard.print(infoList);
+        }
     }
 
     protected void cancelJob() {

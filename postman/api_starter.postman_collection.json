@@ -2,7 +2,7 @@
 	"variables": [],
 	"info": {
 		"name": "api_starter",
-		"_postman_id": "523a3fbb-13aa-6858-31da-c771adbc4df7",
+		"_postman_id": "174af786-05f9-0c40-b5e3-a256b5be9b79",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -688,7 +688,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"order\": 0,\n\t\"pickup\": 1\n}"
+							"raw": "{\n\t\"order\": 1,\n\t\"pickup\": 1\n}"
 						},
 						"description": ""
 					},
@@ -1033,9 +1033,120 @@
 									"key": "file",
 									"description": "",
 									"type": "file",
-									"src": "a38f9a5801bf398e3e234c1b44aa96337.wav"
+									"src": "a38f9a5801bf398e3e234c1b44aa96337.wav",
+									"value": ""
 								}
 							]
+						},
+						"description": ""
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "track",
+			"description": "",
+			"item": [
+				{
+					"name": "{{server}}:{{port}}/track/auto",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{server}}:{{port}}/track/auto",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"track\": 1\n}"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "{{server}}:{{port}}/track/",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Chk\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.msg).to.eq(\"OK\")",
+									"});",
+									""
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{server}}:{{port}}/track/33",
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"description": ""
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "  {\r\n    \"name\": \"Chunky Monkey\",\r\n    \"temp\": \"hot\",\r\n    \"shelfLife\": 200,\r\n    \"decayRate\": 0.54\r\n  }"
+						},
+						"description": ""
+					},
+					"response": []
+				},
+				{
+					"name": "{{server}}:{{port}}/kitchen",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Chk\", function () {",
+									"    var jsonData = pm.response.json();",
+									"    pm.expect(jsonData.items.length).to.gt(0);",
+									"});"
+								]
+							}
+						}
+					],
+					"request": {
+						"url": "{{server}}:{{port}}/track",
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
 						},
 						"description": ""
 					},
