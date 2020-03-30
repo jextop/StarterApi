@@ -1,6 +1,6 @@
 package com.starter.track;
 
-import com.common.util.LogUtil;
+import com.common.util.JsonUtil;
 import com.common.util.MapUtil;
 import com.starter.mq.MqUtil;
 import org.apache.activemq.command.ActiveMQTopic;
@@ -30,13 +30,12 @@ public class TrackConsumer {
     @JmsListener(destination = POSITION_TOPIC, containerFactory = "jmsTopicListenerContainerFactory")
     public void listenTopic(Message msg) throws JMSException {
         Map<String, Object> msgMap = MqUtil.parseMsg(msg);
-        String uid = MapUtil.getStr(msgMap, "uid");
-        LogUtil.info("Receive track position", uid, msgMap);
 
         // 推送数据给后台管理系统
-        TrackSocket.sendMessage(msgMap);
+        TrackSocket.sendMessage(JsonUtil.toStr(msgMap));
 
         // 临时存储位置信息
+        String uid = MapUtil.getStr(msgMap, "uid");
         CLIENT_MAP.put(uid, msgMap);
 
         // todo: 保存历史定位信息

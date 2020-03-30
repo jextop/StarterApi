@@ -39,7 +39,6 @@ public class MqService {
 
     public void sendMessage(Destination dest, Object msg) {
         String msgStr = MqUtil.formatMsg(msg);
-        LogUtil.info(dest.getClass().getSimpleName(), "Send message", msgStr);
 
         try {
             jmsMessagingTemplate.convertAndSend(dest, msgStr);

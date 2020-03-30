@@ -1,6 +1,5 @@
 package com.starter.track;
 
-import com.common.util.JsonUtil;
 import org.springframework.stereotype.Component;
 
 import javax.websocket.OnClose;
@@ -9,7 +8,6 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
 import javax.websocket.server.ServerEndpoint;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -23,10 +21,7 @@ public class TrackSocket {
     private Session session;
     private String uid;
 
-    public static void sendMessage(Map<String, Object> msg) {
-        String msgStr = JsonUtil.toStr(msg);
-        System.out.printf("Send message: %s\n", msgStr);
-
+    public static void sendMessage(String msgStr) {
         for (String uid : webSocketMap.keySet()) {
             try {
                 webSocketMap.get(uid).session.getAsyncRemote().sendText(msgStr);

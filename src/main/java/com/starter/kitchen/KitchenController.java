@@ -3,6 +3,7 @@ package com.starter.kitchen;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.common.util.CodeUtil;
+import com.common.util.LogUtil;
 import com.starter.annotation.AccessLimited;
 import com.starter.kitchen.mock.driver.MockDriverSystem;
 import com.starter.kitchen.mock.order.MockOrderSystem;
@@ -63,6 +64,8 @@ public class KitchenController {
     @ApiOperation("Send order")
     @PostMapping()
     public Map<String, Object> cook(@RequestBody String body) {
+        LogUtil.info("/cook", body);
+
         // Send order to kitchen
         Order order = JSON.parseObject(body, Order.class);
         order.setId(CodeUtil.getCode());
