@@ -1,5 +1,5 @@
 # Web服务脚手架
-Java + SpringBoot + MySQL + Redis + ActiveMQ + ...
+Java + SpringBoot + MySQL + Redis + ActiveMQ + Quartz + ...
 
 # 一键部署Web服务
 https://github.com/jextop/StarterDeploy
@@ -28,6 +28,8 @@ IntelliJ IDEA, Maven
 ## 停止服务
 ./down.sh
 
+# 系统架构、Swagger接口文档、Postman调试工具
+
 | 开发运行环境     | URL:Port                                |  备注              |
 | ------------     | --------------------------------------  | :----------------- |
 | MySQL数据库      | http://localhost:3306, root/root        | |
@@ -44,7 +46,3 @@ IntelliJ IDEA, Maven
 ![](https://github.com/jextop/StarterApi/blob/master/img/architect.png)
 ![](https://github.com/jextop/StarterApi/blob/master/img/postman.png)
 ![](https://github.com/jextop/StarterApi/blob/master/img/swagger.png)
-![](https://github.com/jextop/StarterApi/blob/master/img/admin.png)
-![](https://github.com/jextop/StarterApi/blob/master/img/aiChat.png)
-![](https://github.com/jextop/StarterApi/blob/master/img/track.png)
-![](https://github.com/jextop/StarterApi/blob/master/img/kitchen.png)
