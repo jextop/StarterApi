@@ -181,6 +181,7 @@ public class CheckController {
         Map<String, Object> mqMsg = new HashMap<String, Object>() {{
             put("msg", msg);
             put("date", DateUtil.format(new Date()));
+            put("id", CodeUtil.getCode());
         }};
 
         if (StringUtils.isNotEmpty(topic)) {
@@ -192,7 +193,7 @@ public class CheckController {
         return new HashMap<String, Object>() {{
             put("chk", "mq");
             put("msg", msg);
-            put("text", text);
+            put("id", mqMsg.get("id"));
         }};
     }
 

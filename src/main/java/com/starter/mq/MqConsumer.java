@@ -1,5 +1,6 @@
 package com.starter.mq;
 
+import com.alibaba.fastjson.JSON;
 import com.common.util.LogUtil;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.activemq.command.ActiveMQTopic;
@@ -40,6 +41,6 @@ public class MqConsumer {
     @JmsListener(destination = TOPIC, containerFactory = "jmsTopicListenerContainerFactory")
     public void listenTopic(Message msg) throws JMSException {
         Map<String, ?> msgMap = MqUtil.parseMsg(msg);
-        LogUtil.info("(Topic) Receive status msg", msgMap);
+        System.out.printf("(Topic) Receive status msg: %s\n", JSON.toJSONString(msgMap));
     }
 }

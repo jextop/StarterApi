@@ -12,12 +12,12 @@ import javax.jms.TextMessage;
  */
 public class MqUtil {
     public static String formatMsg(Object msg) {
-        // Specify to use test message
+        // Python Stomp发送来的消息使用TextMessage
         return JSON.toJSONString(msg);
     }
 
     public static JSONObject parseMsg(Message msg) throws JMSException {
-        // Parse text message to Object
+        // Python Stomp发送来的消息使用TextMessage
         if (msg instanceof TextMessage) {
             String msgStr = ((TextMessage) msg).getText();
             return JSON.parseObject(msgStr);
