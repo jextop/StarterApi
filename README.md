@@ -1,5 +1,5 @@
 # Web服务脚手架
-Java + SpringBoot + MySQL + Redis + ActiveMQ + Quartz + ...
+Java + SpringBoot + MySQL + Redis + ActiveMQ + WebSocket + Quartz + ...
 
 # 一键部署Web服务
 https://github.com/jextop/StarterDeploy
@@ -44,5 +44,5 @@ IntelliJ IDEA, Maven
 | Actuator服务监控 | http://localhost:8011/actuator          | |
 
 ![](https://github.com/jextop/StarterApi/blob/master/img/architect.png)
-![](https://github.com/jextop/StarterApi/blob/master/img/postman.png)
 ![](https://github.com/jextop/StarterApi/blob/master/img/swagger.png)
+![](https://github.com/jextop/StarterApi/blob/master/img/postman.png)
