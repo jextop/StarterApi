@@ -27,12 +27,12 @@ public class KitchenSocket {
     }
 
     public void sendMessage(String msgStr) {
-        for (KitchenSocket socket : webSocketMap.values()) {
+        webSocketMap.values().forEach(socket -> {
             try {
                 socket.session.getAsyncRemote().sendText(msgStr);
             } catch (IllegalStateException e) {
             }
-        }
+        });
     }
 
     @OnOpen

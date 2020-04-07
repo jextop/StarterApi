@@ -1,4 +1,4 @@
-package com.starter.track;
+package com.starter.speech;
 
 import org.springframework.stereotype.Component;
 
@@ -13,10 +13,10 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @author ding
  */
-@ServerEndpoint("/track")
+@ServerEndpoint("/speech")
 @Component
-public class TrackSocket {
-    private static ConcurrentHashMap<String, TrackSocket> webSocketMap = new ConcurrentHashMap<>();
+public class SpeechSocket {
+    private static ConcurrentHashMap<String, SpeechSocket> webSocketMap = new ConcurrentHashMap<>();
 
     private Session session;
     private String uid;

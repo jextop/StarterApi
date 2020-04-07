@@ -15,6 +15,7 @@ import com.starter.file.FileHelper;
 import com.starter.file.LocationEnum;
 import com.starter.file.QiniuConfig;
 import com.starter.file.QiniuService;
+import com.starter.track.TrackConsumer;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.commons.collections4.CollectionUtils;
@@ -203,6 +204,9 @@ public class SpeechController {
             return RespUtil.error();
         }
 
+        // 发送到后台管理页面
+        SpeechSocket.sendMessage(asrStr);
+
         // chat
         Map chatMap = (Map) chat(ip, asrStr, uid);
         String chatStr = MapUtil.getStr(chatMap, "msg");
@@ -210,10 +214,24 @@ public class SpeechController {
             return RespUtil.error();
         }
 
+        // 发送到后台管理页面
+        SpeechSocket.sendMessage(chatStr);
+
         // tts
         Map<String, Object> ttsMap = (Map<String, Object>) tts(response, chatStr, url, data, uid);
         ttsMap.put("asr", asrStr);
         ttsMap.put("chat", chatStr);
         return ttsMap;
+    }
+
+    @AccessLimited(count = 10)
+    @ApiOperation("查询信息")
+    @GetMapping
+    public Object info() {
+        LogUtil.info("/speech/info");
+
+        Map<String, Object> ret = RespUtil.ok();
+        ret.put("items", null);
+        return ret;
     }
 }
