@@ -1,7 +1,7 @@
 package com.starter.kitchen;
 
 import com.common.util.CodeUtil;
-import com.starter.kitchen.service.RedisService;
+import com.starter.kitchen.data.RedisService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;

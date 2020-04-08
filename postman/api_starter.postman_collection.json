@@ -727,7 +727,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "  {\r\n    \"name\": \"Chunky Monkey\",\r\n    \"temp\": \"hot\",\r\n    \"shelfLife\": 200,\r\n    \"decayRate\": 0.54\r\n  }"
+							"raw": "  {\r\n    \"name\": \"热干面\",\r\n    \"temp\": \"hot\"\r\n  }"
 						},
 						"description": ""
 					},

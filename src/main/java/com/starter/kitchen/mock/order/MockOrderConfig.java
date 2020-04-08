@@ -9,6 +9,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Map;
+
 /**
  * @author ding
  */
@@ -18,6 +20,7 @@ public class MockOrderConfig {
     private String cron;
     private double lambda;
     private boolean auto;
+    private Map<String, Object>[] data;
 
     @Bean
     public JobDetail orderJob() {
@@ -60,5 +63,13 @@ public class MockOrderConfig {
 
     public void setLambda(double lambda) {
         this.lambda = lambda;
+    }
+
+    public Map<String, Object>[] getData() {
+        return data;
+    }
+
+    public void setData(Map<String, Object>[] data) {
+        this.data = data;
     }
 }

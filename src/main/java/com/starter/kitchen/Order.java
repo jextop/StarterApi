@@ -19,6 +19,7 @@ public class Order implements Serializable, Comparable<Order> {
     private long pickupTime;
 
     public Order() {
+        shelfLife = 300;
     }
 
     public double getPickup() {

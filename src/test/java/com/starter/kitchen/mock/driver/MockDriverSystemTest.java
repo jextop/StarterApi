@@ -3,7 +3,7 @@ package com.starter.kitchen.mock.driver;
 import com.common.util.CodeUtil;
 import com.starter.kitchen.KitchenService;
 import com.starter.kitchen.Order;
-import com.starter.kitchen.service.ActiveMqService;
+import com.starter.mq.MqService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -46,7 +46,7 @@ public class MockDriverSystemTest {
     Scheduler scheduler;
 
     @Mock
-    ActiveMqService activeMqService;
+    MqService mqService;
 
     @Mock
     KitchenService kitchenService;
@@ -57,7 +57,7 @@ public class MockDriverSystemTest {
 
         // Mock
         driverSystem.scheduler = scheduler;
-        driverSystem.activeMqService = activeMqService;
+        driverSystem.mqService = mqService;
         driverSystem.kitchenService = kitchenService;
     }
 
@@ -193,7 +193,7 @@ public class MockDriverSystemTest {
     @Test
     public void testDelivery() throws InterruptedException {
         // Mock
-        doNothing().when(activeMqService).sendMessage(any(), any());
+        doNothing().when(mqService).sendMessage(any(), any());
         doNothing().when(kitchenService).pickedUp(any());
 
         // Delivery
@@ -213,7 +213,7 @@ public class MockDriverSystemTest {
 
         // Verify
         Assertions.assertFalse(driverSystem.orderMap.containsKey(order.getId()));
-        verify(activeMqService, times(1)).sendMessage(any(), any());
+        verify(mqService, times(1)).sendMessage(any(), any());
         verify(kitchenService, times(1)).pickedUp(any());
     }
 

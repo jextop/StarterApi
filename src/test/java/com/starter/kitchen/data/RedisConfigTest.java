@@ -1,4 +1,4 @@
-package com.starter.kitchen.service;
+package com.starter.kitchen.data;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

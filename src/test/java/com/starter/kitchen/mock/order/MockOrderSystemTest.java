@@ -1,6 +1,6 @@
 package com.starter.kitchen.mock.order;
 
-import com.starter.kitchen.service.ActiveMqService;
+import com.starter.mq.MqService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +23,9 @@ public class MockOrderSystemTest {
     @Test
     public void testSendOrders() {
         // Mock
-        ActiveMqService activeMqService = mock(ActiveMqService.class);
-        orderSystem.activeMqService = activeMqService;
-        doNothing().when(activeMqService).sendMessage(any(), any());
+        MqService mqService = mock(MqService.class);
+        orderSystem.mqService = mqService;
+        doNothing().when(mqService).sendMessage(any(), any());
 
         // Turn on auto mode
         orderSystem.setAutoSendOrders(true);
@@ -33,7 +33,7 @@ public class MockOrderSystemTest {
         // Send orders
         int count = orderSystem.sendOrders();
         Assertions.assertTrue(count > 0);
-        verify(activeMqService, times(count)).sendMessage(any(), any());
+        verify(mqService, times(count)).sendMessage(any(), any());
 
         // Empty orderList
         orderSystem.orderList = null;

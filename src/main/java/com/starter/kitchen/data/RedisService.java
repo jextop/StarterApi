@@ -1,4 +1,4 @@
-package com.starter.kitchen.service;
+package com.starter.kitchen.data;
 
 import com.starter.kitchen.Order;
 import org.springframework.beans.factory.annotation.Autowired;

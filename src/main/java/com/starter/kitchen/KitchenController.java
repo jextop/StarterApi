@@ -2,13 +2,13 @@ package com.starter.kitchen;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.common.http.RespUtil;
 import com.common.util.CodeUtil;
 import com.common.util.LogUtil;
 import com.starter.annotation.AccessLimited;
 import com.starter.kitchen.mock.driver.MockDriverSystem;
 import com.starter.kitchen.mock.order.MockOrderSystem;
-import com.starter.kitchen.service.ActiveMqService;
-import com.starter.kitchen.util.RespUtil;
+import com.starter.mq.MqService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ import java.util.Map;
 @RequestMapping("/kitchen")
 public class KitchenController {
     @Autowired
-    ActiveMqService activeMqService;
+    MqService mqService;
 
     @Autowired
     Queue kitchenOrder;
@@ -69,7 +69,7 @@ public class KitchenController {
         // Send order to kitchen
         Order order = JSON.parseObject(body, Order.class);
         order.setId(CodeUtil.getCode());
-        activeMqService.sendMessage(kitchenOrder, order);
+        mqService.sendMessage(kitchenOrder, order);
 
         Map<String, Object> ret = RespUtil.ok();
         ret.put("id", order.getId());

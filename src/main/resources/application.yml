@@ -14,6 +14,20 @@ kitchen:
       auto: false
       lambda: 3.25
       cron: 0/1 * * * * ?
+      data: [
+        {
+          "name": "热干面",
+          "temp": "hot"
+        },
+        {
+          "name": "凉拌黄瓜",
+          "temp": "cold"
+        },
+        {
+          "name": "冰镇啤酒",
+          "temp": "frozen"
+        }
+      ]
     driver:
       auto: true
       min: 2

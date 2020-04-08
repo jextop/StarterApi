@@ -1,9 +1,9 @@
 package com.starter.kitchen;
 
 import com.common.util.CodeUtil;
+import com.starter.kitchen.data.RedisService;
 import com.starter.kitchen.mock.driver.MockDriverSystem;
-import com.starter.kitchen.service.ActiveMqService;
-import com.starter.kitchen.service.RedisService;
+import com.starter.mq.MqService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,7 +53,7 @@ public class KitchenServiceTest {
     MockDriverSystem driverSystem;
 
     @Mock
-    ActiveMqService activeMqService;
+    MqService mqService;
 
     @Mock
     Topic orderStatus;
@@ -85,7 +85,7 @@ public class KitchenServiceTest {
                 kitchenConfig,
                 kitchenSocket,
                 redisService,
-                activeMqService,
+                mqService,
                 orderStatus
         );
 
@@ -122,7 +122,7 @@ public class KitchenServiceTest {
         when(kitchenService.getOrderWithMinLife()).thenReturn(order);
 
         when(driverSystem.pickUpOrder(any())).thenReturn(1L);
-        doNothing().when(activeMqService).sendMessage(any(), any());
+        doNothing().when(mqService).sendMessage(any(), any());
 
         // Cook and pickup
         when(order.getPickupValue()).thenReturn(1.0);
@@ -139,7 +139,7 @@ public class KitchenServiceTest {
         verify(kitchenService, times(1)).scheduleJob();
 
         verify(driverSystem, times(1)).pickUpOrder(order);
-        verify(activeMqService, times(1)).sendMessage(orderStatus, order);
+        verify(mqService, times(1)).sendMessage(orderStatus, order);
 
         // Waste directly
         when(order.getPickupValue()).thenReturn(-1.0);
@@ -155,7 +155,7 @@ public class KitchenServiceTest {
         kitchenService.waste(order);
 
         verify(driverSystem, times(1)).cancelOrder(order);
-        verify(activeMqService, times(1)).sendMessage(orderStatus, order);
+        verify(mqService, times(1)).sendMessage(orderStatus, order);
     }
 
     @Test

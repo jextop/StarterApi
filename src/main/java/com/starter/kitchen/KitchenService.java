@@ -1,11 +1,11 @@
 package com.starter.kitchen;
 
 import com.alibaba.fastjson.JSON;
+import com.starter.kitchen.data.RedisService;
 import com.starter.kitchen.mock.MockDashboard;
 import com.starter.kitchen.mock.driver.MockDriverSystem;
-import com.starter.kitchen.service.ActiveMqService;
-import com.starter.kitchen.service.RedisService;
 import com.starter.kitchen.util.DashboardUtil;
+import com.starter.mq.MqService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.quartz.JobBuilder;
@@ -45,7 +45,7 @@ public class KitchenService {
     private KitchenConfig kitchenConfig;
     private KitchenSocket kitchenSocket;
 
-    private ActiveMqService activeMqService;
+    private MqService mqService;
     private Topic orderStatus;
 
     @Autowired
@@ -56,13 +56,13 @@ public class KitchenService {
             KitchenConfig kitchenConfig,
             KitchenSocket kitchenSocket,
             RedisService redisService,
-            ActiveMqService activeMqService,
+            MqService mqService,
             Topic orderStatus
     ) throws SchedulerException {
         this.kitchenConfig = kitchenConfig;
         this.kitchenSocket = kitchenSocket;
 
-        this.activeMqService = activeMqService;
+        this.mqService = mqService;
         this.orderStatus = orderStatus;
 
         // Initiate the shelves
@@ -118,7 +118,7 @@ public class KitchenService {
         notifyAdmin();
 
         // Send status to order system
-        activeMqService.sendMessage(orderStatus, order);
+        mqService.sendMessage(orderStatus, order);
     }
 
     public void waste(Order order) {
@@ -126,7 +126,7 @@ public class KitchenService {
         driverSystem.cancelOrder(order);
 
         // Send status to order system
-        activeMqService.sendMessage(orderStatus, order);
+        mqService.sendMessage(orderStatus, order);
     }
 
     public void pickedUp(Order order) {

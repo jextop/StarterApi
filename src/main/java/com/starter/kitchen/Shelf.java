@@ -1,6 +1,6 @@
 package com.starter.kitchen;
 
-import com.starter.kitchen.service.RedisService;
+import com.starter.kitchen.data.RedisService;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.ArrayList;

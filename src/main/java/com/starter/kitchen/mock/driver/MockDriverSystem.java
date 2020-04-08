@@ -2,7 +2,7 @@ package com.starter.kitchen.mock.driver;
 
 import com.starter.kitchen.KitchenService;
 import com.starter.kitchen.Order;
-import com.starter.kitchen.service.ActiveMqService;
+import com.starter.mq.MqService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.quartz.JobBuilder;
@@ -39,7 +39,7 @@ public class MockDriverSystem {
     private volatile boolean autoPickup;
     private MockDriverConfig driverConfig;
 
-    ActiveMqService activeMqService;
+    MqService mqService;
     private Topic orderStatus;
 
     @Autowired
@@ -48,12 +48,12 @@ public class MockDriverSystem {
     @Autowired
     public MockDriverSystem(
             MockDriverConfig driverConfig,
-            ActiveMqService activeMqService,
+            MqService mqService,
             Topic orderStatus
     ) throws SchedulerException {
         this.driverConfig = driverConfig;
         this.autoPickup = driverConfig.isAuto();
-        this.activeMqService = activeMqService;
+        this.mqService = mqService;
         this.orderStatus = orderStatus;
 
         orderMap = new ConcurrentHashMap<>();
@@ -164,7 +164,7 @@ public class MockDriverSystem {
                 kitchenService.pickedUp(order);
 
                 // Send status to order system
-                activeMqService.sendMessage(orderStatus, order);
+                mqService.sendMessage(orderStatus, order);
             } else {
                 // Orders are sorted by pickup time
                 break;

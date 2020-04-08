@@ -2,7 +2,7 @@ package com.starter.kitchen;
 
 import com.starter.kitchen.mock.driver.MockDriverSystem;
 import com.starter.kitchen.mock.order.MockOrderSystem;
-import com.starter.kitchen.service.ActiveMqService;
+import com.starter.mq.MqService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,8 +57,8 @@ public class KitchenControllerTest {
     @Test
     public void testCook() {
         // Mock
-        ActiveMqService mqService = spy(kitchenController.activeMqService);
-        kitchenController.activeMqService = mqService;
+        MqService mqService = spy(kitchenController.mqService);
+        kitchenController.mqService = mqService;
 
         doNothing().when(mqService).sendMessage(any(), any());
 

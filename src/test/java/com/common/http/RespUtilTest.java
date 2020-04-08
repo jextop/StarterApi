@@ -14,4 +14,10 @@ public class RespUtilTest {
     public void testOk() {
         Assertions.assertEquals(RespUtil.ok(), RespUtil.ok("OK"));
     }
+
+    @Test
+    public void testUtil() {
+        // To keep 100% unit-testing coverage
+        Assertions.assertNotNull(new RespUtil());
+    }
 }

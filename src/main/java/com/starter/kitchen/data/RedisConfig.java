@@ -1,4 +1,4 @@
-package com.starter.kitchen.service;
+package com.starter.kitchen.data;
 
 import com.starter.cache.FastJsonSerializer;
 import com.starter.kitchen.Order;

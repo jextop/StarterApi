@@ -1,11 +1,10 @@
 package com.starter.kitchen.mock.order;
 
-import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSON;
 import com.common.util.CodeUtil;
 import com.common.util.PoissonUtil;
-import com.common.util.ResUtil;
 import com.starter.kitchen.Order;
-import com.starter.kitchen.service.ActiveMqService;
+import com.starter.mq.MqService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -31,23 +30,23 @@ public class MockOrderSystem {
     private volatile boolean autoSendOrders;
     private MockOrderConfig orderConfig;
 
-    ActiveMqService activeMqService;
+    MqService mqService;
     private Queue kitchenOrder;
 
     @Autowired
     public MockOrderSystem(
             MockOrderConfig orderConfig,
-            ActiveMqService activeMqService,
+            MqService mqService,
             Queue kitchenOrder
     ) throws IOException {
         this.orderConfig = orderConfig;
         this.autoSendOrders = orderConfig.isAuto();
-        this.activeMqService = activeMqService;
+        this.mqService = mqService;
         this.kitchenOrder = kitchenOrder;
 
-        // Load fake orders from resource file
-        String jsonStr = ResUtil.readAsStr("kitchen_order.json");
-        orderList = JSONArray.parseArray(jsonStr, Order.class);
+        // Load data
+        String jsonStr = JSON.toJSONString(orderConfig.getData());
+        orderList = JSON.parseArray(jsonStr, Order.class);
     }
 
     public int sendOrders() {
@@ -69,7 +68,7 @@ public class MockOrderSystem {
 
             // Send to message queue
             order.setId(CodeUtil.getCode());
-            activeMqService.sendMessage(kitchenOrder, order);
+            mqService.sendMessage(kitchenOrder, order);
         }
         return batch;
     }
