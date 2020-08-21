@@ -10,12 +10,13 @@ WORKDIR /code
 RUN sh mvnw package -Dmaven.test.skip=true; \
     \
     mv ./deploy/ /deploy; \
-    mv ./target/api-0.0.1-SNAPSHOT.jar /deploy
+    mv ./target/api-0.0.1-SNAPSHOT.jar /deploy; \
+    \
+    cd ..; \
+    rm -rf /code; \
+    ls -al
 
 WORKDIR /deploy
-
-# delete code
-RUN rm -rf /code
 
 # volume for data
 VOLUME /tmp/files
